@@ -1,0 +1,318 @@
+title: card-mod
+cards:
+  - type: entities
+    title: Default
+    entities:
+      - light.bed_light
+      - light.ceiling_lights
+      - light.kitchen_lights
+
+  - type: entities
+    style: |
+      ha-card {
+        color: red;
+      }
+    entities:
+      - light.bed_light
+      - light.ceiling_lights
+      - light.kitchen_lights
+
+  - type: glance
+    title: Glance card
+    style: |
+      ha-card {
+        font-variant: small-caps;
+      }
+      .card-header {
+        font-size: 16px;
+      }
+    entities:
+      - light.bed_light
+      - light.ceiling_lights
+      - light.kitchen_lights
+
+  - type: horizontal-stack
+    cards:
+    - type: entity-button
+      entity: light.bed_light
+      style: |
+        ha-card {
+          background: [[ if(light.bed_light == "on", "green", "") ]];
+        }
+    - type: entity-button
+      entity: light.ceiling_lights
+      name: Bed Light
+
+  - type: entity-button
+    entity: light.bed_light
+    style: |
+      @keyframes blink {
+        50% {
+          background: red;
+        }
+      }
+      ha-card {
+        animation: blink 2s linear infinite;
+      }
+
+  - type: entities
+    title: Styled
+    style: |
+      ha-card {
+        background: rgba(0,50,0,0.5);
+        border-radius: 15px;
+      }
+      #states div:nth-of-type(2n+0) {
+        color: red;
+      }
+    entities:
+      - light.bed_light
+      - light.ceiling_lights
+      - light.kitchen_lights
+      - light.bed_light
+
+  - type: entities
+    title: Dynamic styles
+    style: |
+      ha-card {
+        background: url(http://place[[ input_select.background.state ]].com/g/600/400);
+        --primary-text-color: rgb(250,250,250);
+        color: [[ if(light.bed_light == "on", "rgb(250,250,250)", "red") ]];
+        --paper-listbox-background-color: black;
+        text-shadow: 1px 1px 0 #000;
+      }
+    entities:
+      - input_select.background
+      - light.bed_light
+      - light.ceiling_lights
+      - light.kitchen_lights
+
+  - type: vertical-stack
+    cards:
+      - type: picture-elements
+        style: |
+          ha-card {
+            --top: [[ input_number.y_pos.state ]]%;
+            --left: [[ input_number.x_pos.state ]]%;
+          }
+        title: Dynamic styling of elements
+        image: "http://placekitten.com/g/800/600"
+        elements:
+          - type: custom:hui-state-badge-element
+            entity: light.bed_light
+            style:
+              top: "var(--top)"
+              left: "var(--left)"
+      - type: entities
+        entities:
+          - input_number.x_pos
+          - input_number.y_pos
+
+  - type: horizontal-stack
+    cards:
+      - type: entity-button
+        entity: light.bed_light
+        name: blink
+        style: |
+          ha-card {
+            animation: blink 3s linear infinite;
+          }
+          @keyframes blink {
+            50% {
+              filter: invert(100%);
+            }
+          }
+      - type: entity-button
+        name: outline
+        entity: light.bed_light
+        style: |
+          ha-card {
+            outline: 0px none green;
+            animation: blink 3s linear infinite;
+          }
+          @keyframes blink {
+            24% {
+              outline: 0px none white;
+              }
+            25% {
+              outline: 0px solid green;
+              }
+            50% {
+              outline: 5px solid green;
+            }
+            75% {
+              outline: 0px solid green;
+              }
+            76% {
+              outline: 0px none white;
+              }
+          }
+      - type: entity-button
+        name: wiggle
+        entity: light.bed_light
+        style: |
+          ha-card {
+            animation: wiggle 2s linear infinite alternate;
+          }
+          @keyframes wiggle {
+            0% {
+              -webkit-transform: rotate(5deg);
+              transform: rotate(5deg);
+            }
+            100% {
+              -webkit-transform: rotate(-5deg);
+              transform: rotate(-5deg);
+            }
+          }
+
+
+
+  - type: horizontal-stack
+    cards:
+    - type: entity-button
+      entity: light.bed_light
+      name: swing
+      style: |
+        ha-card {
+          animation: swing 1s linear infinite alternate;
+        }
+        @keyframes swing {
+          0% {
+            -webkit-transform: rotate(5deg);
+            transform: rotate(5deg);
+          }
+          100% {
+            -webkit-transform: rotate(-5deg);
+            transform: rotate(-5deg);
+          }
+        }
+
+    - type: entity-button
+      entity: light.bed_light
+      name: swell
+      style: |
+        ha-card {
+          animation: pulse 3s linear infinite alternate;
+          }
+        @keyframes blinka {
+          50% { background: white; }
+          100% { background: blue; }
+        }
+        @keyframes pulse {
+          0% {
+            -webkit-transform: scaleX(1);
+            transform: scaleX(1);
+            }
+          50% {
+            -webkit-transform: scale3d(1.15,1.15,1.15);
+            transform: scale3d(1.15,1.15,1.15);
+            }
+          100% {
+            -webkit-transform: scaleX(1);
+            transform: scaleX(1);
+            }
+    - type: entity-button
+      entity: light.bed_light
+      name: flip
+      style: |
+        ha-card {
+          animation: flip 5s linear infinite
+        }
+        @keyframes blinka {
+          50% { background: white; }
+          100% { background: red; }
+        }
+        @keyframes flip {
+            0% {
+                -webkit-animation-timing-function: ease-out;
+                -webkit-transform: perspective(400px) scaleX(1) translateZ(0) rotateY(-1turn);
+                animation-timing-function: ease-out;
+                transform: perspective(400px) scaleX(1) translateZ(0) rotateY(-1turn)
+            }
+
+            40% {
+                -webkit-animation-timing-function: ease-out;
+                -webkit-transform: perspective(400px) scaleX(1) translateZ(150px) rotateY(-190deg);
+                animation-timing-function: ease-out;
+                transform: perspective(400px) scaleX(1) translateZ(150px) rotateY(-190deg)
+            }
+
+            50% {
+                -webkit-animation-timing-function: ease-in;
+                -webkit-transform: perspective(400px) scaleX(1) translateZ(150px) rotateY(-170deg);
+                animation-timing-function: ease-in;
+                transform: perspective(400px) scaleX(1) translateZ(150px) rotateY(-170deg)
+            }
+
+            80% {
+                -webkit-animation-timing-function: ease-in;
+                -webkit-transform: perspective(400px) scale3d(.95,.95,.95) translateZ(0) rotateY(0deg);
+                animation-timing-function: ease-in;
+                transform: perspective(400px) scale3d(.95,.95,.95) translateZ(0) rotateY(0deg)
+            }
+
+            to {
+                -webkit-animation-timing-function: ease-in;
+                -webkit-transform: perspective(400px) scaleX(1) translateZ(0) rotateY(0deg);
+                animation-timing-function: ease-in;
+                transform: perspective(400px) scaleX(1) translateZ(0) rotateY(0deg)
+            }
+        }
+
+  - type: picture-elements
+    style: |
+      @keyframes dvd {
+        0% {
+          left: 0%;
+          top: 50%;
+          --paper-item-icon-color: red;
+        }
+        30% {
+          left: 75%;
+          top: 0%;
+          --paper-item-icon-color: green;
+        }
+        50% {
+          left: 95%;
+          top: 25%;
+          --paper-item-icon-color: blue;
+        }
+        80% {
+          left: 25%;
+          top: 95%;
+          --paper-item-icon-color: yellow;
+        }
+      }
+    image: "http://placekitten.com/g/800/600"
+    elements:
+      - type: state-icon
+        entity: light.bed_light
+        tap_action:
+          action: toggle
+        style:
+          animation: dvd 10s linear infinite
+          left: 0%
+          top: 50%
+  - type: alarm-panel
+    card_icon: mdi:bell
+    name: Alarm Panel
+    style:
+      .: |
+        ha-card {
+          --mdc-theme-primary: red;
+        }
+      "#keypad mwc-button":
+        $: |
+          :host {
+            background: blue;
+          }
+          button {
+            font-size: 24px !important;
+          }
+      "#keypad mwc-button:nth-of-type(12)":
+        $: |
+          button {
+            font-size: 16px !important;
+            --mdc-theme-primary: green;
+          }
+    entity: alarm_control_panel.alarm
