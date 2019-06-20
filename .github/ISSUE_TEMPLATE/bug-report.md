@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: For reporting bugs or unexpected behavior of popup-card
+about: For reporting bugs or unexpected behavior
 title: ''
 labels: ''
 assignees: ''
@@ -42,9 +42,7 @@ Error messages from the browser console:
 
 [ ] Understand that this is a channel for reporting bugs, not a support forum (https://community.home-assistant.io/).
 
-[ ] Have made sure I am using the latest version of popup-card.
-
-[ ] Have made sure I am using the latest version of [card-tools](https://github.com/thomasloven/lovelace-card-tools).
+[ ] Have made sure I am using the latest version of the plugin.
 
 [ ] Have followed the troubleshooting steps of the "Common Problems" section of https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins.
 

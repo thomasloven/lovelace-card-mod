@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: For suggesting new features of popup-card
+about: For suggesting new features
 title: ''
 labels: ''
 assignees: ''
