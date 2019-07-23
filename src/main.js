@@ -19,28 +19,45 @@ customElements.whenDefined('ha-card').then(() => {
     return null;
   };
 
-  const applyStyle = function(root, style) {
+  const applyStyle = function(root, style, debug) {
+
+    const debugPrint = function(str){
+      if(!debug) return;
+      if(typeof str === "string")
+        console.log(' '.repeat(2*(debug-1)) + str);
+      else
+        console.log(str);
+    }
+
     if(!root || !style) return;
 
     if(typeof style === "string") {
       // Remove old styles if we're updating
-      if(root.querySelector(":scope >.card-mod-style"))
-        root.removeChild(root.querySelector(":scope > .card-mod-style"));
+      if(root.querySelector(".card-mod-style"))
+        root.removeChild(root.querySelector(".card-mod-style"));
 
       // Add new style tag to the root element
       const styleEl = document.createElement('style');
       styleEl.classList = "card-mod-style";
       styleEl.innerHTML = parseTemplate(style);
       root.appendChild(styleEl);
+      if(debug) {
+        debugPrint("Applied styles to:")
+        console.log(root);
+      }
     } else {
       Object.keys(style).forEach((k) => {
-        if(k === ".")
-          return applyStyle(root, style[k]);
-        else if(k === "$")
-          return applyStyle(root.shadowRoot, style[k]);
-        else {
-          root.querySelectorAll(`:scope > ${k}`).forEach((el) => {
-            applyStyle(el, style[k]);
+        if(k === ".") {
+          debugPrint(`Stepping into root of ${root.tagName}`)
+          return applyStyle(root, style[k], debug?debug+1:0);
+        } else if(k === "$") {
+          debugPrint(`Stepping into ShadowRoot of ${root.tagName}`)
+          return applyStyle(root.shadowRoot, style[k], debug?debug+1:0);
+        } else {
+          debugPrint(`Searching for: "${k}". ${root.querySelectorAll(k).length} matches.`);
+          root.querySelectorAll(`${k}`).forEach((el) => {
+            debugPrint(`Stepping into ${el.tagName}`)
+            applyStyle(el, style[k], debug?debug+1:0);
           });
           return;
         }
@@ -51,8 +68,13 @@ customElements.whenDefined('ha-card').then(() => {
   HaCard.prototype.updated = function(_) {
     // Apply styles after updates, if specified
     const config = findConfig(this);
-    if(config && config.style)
-      applyStyle(this, config.style);
+    if(config && config.style) {
+      if(config.debug_cardmod)
+        console.log("--- APPLYING STYLES START ---");
+      applyStyle(this, config.style, config.debug_cardmod ? 1 : 0);
+      if(config.debug_cardmod)
+        console.log("--- APPLYING STYLES END ---");
+    }
   }
 
   HaCard.prototype.firstUpdated = function() {
