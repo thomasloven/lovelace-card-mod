@@ -12,7 +12,9 @@ This is *not* a new card. Instead it *changes the way pretty much any other card
 
 Specifically, it looks for `style:` in any cards configuration, and applies the [CSS](https://www.w3schools.com/css/) specified there to the card.
 
-The basis of all lovelace cards there's a `ha-card` element, so that's probably where you'd want to start.
+The basis of almost all lovelace cards is a `ha-card` element, so that's probably where you'd want to start.
+
+Note that some cards (`conditional`, `entity-filter`, `horizontal-stack` and `vertical-stack` as well as some custom cards, like `layout-card`, `auto-entities` and `state-switch` among others) do *not* have a `ha-card` element, and `card-mod` will thus **not** work for those. There is a workaround, though. See FAQ below.
 
 ---
 
@@ -142,6 +144,39 @@ entity: alarm_control_panel.alarm
 ```
 
 ![advanced](https://user-images.githubusercontent.com/1299821/59151780-59732c80-8a39-11e9-9f19-34d3e0dbd8e9.png)
+
+# FAQ
+
+### Why won't this work for some cards?
+The cards this doesn't work for often are not really *cards* at all, but change how other cards work. Examples include: `conditional`, `entity-filter`, `horizontal-stack` and `vertical-stack` as well as some custom cards, like `layout-card`, `auto-entities` and `state-switch` among others.
+
+Common for all those are that they have no `ha-card` element. A workaround for this is to put the card you want inside an entities card and mod that. For built-in cards, this can be done by setting the type of an entities row to `custom:hui-<type>-card`:
+
+```yaml
+type: entities
+style: |
+  ha-card {
+    --ha-card-background: red;
+    box-shadow: none;
+    background: none;
+  }
+  .card-content {
+    padding: 0
+  }
+entities:
+  - type: custom:hui-horizontal-stack-card
+    cards:
+      - type: entities
+        entities:
+          - light.bed_light
+          - light.kitchen_lights
+          - light.ceiling_lights
+      - type: glance
+        entities:
+          - light.bed_light
+          - light.kitchen_lights
+          - light.ceiling_lights
+```
 
 ---
 <a href="https://www.buymeacoffee.com/uqD6KHCdJ" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
