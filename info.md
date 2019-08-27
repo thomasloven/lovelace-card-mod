@@ -1,6 +1,8 @@
 card-mod
 ========
 
+## Requires Home Assistant verison 0.98 or later
+
 Allows you to add css styles to any lovelace card.
 
 Install `card-mod.js` as a `module`.

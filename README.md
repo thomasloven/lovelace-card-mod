@@ -3,6 +3,8 @@ card-mod
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
 
+## Requires Home Assistant verison 0.98 or later
+
 Allows you to add css styles to any lovelace card.
 
 For installation instructions [see this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
