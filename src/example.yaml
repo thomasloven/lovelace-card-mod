@@ -1,15 +1,13 @@
 title: card-mod
 cards:
+  # Style the card, but use special styles for the header
   - type: entities
-    title: Default
-    entities:
-      - light.bed_light
-      - light.ceiling_lights
-      - light.kitchen_lights
-
-  - type: entities
+    title: Simple configuration
     style: |
       ha-card {
+        color: blue;
+      }
+      .card-header {
         color: red;
       }
     entities:
@@ -17,41 +15,55 @@ cards:
       - light.ceiling_lights
       - light.kitchen_lights
 
-  - type: glance
-    title: Glance card
+  # Style an entities card row separately
+  - type: entities
+    title: Styled rows
+    entities:
+      - light.bed_light
+      - entity: light.ceiling_lights
+        style: |
+          :host {
+            color: green;
+          }
+      - type: section
+        label: A section label
+        style: |
+          :host {
+            --primary-color: red;
+          }
+      - entity: light.kitchen_lights
+
+
+  # Styles that update to state changes using jinja2 templating
+  - type: entities
+    title: Dynamic styles
     style: |
       ha-card {
-        font-variant: small-caps;
-      }
-      .card-header {
-        font-size: 16px;
+        background: url(http://place{{ states("input_select.background") }}.com/g/600/400);
+        --primary-text-color: rgb(250,250,250);
+        --paper-listbox-background-color: black;
+        text-shadow: 1px 1px 0 #000;
       }
     entities:
+      - input_select.background
       - light.bed_light
       - light.ceiling_lights
       - light.kitchen_lights
 
+  # Using the "config" special variable for templates
   - type: entity-button
     entity: light.bed_light
     style: |
       ha-card {
-        background: [[ if(light.bed_light == "on", "green", "") ]];
-      }
+        background:
+          {% if is_state(config.entity, 'on') %}
+            green
+          {% endif %}
+          ;
 
-  - type: entity-button
-    entity: light.bed_light
-    style: |
-      @keyframes blink {
-        50% {
-          background: red;
-        }
-      }
-      ha-card {
-        animation: blink 2s linear infinite;
-      }
-
+  # Advanced css selectors can be used
   - type: entities
-    title: Styled
+    title: Advanced CSS rules
     style: |
       ha-card {
         background: rgba(0,50,0,0.5);
@@ -66,29 +78,48 @@ cards:
       - light.kitchen_lights
       - light.bed_light
 
+  # Cards can be made transparent by removing background and box-shadow
   - type: entities
-    title: Dynamic styles
+    title: Transparent card
+    show_header_toggle: false
     style: |
       ha-card {
-        background: url(http://place[[ input_select.background.state ]].com/g/600/400);
-        --primary-text-color: rgb(250,250,250);
-        color: [[ if(light.bed_light == "on", "rgb(250,250,250)", "red") ]];
-        --paper-listbox-background-color: black;
-        text-shadow: 1px 1px 0 #000;
+        background: none;
+        box-shadow: none;
       }
     entities:
-      - input_select.background
+      - type: custom:text-divider-row
+        text: blah
+
+  # Entities in glance cards can also be styled individually
+  - type: glance
+    title: Glance card
+    style: |
+      ha-card {
+        font-variant: small-caps;
+      }
+      .card-header {
+        font-size: 16px;
+      }
+    entities:
       - light.bed_light
-      - light.ceiling_lights
+      - entity: light.ceiling_lights
+        style: |
+          :host {
+            font-variant: none;
+          }
       - light.kitchen_lights
 
+  # Adjustable picture elements position
+  # This could be much more useful with, say, an x and y value taken from sensor values
+  # that e.g. contain your robot vacuum cleaner location...
   - type: vertical-stack
     cards:
       - type: picture-elements
         style: |
           ha-card {
-            --top: [[ input_number.y_pos.state ]]%;
-            --left: [[ input_number.x_pos.state ]]%;
+            --top: {{ states("input_number.y_pos") }}%;
+            --left: {{ states("input_number.x_pos") }}%;
           }
         title: Dynamic styling of elements
         image: "http://placekitten.com/g/800/600"
@@ -103,6 +134,7 @@ cards:
           - input_number.x_pos
           - input_number.y_pos
 
+  # Some animations
   - type: horizontal-stack
     cards:
       - type: entity-button
@@ -114,7 +146,7 @@ cards:
           }
           @keyframes blink {
             50% {
-              filter: invert(100%);
+              background: red;
             }
           }
       - type: entity-button
@@ -160,100 +192,7 @@ cards:
             }
           }
 
-
-
-  - type: horizontal-stack
-    cards:
-    - type: entity-button
-      entity: light.bed_light
-      name: swing
-      style: |
-        ha-card {
-          animation: swing 1s linear infinite alternate;
-        }
-        @keyframes swing {
-          0% {
-            -webkit-transform: rotate(5deg);
-            transform: rotate(5deg);
-          }
-          100% {
-            -webkit-transform: rotate(-5deg);
-            transform: rotate(-5deg);
-          }
-        }
-
-    - type: entity-button
-      entity: light.bed_light
-      name: swell
-      style: |
-        ha-card {
-          animation: pulse 3s linear infinite alternate;
-          }
-        @keyframes blinka {
-          50% { background: white; }
-          100% { background: blue; }
-        }
-        @keyframes pulse {
-          0% {
-            -webkit-transform: scaleX(1);
-            transform: scaleX(1);
-            }
-          50% {
-            -webkit-transform: scale3d(1.15,1.15,1.15);
-            transform: scale3d(1.15,1.15,1.15);
-            }
-          100% {
-            -webkit-transform: scaleX(1);
-            transform: scaleX(1);
-            }
-    - type: entity-button
-      entity: light.bed_light
-      name: flip
-      style: |
-        ha-card {
-          animation: flip 5s linear infinite
-        }
-        @keyframes blinka {
-          50% { background: white; }
-          100% { background: red; }
-        }
-        @keyframes flip {
-            0% {
-                -webkit-animation-timing-function: ease-out;
-                -webkit-transform: perspective(400px) scaleX(1) translateZ(0) rotateY(-1turn);
-                animation-timing-function: ease-out;
-                transform: perspective(400px) scaleX(1) translateZ(0) rotateY(-1turn)
-            }
-
-            40% {
-                -webkit-animation-timing-function: ease-out;
-                -webkit-transform: perspective(400px) scaleX(1) translateZ(150px) rotateY(-190deg);
-                animation-timing-function: ease-out;
-                transform: perspective(400px) scaleX(1) translateZ(150px) rotateY(-190deg)
-            }
-
-            50% {
-                -webkit-animation-timing-function: ease-in;
-                -webkit-transform: perspective(400px) scaleX(1) translateZ(150px) rotateY(-170deg);
-                animation-timing-function: ease-in;
-                transform: perspective(400px) scaleX(1) translateZ(150px) rotateY(-170deg)
-            }
-
-            80% {
-                -webkit-animation-timing-function: ease-in;
-                -webkit-transform: perspective(400px) scale3d(.95,.95,.95) translateZ(0) rotateY(0deg);
-                animation-timing-function: ease-in;
-                transform: perspective(400px) scale3d(.95,.95,.95) translateZ(0) rotateY(0deg)
-            }
-
-            to {
-                -webkit-animation-timing-function: ease-in;
-                -webkit-transform: perspective(400px) scaleX(1) translateZ(0) rotateY(0deg);
-                animation-timing-function: ease-in;
-                transform: perspective(400px) scaleX(1) translateZ(0) rotateY(0deg)
-            }
-        }
-
+  # Keyframes are inherited into picture-elements elements as well...
   - type: picture-elements
     style: |
       @keyframes dvd {
@@ -288,6 +227,9 @@ cards:
           animation: dvd 10s linear infinite
           left: 0%
           top: 50%
+
+  # An example of going into shadowroots of stuff
+  # Not for the faint of heart
   - type: alarm-panel
     card_icon: mdi:bell
     name: Alarm Panel
@@ -311,3 +253,44 @@ cards:
             --mdc-theme-primary: green;
           }
     entity: alarm_control_panel.alarm
+
+  # By placing a stack in an entities card as a row, it can be modded as well.
+  - type: entities
+    style: |
+      ha-card {
+        --ha-card-background: red;
+        box-shadow: none;
+        background: none;
+      }
+      .card-content {
+        padding: 0
+      }
+    entities:
+      - type: custom:hui-horizontal-stack-card
+        cards:
+          - type: entities
+            entities:
+              - light.bed_light
+              - light.kitchen_lights
+              - light.ceiling_lights
+          - type: glance
+            entities:
+              - light.bed_light
+              - light.kitchen_lights
+              - light.ceiling_lights
+
+  # Automatically styled entity rows
+  # Makes use of config variable
+  - type: custom:auto-entities
+    filter:
+      include:
+        - domain: light
+          options:
+            style: |
+              :host {
+                color: {% if is_state(config.entity, 'on') %} green {% endif %};
+              }
+    card:
+      type: entities
+      title: Auto-entities
+

@@ -59,7 +59,7 @@ entities:
 
 ![smallcaps](https://user-images.githubusercontent.com/1299821/59151624-9a1d7680-8a36-11e9-9b2d-598c80ff2aa1.png)
 
-You can also use [templates](https://github.com/thomasloven/hass-config/wiki/Mod-plugin-templates) to change the styles dynamically.
+You can also use [templating](https://www.home-assistant.io/docs/configuration/templating/) to change the styles dynamically.
 
 **Example** \
 Make an `entity-button` card green when the light is on
@@ -69,7 +69,7 @@ type: entity-button
 entity: light.bed_light
 style: |
   ha-card {
-    background: [[ if(light.bed_light == "on", "green", "") ]];
+    background: {% if is_state('light.bed_light', 'on') %} green {% endif %};
   }
 ```
 
@@ -100,8 +100,42 @@ style: |
 ## More examples
 More examples are available [here](https://github.com/thomasloven/lovelace-card-mod/blob/master/src/example.yaml).
 
-![more](https://user-images.githubusercontent.com/1299821/59151861-9f7cc000-8a3a-11e9-90d2-ff192c4c10a7.gif)
+![more](https://user-images.githubusercontent.com/1299821/63809565-eb951d80-c922-11e9-8630-697befb3c95f.png)
 
+
+## Styling entity and glance cards
+
+To make things easier, rows in `entities` cards and buttons in `glance` cards can be styled individually.
+For those, the styles will be applied to the shadowRoot of the element, so a good starting point (rather than `ha-card`) would be `:host`:
+
+```yaml
+type: entities
+entities:
+  - light.bed_light
+  - entity: light.kitchen_lights
+    style: |
+      :host {
+        color: red;
+      }
+  - entity: input_number.value
+    style: |
+      :host {
+        --paper-item-icon-color:
+          {% if states(config.entity)|int < 50 %}
+            blue
+          {% else %}
+            red
+          {% endif %}
+          ;
+```
+
+## Templating
+Jinja templates have access to a few special variables. Those are:
+
+- `config` - an object containing the card, entity row or glance button configuration
+- `user` - the username of the currently logged in user
+- `browser` - the deviceID of the current browser (see [browser_mod](https://github.com/thomasloven/hass-browser_mod).
+- `hash` - the hash part of the current URL.
 
 ## Advanced usage
 
@@ -146,6 +180,29 @@ entity: alarm_control_panel.alarm
 ![advanced](https://user-images.githubusercontent.com/1299821/59151780-59732c80-8a39-11e9-9f19-34d3e0dbd8e9.png)
 
 # FAQ
+
+### How do I convert my old card-modder configuration to card-mod?
+For cards, you just have to wrap everything in `ha-card {}` and format it as CSS.
+
+So, you go from:
+```yaml
+style:
+  "--ha-card-background": rgba(200, 0, 0, 0.5)
+  color: white
+```
+
+to
+```yaml
+style: |
+  ha-card {
+    --ha-card-background: rgba(200, 0, 0, 0.5);
+    color: white
+  }
+```
+
+For rows in an entities card, you replace `ha-card` with `:host` as described above.
+
+Note that some cards can't be modded with card-mod. See below.
 
 ### Why won't this work for some cards?
 The cards this doesn't work for often are not really *cards* at all, but change how other cards work. Examples include: `conditional`, `entity-filter`, `horizontal-stack` and `vertical-stack` as well as some custom cards, like `layout-card`, `auto-entities` and `state-switch` among others.
