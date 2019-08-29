@@ -2,6 +2,72 @@ import {html, css} from "/card-tools/lit-element.js";
 import {fireEvent} from "/card-tools/event.js";
 import {subscribeRenderTemplate} from "/card-tools/templates.js";
 
+class CardMod extends HTMLElement {
+
+  disconnectedCallback() {
+    this._disconnect();
+  }
+  connectedCallback() {
+    this._connect();
+  }
+
+  _has_template(data) {
+    if(data.template.includes("{%")) return true;
+    if(data.template.includes("{{")) return true;
+    return false;
+  }
+
+  set template(data) {
+    this._data = data;
+    if(!this._has_template(data)) return;
+
+    if(!this._data.entity_ids && this._data.template.includes("config.entity")) {
+      if(this._data.variables.config && this._data.variables.config.entity) {
+        this._data.entity_ids = [this._data.variables.config.entity];
+      }
+    }
+  }
+
+  update() {
+    this._disconnect().then(() => this._connect());
+  }
+
+  async _connect() {
+    if(!this._data) return;
+
+    if(!this._has_template(this._data)) {
+      this.innerHTML = `<style>${this._data.template}</style>`;
+    }
+
+    if(this._unsubRenderTemplate) return;
+    this._unsubRenderTemplate = subscribeRenderTemplate(null,
+      (result) => this.innerHTML = `<style>${result}</style>`,
+      this._data);
+
+    this._unsubRenderTemplate.catch(() => {
+      this.innerHTML = `<style>${this._data.template}</style>`;
+      this._unsubRenderTemplate = undefined;
+    });
+  }
+
+  async _disconnect() {
+    if(this._unsubRenderTemplate) {
+      try {
+        const unsub = await this._unsubRenderTemplate;
+        this._unsubRenderTemplate = undefined;
+        await unsub();
+      } catch (e) {
+        if(e.code !== "not_found")
+          throw e;
+      }
+    }
+  }
+
+}
+
+customElements.define("card-mod", CardMod);
+
+
 const applyStyle = async function(root, style, params, debug) {
 
   const debugPrint = function(str){
@@ -18,31 +84,19 @@ const applyStyle = async function(root, style, params, debug) {
     await root.updateComplete;
 
   if(typeof style === "string") {
-    const oldStyleEl = root.querySelector(".card-mod-style");
-    if(oldStyleEl)
-    {
-      // Remove old styles and cancel template subscriptions
-      if(oldStyleEl.cancelSubscription)
-      {
-        await oldStyleEl.cancelSubscription;
-      }
-      root.removeChild(oldStyleEl)
+    const oldStyleEl = root.querySelector("card-mod");
+    if(oldStyleEl) {
+      oldStyleEl.update();
+      return;
     }
 
     // Add new style tag to the root element
-    const styleEl = document.createElement('style');
-    styleEl.classList = "card-mod-style";
-    styleEl.cancelSubscription = subscribeRenderTemplate(
-      null,
-      (result) => {
-        styleEl.innerHTML = result;
-      },
-      {
-        template: style,
-        variables: params.variables,
-        entity_ids: params.entity_ids,
-      }
-    );
+    const styleEl = document.createElement('card-mod');
+    styleEl.template = {
+      template: style,
+      variables: params.variables,
+      entity_ids: params.entity_ids,
+    };
     root.appendChild(styleEl);
     debugPrint("Applied styles to:");
     debugPrint(root);
@@ -64,13 +118,6 @@ const applyStyle = async function(root, style, params, debug) {
       }
     });
   }
-}
-
-const find_entity_ids = function(data) {
-  if(typeof(data) === "string") {
-    return data.includes("config.entity");
-  }
-  return Object.values(data).some(find_entity_ids);
 }
 
 
@@ -105,8 +152,6 @@ customElements.whenDefined('ha-card').then(() => {
     if(!config || !config.style) return;
 
     let entity_ids = config.entity_ids;
-    if(!entity_ids && find_entity_ids(config.style))
-      entity_ids = [config.entity];
 
     const apply = () => {
       applyStyle(this, config.style, {
@@ -137,8 +182,6 @@ customElements.whenDefined('hui-entities-card').then(() => {
     if(!row || !row.updateComplete) return retval;
 
     let entity_ids = config.entity_ids;
-    if (!entity_ids && find_entity_ids(config.style))
-      entity_ids = [config.entity];
 
     const apply = () => {
       applyStyle(row.shadowRoot, config.style, {
@@ -194,8 +237,6 @@ customElements.whenDefined('hui-glance-card').then(() => {
       const config = e.entityConf;
       if(!config.style) return;
       let entity_ids = config.entity_ids;
-      if (!entity_ids && find_entity_ids(config.style))
-        entity_ids = [config.entity];
 
       const apply = () => {
         applyStyle(root, config.style, {
