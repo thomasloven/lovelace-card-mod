@@ -9,8 +9,8 @@ customElements.whenDefined('hui-entities-card').then(() => {
 
     const retval = oldRenderEntity.bind(this)(config);
 
-    if(!config.style) return retval;
-    if(!retval.values) return retval;
+    if(!config || !config.style) return retval;
+    if(!retval || !retval.values) return retval;
     const row = retval.values[0];
     if(!row || !row.updateComplete) return retval;
 
