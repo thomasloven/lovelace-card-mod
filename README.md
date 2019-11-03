@@ -149,7 +149,7 @@ In this case, you can make `style:` a dictionary instead of a string, where each
 
 This is not for the faint of heart.
 
-For some extra help, add `debug_cardMod: true` to the card config, and the steps taken to apply the styling will be printed in the browser console. It can be removed later.
+For some extra help, add `debug_cardmod: true` to the card config, and the steps taken to apply the styling will be printed in the browser console. It can be removed later.
 
 **Example**:
 Change some things in an `alarm-panel` card.
@@ -158,7 +158,7 @@ Change some things in an `alarm-panel` card.
 type: alarm-panel
 card_icon: mdi:bell
 name: Alarm Panel
-debug_cardMod: true
+debug_cardmod: true
 style:
   .: |
     ha-card {
