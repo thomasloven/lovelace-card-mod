@@ -37,7 +37,7 @@ customElements.whenDefined('hui-glance-card').then(() => {
       }
       `;
 
-      const config = e.entityConf;
+      const config = e.config || e.entityConf;
       if(!config || !config.style) return;
       let entity_ids = config.entity_ids;
 
