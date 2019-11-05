@@ -1,4 +1,4 @@
-import {subscribeRenderTemplate} from "/card-tools/templates.js";
+import {subscribeRenderTemplate} from "card-tools/src/templates.js";
 
 class CardMod extends HTMLElement {
 

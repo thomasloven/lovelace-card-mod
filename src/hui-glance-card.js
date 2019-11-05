@@ -1,4 +1,4 @@
-import {fireEvent} from "/card-tools/event.js";
+import {fireEvent} from "card-tools/src/event.js";
 import {applyStyle} from "./apply-style.js";
 
 customElements.whenDefined('hui-glance-card').then(() => {
