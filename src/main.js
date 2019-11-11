@@ -1,4 +1,5 @@
-import "./card-mod.js";
-import "./ha-card.js";
-import "./hui-entities-card.js";
-import "./hui-glance-card.js";
+import "./card-mod";
+import "./ha-card";
+import "./hui-entities-card";
+import "./hui-glance-card";
+import "./mod-card"
