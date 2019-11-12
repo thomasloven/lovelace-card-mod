@@ -131,6 +131,7 @@ entities:
             red
           {% endif %}
           ;
+      }
 ```
 
 ## Templating
@@ -138,7 +139,7 @@ Jinja templates have access to a few special variables. Those are:
 
 - `config` - an object containing the card, entity row or glance button configuration
 - `user` - the username of the currently logged in user
-- `browser` - the deviceID of the current browser (see [browser_mod](https://github.com/thomasloven/hass-browser_mod).
+- `browser` - the deviceID of the current browser (see [browser_mod](https://github.com/thomasloven/hass-browser_mod)).
 - `hash` - the hash part of the current URL.
 
 ## Advanced usage
