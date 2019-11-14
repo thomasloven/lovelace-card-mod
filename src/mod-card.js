@@ -8,10 +8,14 @@ ha-card {
 }`;
 
 class ModCard extends LitElement {
-
+    static get properties() {
+      return {
+        hass: {},
+      };
+    }
     setConfig(config) {
         this._config = config;
-        if(!config.style === undefined)
+        if(config.style === undefined)
         {
           this._config.style = NO_STYLE;
         } else if (typeof(config.style) === "string") {
