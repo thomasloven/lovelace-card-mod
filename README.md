@@ -11,6 +11,12 @@ For installation instructions [see this guide](https://github.com/thomasloven/ha
 
 Install `card-mod.js` as a `module`.
 
+```yaml
+resources:
+  - url: /local/card-mod.js
+    type: module
+```
+
 ## Usage
 This is *not* a new card. Instead it *changes the way pretty much any other card works*.
 
