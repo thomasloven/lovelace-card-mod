@@ -24,6 +24,8 @@ customElements.whenDefined('hui-entities-card').then(() => {
     }
 
     row.updateComplete.then(apply);
+    if(retval.values[0])
+      retval.values[0].addEventListener("ll-rebuild", apply);
     window.addEventListener("location-changed", apply);
     return retval;
   }
