@@ -246,45 +246,6 @@ card:
 ```
 ![mod-card](https://user-images.githubusercontent.com/1299821/68621707-b71c1100-04d0-11ea-8473-965dbd77b762.png)
 
-# Bonus function - entities card tap\_action
-With card-mod installed, you will be able to use `tap_action` with rows in your entities cards:
-
-Example:
-```yaml
-type: entities
-entities:
-  - entity: light.bed_light
-    name: default
-  - entity: light.bed_light
-    name: toggle
-    tap_action:
-      action: toggle
-  - entity: light.bed_light
-    name: navigate
-    tap_action:
-      action: navigate
-      navigation_path: /lovelace/1
-  - entity: light.bed_light
-    name: url
-    tap_action:
-      action: url
-      url_path: https://google.com
-  - entity: light.bed_light
-    name: call-service
-    tap_action:
-      action: call-service
-      service: browser_mod.popup
-      service_data:
-        deviceID: this
-        title: Popup
-        card:
-          type: entities
-          entities:
-            - light.bed_light
-```
-
-
-
 # FAQ
 
 ### How do I convert my old card-modder configuration to card-mod?
