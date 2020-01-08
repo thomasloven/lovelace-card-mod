@@ -1,5 +1,6 @@
-import { LitElement, html, css} from "card-tools/src/lit-element";
-import "card-tools/src/card-maker";
+import { LitElement, html} from "card-tools/src/lit-element";
+import { createCard } from "card-tools/src/lovelace-element";
+import { hass } from "card-tools/src/hass";
 
 const NO_STYLE = `
 ha-card {
@@ -26,17 +27,32 @@ class ModCard extends LitElement {
           this._config.style["."] = NO_STYLE;
         }
 
+        this.card = createCard(this._config.card);
+        this.card.hass = hass();
     }
 
     render() {
         return html`
           <ha-card modcard>
-          <card-maker
-            .config=${this._config.card}
-            .hass=${this.hass}
-          ></card-maker>
+          ${this.card}
           </ha-card>
         `;
+    }
+
+    set hass(hass) {
+      if(!this.card) return;
+      this.card.hass = hass;
+    }
+
+    getCardSize() {
+      if(this._config.report_size)
+        return this._config.report_size;
+      let ret = this.shadowRoot;
+      if(ret) ret = ret.querySelector("ha-card card-maker");
+      if(ret) ret = ret.getCardSize;
+      if(ret) ret = ret();
+      if(ret) return ret;
+      return 1;
     }
 }
 

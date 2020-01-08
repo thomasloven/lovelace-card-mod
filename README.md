@@ -246,6 +246,19 @@ card:
 ```
 ![mod-card](https://user-images.githubusercontent.com/1299821/68621707-b71c1100-04d0-11ea-8473-965dbd77b762.png)
 
+> Note: mod-card sets it's own `background` to `transparent`. That means, `--ha-card-background` will have no effect on mod-card itself. Instead, you ahve to modify the `background` property directly.
+
+Mod-card also allows you to manually specify a `cardHeight` of a card. This can be used to slightly modify the behavior of the layout engine of lovelace. See [this description](https://github.com/thomasloven/lovelace-layout-card#auto-layout) for details.
+The cardHeight is set with the `report_size:` option:
+
+```yaml
+type: custom:mod-card
+report_size: 5
+card:
+  ... etc ...
+```
+
+
 # FAQ
 
 ### How do I convert my old card-modder configuration to card-mod?
