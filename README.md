@@ -140,6 +140,40 @@ entities:
       }
 ```
 
+## Styling badges
+
+Badges can be styled too, with the base style applied to `:host`.
+Note that to change the color of a badge, you need to override the variable for it's default color. I.e. the badges in the example below are normally red, thus the `--label-badge-red` variable is set.
+
+```yaml
+badges:
+  - entity: sun.sun
+    name: Original
+  - entity: sun.sun
+    style: |
+      :host {
+        --label-badge-red: purple;
+      }
+    name: Purple
+  - entity: sun.sun
+    name: Teal
+    style: |
+      :host {
+        --label-badge-red: teal;
+      }
+  - entity: sun.sun
+    name: Dashed
+    style:
+      ha-state-label-badge:
+        $:
+          ha-label-badge:
+            $: |
+              .label-badge {
+                border-style: dashed !important;
+              }
+```
+![badges](https://user-images.githubusercontent.com/1299821/71958861-9da5f580-31f1-11ea-8c70-b1d6b3a69f9b.png)
+
 ## Templating
 Jinja templates have access to a few special variables. Those are:
 
