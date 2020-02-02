@@ -1,5 +1,5 @@
 import {fireEvent} from "card-tools/src/event.js";
-import {applyStyle} from "./apply-style.js";
+import "../card-mod";
 
 customElements.whenDefined('ha-card').then(() => {
   const HaCard = customElements.get('ha-card');
@@ -29,19 +29,24 @@ customElements.whenDefined('ha-card').then(() => {
     }
 
     const config = findConfig(this);
-    if(!config || !config.style) return;
+    if(!config) return;
 
     let entity_ids = config.entity_ids;
 
-    const apply = () => {
-      applyStyle(this, config.style, {
-          variables: {config},
-          entity_ids
-        }, !!config.debug_cardmod);
-    }
+    if(config.class)
+      this.classList.add(config.class);
+    if(config.type)
+      this.classList.add(`type-${config.type.replace(":","-")}`);
 
-    apply();
-    window.addEventListener("location-changed", () => apply());
+    const cardMod = this.querySelector("card-mod") || document.createElement("card-mod");
+    cardMod.type = "card";
+    cardMod.template = {
+      template: config.style,
+      variables: {config},
+      entity_ids
+    };
+    this.appendChild(cardMod);
+
   }
 
   fireEvent('ll-rebuild', {});

@@ -1,5 +1,5 @@
 import {fireEvent} from "card-tools/src/event.js";
-import {applyStyle} from "./apply-style.js";
+import "../card-mod";
 
 customElements.whenDefined('hui-glance-card').then(() => {
   const GlanceCard = customElements.get('hui-glance-card');
@@ -38,18 +38,23 @@ customElements.whenDefined('hui-glance-card').then(() => {
       `;
 
       const config = e.config || e.entityConf;
-      if(!config || !config.style) return;
+      if(!config) return;
       let entity_ids = config.entity_ids;
 
-      const apply = () => {
-        applyStyle(root, config.style, {
-            variables: {config},
-            entity_ids
-          }, !!config.debug_cardmod);
-      }
+      if(config.class)
+        e.classList.add(config.class);
+      if(config.type)
+        e.classList.add(`type-${config.type.replace(":","-")}`);
 
-      apply();
-      window.addEventListener("location-changed", apply);
+      const cardMod = root.querySelector("card-mod") || document.createElement("card-mod");
+      cardMod.type = "glance";
+      cardMod.template = {
+        template: config.style,
+        variables: {config},
+        entity_ids
+      };
+      root.appendChild(cardMod);
+
     });
   }
 

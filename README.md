@@ -3,6 +3,12 @@ card-mod
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
 
+# BETA
+
+This BETA version of card mod can get its styling information from the current Home Assistant theme.
+See `card-mod-themes.md` for more info.
+
+
 ## Requires Home Assistant version 0.98 or later
 
 Allows you to add css styles to any lovelace card.

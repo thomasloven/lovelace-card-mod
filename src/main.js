@@ -1,6 +1,6 @@
 import "./card-mod";
-import "./ha-card";
-import "./hui-entities-card";
-import "./hui-glance-card";
-import "./hui-state-label-badge";
+import "./patch/ha-card";
+import "./patch/hui-entities-card";
+import "./patch/hui-glance-card";
+import "./patch/hui-state-label-badge";
 import "./mod-card"
