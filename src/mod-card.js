@@ -15,7 +15,7 @@ class ModCard extends LitElement {
       };
     }
     setConfig(config) {
-        this._config = config;
+        this._config = JSON.parse(JSON.stringify(config));
         if(config.style === undefined)
         {
           this._config.style = NO_STYLE;

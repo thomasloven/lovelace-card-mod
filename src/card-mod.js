@@ -16,7 +16,7 @@ class CardMod extends HTMLElement {
   }
 
   set template(data) {
-    this._data = data;
+    this._data = JSON.parse(JSON.stringify(data));
     if(!this._has_template(data)) return;
 
     if(!this._data.entity_ids && this._data.template.includes("config.entity")) {
