@@ -225,10 +225,14 @@ entity: alarm_control_panel.alarm
 ![advanced](https://user-images.githubusercontent.com/1299821/59151780-59732c80-8a39-11e9-9f19-34d3e0dbd8e9.png)
 
 ## Mod-card
+
+** IMPORTANT: *** `mod-card` is a *workaround* for the *very few* cases where normal usage of card-mod does not work.
+I *cannot* stress this enough (apparently). If you every find yourself typing `type: custom:mod-card`, stop, go back, read this readme all the way through **again**, and realized that in approximately 10 out of 10 cases, you should NOT use `mod-card`.
+
 There are some cards where card-mod just won't work.
 Those cards often are not really *cards* at all, but change how other cards work. Examples include: `conditional`, `entity-filter`, `horizontal-stack` and `vertical-stack` as well as some custom cards, like `layout-card`, `auto-entities` and `state-switch` among others.
 
-For those cases, a special `mod-card` is provided as a workaround:
+For those cases, a special `mod-card` is provided as a **workaround**:
 
 ```yaml
 type: custom:mod-card
@@ -264,8 +268,15 @@ card:
 ### How do I convert my old card-modder configuration to card-mod?
 For cards, you just have to wrap everything in `ha-card {}` and format it as CSS.
 
+And don't forget to *remove* (not replace with anything else) `card-modder`.
+
 So, you go from:
 ```yaml
+type: custom:card-modder
+card:
+  type: entities
+  entities:
+    - light.bed_light
 style:
   "--ha-card-background": rgba(200, 0, 0, 0.5)
   color: white
@@ -273,6 +284,9 @@ style:
 
 to
 ```yaml
+type: entities
+entities:
+  - light.bed_light
 style: |
   ha-card {
     --ha-card-background: rgba(200, 0, 0, 0.5);
@@ -281,8 +295,6 @@ style: |
 ```
 
 For rows in an entities card, you replace `ha-card` with `:host` as described above.
-
-Note that some cards can't be modded with card-mod. See below.
 
 ---
 <a href="https://www.buymeacoffee.com/uqD6KHCdJ" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
