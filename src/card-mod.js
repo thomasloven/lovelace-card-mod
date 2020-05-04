@@ -63,4 +63,10 @@ class CardMod extends HTMLElement {
 
 }
 
-customElements.define("card-mod", CardMod);
+if(!customElements.get("card-mod")) {
+  customElements.define('card-mod', CardMod);
+  const pjson = require('../package.json');
+  console.info(`%cCARD-MOD ${pjson.version} IS INSTALLED`,
+  "color: green; font-weight: bold",
+  "");
+}
