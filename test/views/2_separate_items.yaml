@@ -1,0 +1,104 @@
+x-anchors:
+  desc: &desc
+    type: markdown
+    style: |
+      code {
+        font-size: 8pt;
+        line-height: normal;
+        white-space: pre-wrap;
+        }
+#
+# Styling individual items
+#
+title: Individual items
+cards:
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 1: Styling each entity card row separately
+          First row red
+          Second row green
+          Third row blue
+          ```
+          type: entities
+          show_header_toggle: false
+          entities:
+            - entity: light.bed_light
+              style: |
+                :host {
+                  color: red;
+                }
+            - entity: light.ceiling_lights
+              style: |
+                :host {
+                  color: green;
+                }
+            - entity: light.kitchen_lights
+              style: |
+                :host {
+                  color: blue;
+                }
+          ```
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: light.bed_light
+            style: |
+              :host {
+                color: red;
+              }
+          - entity: light.ceiling_lights
+            style: |
+              :host {
+                color: green;
+              }
+          - entity: light.kitchen_lights
+            style: |
+              :host {
+                color: blue;
+              }
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 2: Styling each glance item separately
+          First button red
+          Second button green
+          Third button blue
+          ```
+          type: glance
+          entities:
+            - entity: light.bed_light
+              style: |
+                :host {
+                  color: red;
+                }
+            - entity: light.ceiling_lights
+              style: |
+                :host {
+                  color: green;
+                }
+            - entity: light.kitchen_lights
+              style: |
+                :host {
+                  color: blue;
+                }
+          ```
+      - type: glance
+        entities:
+          - entity: light.bed_light
+            style: |
+              :host {
+                color: red;
+              }
+          - entity: light.ceiling_lights
+            style: |
+              :host {
+                color: green;
+              }
+          - entity: light.kitchen_lights
+            style: |
+              :host {
+                color: blue;
+              }

@@ -1,0 +1,68 @@
+x-anchors:
+  desc: &desc
+    type: markdown
+    style: |
+      code {
+        font-size: 8pt;
+        line-height: normal;
+        white-space: pre-wrap;
+        }
+#
+# Styling badges
+#
+title: Badges
+badges:
+  - entity: sun.sun
+    name: Default
+  - entity: sun.sun
+    name: Purple border
+    style: |
+      :host {
+        --label-badge-red: purple;
+      }
+  - entity: sun.sun
+    name: Red text
+    style: |
+      :host {
+        color: red
+      }
+  - entity: sun.sun
+    name: Teal background
+    style: |
+      :host {
+        --label-badge-background-color: teal;
+      }
+
+cards:
+  - <<: *desc
+    content: |
+      ## 1: Change badge properties
+
+      First: Default
+      Second: Purple border
+      Third: Red text
+      Fourth: Teal background
+
+      ```
+      badges:
+        - entity: sun.sun
+          name: Default
+        - entity: sun.sun
+          name: Purple
+          style: |
+            :host {
+              --label-badge-red: purple;
+            }
+        - entity: sun.sun
+          name: Teal
+          style: |
+            :host {
+              color: red
+            }
+        - entity: sun.sun
+          name: No background
+          style: |
+            :host {
+              --label-badge-background-color: teal;
+            }
+      ```

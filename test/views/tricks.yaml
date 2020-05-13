@@ -1,0 +1,198 @@
+x-anchors:
+  desc: &desc
+    type: markdown
+    style: |
+      code {
+        font-size: 8pt;
+        line-height: normal;
+        white-space: pre-wrap;
+        }
+
+title: Various tricks
+cards:
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## CSS keyframes
+          ```
+          style: |
+            @keyframes blink {
+              50% {
+                background: red;
+              }
+            }
+            ha-card {
+              animation: blink 5s linear infinite;
+            }
+          ```
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - light.bed_light
+          - light.ceiling_lights
+          - light.kitchen_lights
+        style: |
+          @keyframes blink {
+            50% {
+              background: red;
+            }
+          }
+          ha-card {
+            animation: blink 3s linear infinite;
+          }
+
+      - <<: *desc
+        content: |
+          ```
+          ha-card {
+            z-index: 1;
+            animation: wiggle 2s linear infinite alternate;
+          }
+          @keyframes wiggle {
+            0% {
+              -webkit-transform: rotate(5deg);
+              transform: rotate(5deg);
+            }
+            100% {
+              -webkit-transform: rotate(-5deg);
+              transform: rotate(-5deg);
+            }
+          }
+          ```
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - light.bed_light
+          - light.ceiling_lights
+          - light.kitchen_lights
+        style: |
+          ha-card {
+            z-index: 1;
+            animation: wiggle 2s linear infinite alternate;
+          }
+          @keyframes wiggle {
+            0% {
+              -webkit-transform: rotate(5deg);
+              transform: rotate(5deg);
+            }
+            100% {
+              -webkit-transform: rotate(-5deg);
+              transform: rotate(-5deg);
+            }
+          }
+
+      - <<: *desc
+        content: |
+          ```
+          @keyframes blink {
+            24% {
+              outline: 0px none white;
+              }
+            25% {
+              outline: 0px solid green;
+              }
+            50% {
+              outline: 5px solid green;
+            }
+            75% {
+              outline: 0px solid green;
+              }
+            76% {
+              outline: 0px none white;
+              }
+          }
+          ```
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - light.bed_light
+          - light.ceiling_lights
+          - light.kitchen_lights
+        style: |
+          ha-card {
+            animation: blink 5s linear infinite;
+          }
+          @keyframes blink {
+            24% {
+              outline: 0px none white;
+              }
+            25% {
+              outline: 0px solid green;
+              }
+            50% {
+              outline: 5px solid green;
+            }
+            75% {
+              outline: 0px solid green;
+              }
+            76% {
+              outline: 0px none white;
+              }
+          }
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## Css ::after
+          Display brightness of lights as secondary info
+          {%raw%}
+          ```
+          entities:
+            - entity: light.bed_light
+              secondary_info: true
+              style: &brightness
+                hui-generic-entity-row:
+                  $: |
+                    .secondary::after {
+                      content: "{{ (state_attr(config.entity, 'brightness')/255*100) | int }}%"
+                      }
+            - entity: light.ceiling_lights
+              secondary_info: true
+              style: *brightness
+            - entity: light.kitchen_lights
+              secondary_info: true
+              style: *brightness
+          ```
+          {%endraw%}
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: light.bed_light
+            secondary_info: true
+            style: &brightness
+              hui-generic-entity-row:
+                $: |
+                  .secondary::after {
+                    content: "{{ (state_attr(config.entity, 'brightness')/255*100) | int }}%"
+                    }
+          - entity: light.ceiling_lights
+            secondary_info: true
+            style: *brightness
+          - entity: light.kitchen_lights
+            secondary_info: true
+            style: *brightness
+
+      - <<: *desc
+        content: |
+          Display currently logged in user name
+          {%raw%}
+          ```
+          type: markdown
+          content: |
+            # Hello
+          style: |
+            h1::after {
+              content: " {{user}}"
+            }
+          ```
+          {%endraw%}
+      - type: markdown
+        content: |
+          # Hello
+        style: |
+          h1::after {
+            content: " {{user}}"
+          }

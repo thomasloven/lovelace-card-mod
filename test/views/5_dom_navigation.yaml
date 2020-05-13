@@ -1,0 +1,67 @@
+x-anchors:
+  desc: &desc
+    type: markdown
+    style: |
+      code {
+        font-size: 8pt;
+        line-height: normal;
+        white-space: pre-wrap;
+        }
+
+title: DOM navigation
+cards:
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## DOM navigation
+          Main color red
+          Buttons larger and blue
+          12th button green
+          {%raw%}
+          ```
+          style:
+            .: |
+              ha-card {
+                --mdc-theme-primary: red;
+              }
+            "#keypad mwc-button:nth-of-type(12)":
+              $: |
+                button {
+                  font-size: 16px !important;
+                  --mdc-theme-primary: green;
+                }
+            "#keypad mwc-button":
+              $: |
+                :host {
+                  background: blue;
+                }
+                button {
+                  font-size: 24px !important;
+                }
+          ```
+          {%endraw%}
+          Hint: More specific rules first
+      - type: alarm-panel
+        card_icon: mdi:bell
+        name: Alarm Panel
+        style:
+          .: |
+            ha-card {
+              --mdc-theme-primary: red;
+            }
+          "#keypad mwc-button:nth-of-type(12)":
+            $: |
+              button {
+                font-size: 16px !important;
+                --mdc-theme-primary: green;
+              }
+          "#keypad mwc-button":
+            $: |
+              :host {
+                background: blue;
+              }
+              button {
+                font-size: 24px !important;
+              }
+        entity: alarm_control_panel.alarm

@@ -1,0 +1,30 @@
+default_config:
+
+demo:
+
+lovelace:
+  mode: yaml
+  resources:
+    - url: /local/card-mod.js
+      type: module
+  dashboards:
+    lovelace-yaml:
+      mode: yaml
+      title: yaml
+      filename: lovelace.yaml
+
+input_select:
+  background:
+    name: Background
+    options:
+      - bear
+      - kitten
+input_number:
+  x_pos:
+    name: x
+    min: 0
+    max: 100
+  y_pos:
+    name: y
+    min: 0
+    max: 100

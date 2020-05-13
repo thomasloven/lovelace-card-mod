@@ -1,0 +1,165 @@
+x-anchors:
+  card: &card
+    type: entities
+    show_header_toggle: false
+    entities:
+      - light.bed_light
+      - light.ceiling_lights
+      - light.kitchen_lights
+
+  desc: &desc
+    type: markdown
+    style: |
+      code {
+        font-size: 8pt;
+        line-height: normal;
+        white-space: pre-wrap;
+        }
+#
+# Applying basic styles to cards
+#
+title: Cards
+cards:
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 1: Default entities card with three entities
+
+          ```
+          type: entities
+          show_header_toggle: false
+          entities:
+            - light.bed_light
+            - light.ceiling_lights
+            - light.kitchen_lights
+          ```
+      - <<: *card
+        title: Default
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 2: Basic styling
+          Red colored text
+          ```
+          type: entities
+          show_header_toggle: false
+          entities:
+            - light.bed_light
+            - light.ceiling_lights
+            - light.kitchen_lights
+          style: |
+            ha-card {
+              color: red;
+            }
+          ```
+      - <<: *card
+        title: Red text
+        style: |
+          ha-card {
+            color: red;
+          }
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 3: Using CSS variables
+          Red/Green switches, rounded corners
+          ```
+          style: |
+            ha-card {
+              --switch-unchecked-button-color: red;
+              --switch-checked-color: green;
+              --switch-checked-button-color: green;
+              --switch-checked-track-color: green;
+              --ha-card-border-radius: 20px;
+            }
+          ```
+      - <<: *card
+        title: Using variables
+        style: |
+          ha-card {
+            --switch-unchecked-button-color: red;
+            --switch-checked-color: green;
+            --switch-checked-button-color: green;
+            --switch-checked-track-color: green;
+            --ha-card-border-radius: 20px;
+          }
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 4: Using CSS selectors
+          Red text, green header, second entity has blue text
+          ```
+          style: |
+            ha-card {
+              color: red;
+            }
+            .card-header {
+              color: green;
+            }
+            #states div:nth-of-type(2n+0) {
+              color: blue;
+            }
+          ```
+      - <<: *card
+        title: Css selectors
+        style: |
+          ha-card {
+            color: red;
+          }
+          .card-header {
+            color: green;
+          }
+          #states div:nth-of-type(2n+0) {
+            color: blue;
+          }
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 5: Borderless
+          No background or box shadow
+          ```
+          style: |
+            ha-card {
+              background: none;
+              box-shadow: none;
+            }
+          ```
+      - <<: *card
+        title: Borderless
+        style: |
+          ha-card {
+            background: none;
+            box-shadow: none;
+          }
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 6: Different card type - glance card
+          Teal background
+          ```
+          style: |
+            ha-card {
+              background: teal;
+            }
+          ```
+      - type: glance
+        title: Glance card
+        entities:
+          - light.bed_light
+          - light.ceiling_lights
+          - light.kitchen_lights
+        style: |
+          ha-card {
+            background: teal;
+          }

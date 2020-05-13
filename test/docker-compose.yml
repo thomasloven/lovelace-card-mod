@@ -1,0 +1,57 @@
+#
+# Docker services for testing Home Assistant integrations and plugins
+#
+# Automaatically sets up configuration adds a user and skips the onboarding
+#
+# Username: dev
+# Password: dev
+#
+# Two services, 'prod' and 'dev' run the latest production and dev docker images respectively.
+#
+# Start with
+# $ docker-compose up prod
+# or
+# $ docker-compose up dev
+#
+# When done, clean up with
+# $ docker-compose rm -f
+#
+
+x-files: &x-files
+  - ../card-mod.js:/config/www/card-mod.js
+  - ./configuration.yaml:/config/configuration.yaml
+  - ./lovelace.yaml:/config/lovelace.yaml
+  - ./views:/config/views
+
+x-command: &x-command |
+  bash -c '
+  hass --script ensure_config -c /config &&
+  hass --script auth -c /config add dev dev &&
+  echo "
+    {
+      \"data\": {
+        \"done\": [
+          \"user\",
+          \"core_config\",
+          \"integration\"
+        ]
+      },
+      \"key\": \"onboarding\",
+      \"version\": 3
+    }
+    " > /config/.storage/onboarding &&
+  hass -c /config'
+
+version: '3.5'
+services:
+
+  prod: &base_service
+    image: homeassistant/home-assistant:latest
+    volumes: *x-files
+    ports:
+      - "5001:8123"
+    command: *x-command
+
+  dev:
+    <<: *base_service
+    image: homeassistant/home-assistant:dev

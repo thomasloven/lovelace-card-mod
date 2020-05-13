@@ -1,0 +1,117 @@
+x-anchors:
+  desc: &desc
+    type: markdown
+    style: |
+      code {
+        font-size: 8pt;
+        line-height: normal;
+        white-space: pre-wrap;
+        }
+
+title: Templates
+cards:
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 1: State based style
+          Teal background when Bed Light is on
+          Purple background when Bed Light is off
+          {% raw %}
+          ```
+          style: |
+            ha-card {
+              background:
+                {% if is_state('light.bed_light', 'on') %}
+                  teal
+                {% else %}
+                  purple
+                {% endif %}
+                ;
+            }
+          ```
+          {% endraw %}
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - light.bed_light
+          - light.ceiling_lights
+          - light.kitchen_lights
+        style: |
+          ha-card {
+            background:
+              {% if is_state('light.bed_light', 'on') %}
+                teal
+              {% else %}
+                purple
+              {% endif %}
+              ;
+          }
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 2: Dynamic background
+          Card background follows selected value
+          {%raw%}
+          ```
+          style: |
+            ha-card {
+              background: url(https://place{{ states('input_select.background') }}.com/g/600/400);
+            }
+          ```
+          {%endraw%}
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - input_select.background
+          - light.bed_light
+          - light.ceiling_lights
+          - light.kitchen_lights
+        style: |
+          ha-card {
+            background: url(https://place{{ states('input_select.background') }}.com/g/600/400);
+          }
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 3: Dynamic styling of elements
+          Position of light bulb setable by sliders below.
+
+          Set a css variable using card-mod and then use that to place the element
+          {%raw%}
+          ```
+          type: picture-elements
+          style: |
+            ha-card {
+              --left-pos: {{states('input_number.x_pos')}}%;
+              --top-pos: {{states('input_number.y_pos')}}%;
+            }
+          elements:
+            - type: state-icon
+              entity: light.bed_light
+              style:
+                top: var(--top-pos)
+                left: var(--left-pos)
+          ```
+          {%endraw%}
+      - type: picture-elements
+        image: https://placekitten.com/g/600/400
+        elements:
+          - type: state-icon
+            entity: light.bed_light
+            style:
+              top: var(--top-pos)
+              left: var(--left-pos)
+        style: |
+          ha-card {
+            --left-pos: {{states('input_number.x_pos')}}%;
+            --top-pos: {{states('input_number.y_pos')}}%;
+          }
+      - type: entities
+        entities:
+          - input_number.x_pos
+          - input_number.y_pos

@@ -1,0 +1,60 @@
+x-anchors:
+  desc: &desc
+    type: markdown
+    style: |
+      code {
+        font-size: 8pt;
+        line-height: normal;
+        white-space: pre-wrap;
+        }
+
+title: mod-card
+cards:
+  - type: vertical-stack
+    cards:
+      - type: vertical-stack
+        cards:
+          - <<: *desc
+            content: |
+              ## 1: Style horizontal stack
+              Green border around all cards
+              ```
+              type: custom:mod-card
+              card:
+                type: horizontal-stack
+                cards:
+                  - type: markdown
+                    content: "# 1"
+                  - type: markdown
+                    content: "# 2"
+                  - type: markdown
+                    content: "# 3"
+              style: |
+                ha-card {
+                  border: 1px solid green;
+                }
+              ```
+          - type: custom:mod-card
+            card:
+              type: horizontal-stack
+              cards:
+                - type: markdown
+                  content: "# 1"
+                - type: markdown
+                  content: "# 2"
+                - type: markdown
+                  content: "# 3"
+            style: |
+              ha-card {
+                border: 1px solid green;
+              }
+      - type: vertical-stack
+        cards:
+          - <<: *desc
+            content: |
+              ## 2: Lazy-load with mod-card
+              No styles, alarm panel shows up
+          - type: custom:mod-card
+            card:
+              type: alarm-panel
+              entity: alarm_control_panel.alarm
