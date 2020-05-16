@@ -1,0 +1,34 @@
+x-anchors:
+  desc: &desc
+    type: markdown
+    style: |
+      code {
+        font-size: 8pt;
+        line-height: normal;
+        white-space: pre-wrap;
+        }
+
+title: Answers
+cards:
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          [Discord](https://discordapp.com/channels/330944238910963714/460846676358332417/710862754130427924)
+          Since sensor rows use slotted content for the sensor value, that can be styled without going through the shadowroots.
+          ```
+          type: entities
+          entities:
+            - entity: sensor.outside_temperature
+              style: |
+                .text-content {
+                  color: red;
+                }
+          ```
+      - type: entities
+        entities:
+          - entity: sensor.outside_temperature
+            style: |
+              .text-content {
+                color: red;
+              }

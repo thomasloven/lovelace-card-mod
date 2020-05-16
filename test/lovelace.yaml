@@ -8,3 +8,4 @@ views:
   - !include views/5_dom_navigation.yaml
   - !include views/6_mod_card.yaml
   - !include views/tricks.yaml
+  - !include views/answers.yaml
