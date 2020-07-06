@@ -1,5 +1,5 @@
 import {fireEvent} from "card-tools/src/event.js";
-import {applyStyle} from "./apply-style.js";
+import {applyStyle} from "../apply-style.js";
 
 customElements.whenDefined('hui-state-label-badge').then(() => {
     const HuiStateLabelBadge = customElements.get('hui-state-label-badge');

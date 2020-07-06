@@ -182,17 +182,65 @@ cards:
           ```
           type: markdown
           content: |
-            # Hello
-          style: |
-            h1::after {
-              content: " {{user}}"
-            }
+            # Hello,
+          style:
+            ha-markdown:
+              $: |
+                h1::after {
+                  content: " {{user}}!"
+                }
           ```
           {%endraw%}
       - type: markdown
         content: |
-          # Hello
-        style: |
-          h1::after {
-            content: " {{user}}"
-          }
+          # Hello,
+        style:
+          ha-markdown:
+            $: |
+              h1::after {
+                content: " {{user}}!"
+              }
+
+      - type: entities
+        title: Device trackers
+        entities:
+          - entity: device_tracker.demo_anne_therese
+            secondary_info: true
+            style:
+              hui-generic-entity-row:
+                $: |
+                  .secondary::after {
+                    content: "{{state_attr(config.entity, 'battery')}}% battery charge";
+                  }
+              .: |
+                :host {
+                  display: block;
+                  background: linear-gradient(to right, rgba(0,255,0,0.5), {{state_attr(config.entity, 'battery')}}%, white {{state_attr(config.entity, 'battery')}}%);
+                }
+          - entity: device_tracker.demo_home_boy
+            secondary_info: true
+            style:
+              hui-generic-entity-row:
+                $: |
+                  .secondary::after {
+                    content: "{{state_attr(config.entity, 'battery')}}% battery charge";
+                  }
+              .: |
+                :host {
+                  display: block;
+                  background: linear-gradient(to right, rgba(0,255,0,0.5), {{state_attr(config.entity, 'battery')}}%, white {{state_attr(config.entity, 'battery')}}%);
+                }
+          - entity: device_tracker.demo_paulus
+            secondary_info: true
+            style:
+              hui-generic-entity-row:
+                $: |
+                  .secondary::after {
+                    content: "{{state_attr(config.entity, 'battery')}}% battery charge";
+                  }
+              .: |
+                :host {
+                  display: block;
+                  background: linear-gradient(to right, rgba(0,255,0,0.5), {{state_attr(config.entity, 'battery')}}%, white {{state_attr(config.entity, 'battery')}}%);
+                }
+

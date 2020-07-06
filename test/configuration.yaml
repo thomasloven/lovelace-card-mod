@@ -3,10 +3,7 @@ default_config:
 demo:
 
 lovelace:
-  mode: yaml
-  resources:
-    - url: /local/card-mod.js
-      type: module
+  mode: storage
   dashboards:
     lovelace-yaml:
       mode: yaml

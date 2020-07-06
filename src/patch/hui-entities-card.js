@@ -1,5 +1,5 @@
 import {fireEvent} from "card-tools/src/event.js";
-import {applyStyle} from "./apply-style.js";
+import {applyStyle} from "../apply-style.js";
 
 customElements.whenDefined('hui-entities-card').then(() => {
   const EntitiesCard = customElements.get('hui-entities-card');

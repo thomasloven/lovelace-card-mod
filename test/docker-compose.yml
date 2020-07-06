@@ -40,7 +40,24 @@ x-command: &x-command |
       \"version\": 3
     }
     " > /config/.storage/onboarding &&
-  hass -c /config'
+
+  echo "
+    {
+      \"data\": {
+        \"items\": [
+          {
+            \"id\": \"1\",
+            \"type\": \"module\",
+            \"url\": \"/local/card-mod.js\"
+          }
+        ]
+      },
+      \"key\": \"lovelace_resources\",
+      \"version\": 1
+    }
+    " > /config/.storage/lovelace_resources &&
+
+  hass -v -c /config'
 
 version: '3.5'
 services:
