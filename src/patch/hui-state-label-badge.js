@@ -1,5 +1,4 @@
 import {fireEvent} from "card-tools/src/event.js";
-import {applyStyle} from "../apply-style.js";
 
 customElements.whenDefined('hui-state-label-badge').then(() => {
     const HuiStateLabelBadge = customElements.get('hui-state-label-badge');
@@ -11,10 +10,13 @@ customElements.whenDefined('hui-state-label-badge').then(() => {
         let entity_ids = config.entity_ids;
 
         const apply = () => {
-          applyStyle(this.shadowRoot, config.style, {
-              variables: {config},
-              entity_ids
-            }, !!config.debug_cardmod);
+          this._cardMod = this._cardMod || document.createElement("card-mod");
+          this._cardMod.template = {
+            template: config.style,
+            variables: {config},
+            entity_ids: config.entity_ids,
+          };
+          this.shadowRoot.appendChild(this._cardMod);
         }
 
         apply();

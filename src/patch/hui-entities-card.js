@@ -1,5 +1,4 @@
 import {fireEvent} from "card-tools/src/event.js";
-import {applyStyle} from "../apply-style.js";
 
 customElements.whenDefined('hui-entities-card').then(() => {
   const EntitiesCard = customElements.get('hui-entities-card');
@@ -17,10 +16,13 @@ customElements.whenDefined('hui-entities-card').then(() => {
     let entity_ids = config.entity_ids;
 
     const apply = () => {
-      applyStyle(row.shadowRoot, config.style, {
-          variables: {config},
-          entity_ids
-        }, !!config.debug_cardmod);
+      row._cardMod = row._cardMod || document.createElement("card-mod");
+      row._cardMod.template = {
+        template: config.style,
+        variables: {config},
+        entity_ids: config.entity_ids,
+      };
+      row.shadowRoot.appendChild(row._cardMod);
     }
 
     row.updateComplete.then(apply);

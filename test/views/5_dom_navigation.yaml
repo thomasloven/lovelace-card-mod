@@ -25,12 +25,6 @@ cards:
               ha-card {
                 --mdc-theme-primary: red;
               }
-            "#keypad mwc-button:nth-of-type(12)":
-              $: |
-                button {
-                  font-size: 16px !important;
-                  --mdc-theme-primary: green;
-                }
             "#keypad mwc-button":
               $: |
                 :host {
@@ -38,6 +32,12 @@ cards:
                 }
                 button {
                   font-size: 24px !important;
+                }
+            "#keypad mwc-button:nth-of-type(12)":
+              $: |
+                button {
+                  font-size: 16px !important;
+                  --mdc-theme-primary: green;
                 }
           ```
           {%endraw%}
@@ -50,12 +50,6 @@ cards:
             ha-card {
               --mdc-theme-primary: red;
             }
-          "#keypad mwc-button:nth-of-type(12)":
-            $: |
-              button {
-                font-size: 16px !important;
-                --mdc-theme-primary: green;
-              }
           "#keypad mwc-button":
             $: |
               :host {
@@ -63,5 +57,11 @@ cards:
               }
               button {
                 font-size: 24px !important;
+              }
+          "#keypad mwc-button:nth-of-type(12)":
+            $: |
+              button {
+                font-size: 16px !important;
+                --mdc-theme-primary: green;
               }
         entity: alarm_control_panel.alarm

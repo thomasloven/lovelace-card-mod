@@ -1,64 +1,99 @@
-import {subscribeRenderTemplate} from "card-tools/src/templates.js";
+import { LitElement, html } from "card-tools/src/lit-element";
+import { subscribeRenderTemplate, hasTemplate } from "card-tools/src/templates";
 
-class CardMod extends HTMLElement {
+const EMPTY_TEMPLATE = {template: "", variables: {}, entity_ids: []};
 
-  disconnectedCallback() {
-    this._disconnect();
-  }
-  connectedCallback() {
-    this._connect();
-  }
+class CardMod extends LitElement {
 
-  _has_template(data) {
-    if(data.template.includes("{%")) return true;
-    if(data.template.includes("{{")) return true;
-    return false;
+  static get properties() {
+    return {
+      _renderedStyles: {},
+      _renderer: {},
+    }
   }
 
   set template(data) {
-    this._data = JSON.parse(JSON.stringify(data));
-    if(!this._has_template(data)) return;
+    const _data = JSON.parse(JSON.stringify(data));
 
-    if(!this._data.entity_ids && this._data.template.includes("config.entity")) {
-      if(this._data.variables.config && this._data.variables.config.entity) {
-        this._data.entity_ids = [this._data.variables.config.entity];
+    if(JSON.stringify(_data.template).includes("config.entity") && !_data.entity_ids) {
+      if(_data.variables.config && _data.variables.config.entity)
+        _data.entity_ids = [_data.variables.config.entity]
+    }
+
+    this.setStyle(_data);
+  }
+
+  async unStyle() {
+    this._styledChildren = this._styledChildren || new Set();
+    for(const c of this._styledChildren) {
+      c.template = EMPTY_TEMPLATE;
+    }
+  }
+
+  async setStyle(data) {
+
+    let { template, variables, entity_ids } = data;
+
+    await this.unStyle();
+
+    if(!template) template = "";
+    if(typeof template === "string") {
+      this._renderedStyles = template;
+      if(hasTemplate(template)) {
+        if(this._renderer) {
+          await this._renderer();
+          this._renderer = undefined;
+        }
+
+        this._renderer = await subscribeRenderTemplate(
+          null,
+          (res) => {
+            this._renderedStyles = res;
+          },
+          { template, variables, entity_ids }
+        )
+      }
+      return;
+    }
+
+    await this.updateComplete;
+    const parent = this.parentElement || this.parentNode;
+    if(!parent) return {template: "", variable, entity_ids};
+    if(parent.updateComplete) await parent.updateComplete;
+    for(const k of Object.keys(template)) {
+      let next = [];
+      if(k === ".") {
+        this.setStyle({template: template[k], variables, entity_ids});
+        continue;
+      } else if(k === "$") {
+        if(parent.localName === "ha-card") debugger;
+        next = [parent.shadowRoot];
+      } else {
+        next = parent.querySelectorAll(k);
+      }
+      if(!next.length) continue;
+      for(const el of next) {
+        if(!el) continue;
+        let styleEl = el.querySelector(":scope > card-mod");
+        if(!styleEl || styleEl._parent !== this) {
+          styleEl = document.createElement("card-mod");
+          this._styledChildren.add(styleEl);
+          styleEl._parent = this;
+        }
+        styleEl.template = {template: template[k], variables, entity_ids};
+        el.appendChild(styleEl);
       }
     }
+
   }
 
-  update() {
-    this._disconnect().then(() => this._connect());
-  }
-
-  async _connect() {
-    if(!this._data) return;
-
-    if(!this._has_template(this._data)) {
-      this.innerHTML = `<style>${this._data.template}</style>`;
-    }
-
-    if(this._unsubRenderTemplate) return;
-    this._unsubRenderTemplate = subscribeRenderTemplate(null,
-      (result) => this.innerHTML = `<style>${result}</style>`,
-      this._data);
-
-    this._unsubRenderTemplate.catch(() => {
-      this.innerHTML = `<style>${this._data.template}</style>`;
-      this._unsubRenderTemplate = undefined;
-    });
-  }
-
-  async _disconnect() {
-    if(this._unsubRenderTemplate) {
-      try {
-        const unsub = await this._unsubRenderTemplate;
-        this._unsubRenderTemplate = undefined;
-        await unsub();
-      } catch (e) {
-        if(e.code !== "not_found")
-          throw e;
-      }
-    }
+  createRenderRoot() { return this; }
+  render() {
+    return html`
+      <style>
+        ${this._renderedStyles}
+      </style>
+    `;
   }
 
 }
