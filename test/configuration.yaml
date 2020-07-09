@@ -25,3 +25,21 @@ input_number:
     name: y
     min: 0
     max: 100
+
+frontend:
+  themes:
+    test:
+      card-mod-card: |
+        ha-card {
+          background: blue;
+        }
+      card-mod-row: |
+        :host {
+          display: block;
+          background: {% if is_state(config.entity, 'on') %}green{% else %}red{% endif %};
+        }
+    test2:
+      card-mod-card: |
+        ha-card {
+          background: green;
+          }

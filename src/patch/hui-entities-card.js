@@ -1,4 +1,5 @@
 import {fireEvent} from "card-tools/src/event.js";
+import { applyToElement } from "../card-mod";
 
 customElements.whenDefined('hui-entities-card').then(() => {
   const EntitiesCard = customElements.get('hui-entities-card');
@@ -8,27 +9,18 @@ customElements.whenDefined('hui-entities-card').then(() => {
 
     const retval = oldRenderEntity.bind(this)(config);
 
-    if(!config || !config.style) return retval;
+    if(!config) return retval;
     if(!retval || !retval.values) return retval;
     const row = retval.values[0];
-    if(!row || !row.updateComplete) return retval;
+    if(!row) return retval;
 
     let entity_ids = config.entity_ids;
 
-    const apply = () => {
-      row._cardMod = row._cardMod || document.createElement("card-mod");
-      row._cardMod.template = {
-        template: config.style,
-        variables: {config},
-        entity_ids: config.entity_ids,
-      };
-      row.shadowRoot.appendChild(row._cardMod);
-    }
+    const apply = () => applyToElement(row, "row", config.style, {config}, config.entity_ids);
 
-    row.updateComplete.then(apply);
+    apply();
     if(retval.values[0])
       retval.values[0].addEventListener("ll-rebuild", apply);
-    window.addEventListener("location-changed", apply);
     return retval;
   }
 

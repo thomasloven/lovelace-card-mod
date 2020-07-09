@@ -1,4 +1,5 @@
 import {fireEvent} from "card-tools/src/event.js";
+import { applyToElement } from "../card-mod";
 
 customElements.whenDefined('ha-card').then(() => {
   const HaCard = customElements.get('ha-card');
@@ -28,19 +29,12 @@ customElements.whenDefined('ha-card').then(() => {
     }
 
     const config = findConfig(this);
-    if(!config || !config.style) return;
 
-    const apply = () => {
-      this._cardMod = this._cardMod || document.createElement("card-mod");
-      this._cardMod.template = {
-        template: config.style,
-        variables: {config},
-        entity_ids: config.entity_ids,
-      };
-      this.appendChild(this._cardMod);
-    }
+    if(!config) return;
+
+    const apply = () => applyToElement(this, "card", config.style, {config}, config.entity_ids, false);
+
     apply();
-    window.addEventListener("location-changed", apply);
   }
 
   fireEvent('ll-rebuild', {});

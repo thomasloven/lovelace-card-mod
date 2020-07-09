@@ -1,7 +1,25 @@
 import { LitElement, html } from "card-tools/src/lit-element";
 import { subscribeRenderTemplate, hasTemplate } from "card-tools/src/templates";
+import { hass } from "card-tools/src/hass";
 
 const EMPTY_TEMPLATE = {template: "", variables: {}, entity_ids: []};
+
+export const applyToElement = async (el, type, template, variables, entity_ids, shadow=true) => {
+  if(el.localName.includes("-"))
+    await customElements.whenDefined(el.localName);
+  if(el.updateComplete)
+    await el.updateComplete;
+
+  el._cardMod = el._cardMod || document.createElement("card-mod");
+  el._cardMod.type = type;
+  el._cardMod.template = {
+    template,
+    variables,
+    entity_ids,
+  };
+  const target = shadow ? el.shadowRoot : el;
+  target.appendChild(el._cardMod);
+}
 
 class CardMod extends LitElement {
 
@@ -12,15 +30,46 @@ class CardMod extends LitElement {
     }
   }
 
-  set template(data) {
-    const _data = JSON.parse(JSON.stringify(data));
+  static get applyToElement() { return applyToElement; }
 
-    if(JSON.stringify(_data.template).includes("config.entity") && !_data.entity_ids) {
-      if(_data.variables.config && _data.variables.config.entity)
-        _data.entity_ids = [_data.variables.config.entity]
+  connectedCallback() {
+    super.connectedCallback();
+    this.template = this._data;
+  }
+
+  async getTheme() {
+    // await this.updateComplete;
+    if(!this.type) return null;
+    let key = `card-mod-${this.type}-yaml`;
+    let compressed = window.getComputedStyle(this).getPropertyValue(`--${key}`);
+    if(!compressed) {
+      key = `card-mod-${this.type}`;
+      compressed = window.getComputedStyle(this).getPropertyValue(`--${key}`);
     }
 
-    this.setStyle(_data);
+    if(!window.CardModCompressedStyles ||
+      !window.CardModCompressedStyles[key] ||
+      !window.CardModCompressedStyles[key][compressed]) return null;
+    return window.CardModCompressedStyles[key][compressed];
+  }
+
+  set template(data) {
+    this._data = JSON.parse(JSON.stringify(data));
+
+    this._setTemplate(this._data);
+  }
+
+  async _setTemplate(data) {
+    if(!data.template && !this._parent) {
+      data.template = await this.getTheme();
+    }
+
+    if(data.template && JSON.stringify(data.template).includes("config.entity") && !data.entity_ids) {
+      if(data.variables.config && data.variables.config.entity)
+        data.entity_ids = [data.variables.config.entity]
+    }
+
+    await this.setStyle(data);
   }
 
   async unStyle() {
@@ -39,12 +88,17 @@ class CardMod extends LitElement {
     if(!template) template = "";
     if(typeof template === "string") {
       this._renderedStyles = template;
-      if(hasTemplate(template)) {
-        if(this._renderer) {
+      if(this._renderer) {
+        try {
           await this._renderer();
-          this._renderer = undefined;
+        } catch(err) {
+          if(!err.code || err.code !== "not_found")
+            throw(err);
         }
+        this._renderer = undefined;
+      }
 
+      if(hasTemplate(template)) {
         this._renderer = await subscribeRenderTemplate(
           null,
           (res) => {
