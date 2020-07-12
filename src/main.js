@@ -3,6 +3,7 @@ import "./patch/ha-card";
 import "./patch/hui-entities-card";
 import "./patch/hui-glance-card";
 import "./patch/hui-state-label-badge";
+import "./patch/hui-view";
 import "./mod-card"
 
 
@@ -21,6 +22,8 @@ const compressThemes = () => {
     "card-mod-glance": {},
     "card-mod-badge-yaml": {},
     "card-mod-badge": {},
+    "card-mod-view-yaml": {},
+    "card-mod-view": {},
   };
 
   for (const t in themes) {
@@ -40,3 +43,8 @@ const compressThemes = () => {
 
 compressThemes();
 document.querySelector("home-assistant").addEventListener("settheme", compressThemes);
+
+
+hass().connection.subscribeEvents(() => {
+  window.setTimeout(() => compressThemes(), 100);
+}, "themes_updated");

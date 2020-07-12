@@ -22,6 +22,7 @@ x-files: &x-files
   - ./configuration.yaml:/config/configuration.yaml
   - ./lovelace.yaml:/config/lovelace.yaml
   - ./views:/config/views
+  - ./themes:/config/themes
 
 x-command: &x-command |
   bash -c '

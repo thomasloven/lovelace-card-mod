@@ -1,0 +1,48 @@
+airy:
+  primary-color: darkseagreen
+  ha-card-background: none
+  ha-card-box-shadow: none
+  lovelace-background: url("https://source.unsplash.com/user/anniespratt/2560x1440")
+
+
+  theme-box-shadow:  0px  2px  1px -1px rgba(0, 0, 0, 0.2),
+               0px  1px  1px  0px rgba(0, 0, 0, 0.14),
+               0px  1px  3px  0px rgba(0, 0, 0, 0.12)
+
+  background-1: rgba(200, 200, 200, 0.5)
+  background-2: rgba(150, 150, 150, 0.5)
+
+  #card-mod-view: |
+  #  #badges, #columns {
+  #    backdrop-filter: grayscale(0.9) blur(5px);
+  #  }
+  card-mod-card: |
+    ha-card {
+      backdrop-filter: grayscale(0.9) blur(5px);
+      border-radius: 10px;
+      background: var(--background-1);
+    }
+    .card-header {
+      text-align: center;
+      display: block !important;
+      padding-bottom: 16px;
+      margin-bottom: 12px;
+      font-variant: small-caps;
+      background: var(--background-2);
+      border-radius: 10px;
+    }
+    .card-header hui-entities-toggle {
+      display: none;
+    }
+
+  card-mod-row: |
+    :host {
+      display: block;
+      background: var(--background-1);
+      box-shadow:  var(--theme-box-shadow);
+      padding-right: 8px;
+      border-radius: 10px;
+    }
+    :host(:hover) {
+      background: var(--background-2);
+    }
