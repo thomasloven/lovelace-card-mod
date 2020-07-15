@@ -1,6 +1,7 @@
 import { LitElement, html } from "card-tools/src/lit-element";
 import { subscribeRenderTemplate, hasTemplate } from "card-tools/src/templates";
 import { hass } from "card-tools/src/hass";
+import { yaml2json } from "card-tools/src/yaml";
 
 const EMPTY_TEMPLATE = {template: "", variables: {}, entity_ids: []};
 
@@ -35,22 +36,21 @@ class CardMod extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.template = this._data;
+    this.setAttribute("slot", "none");
   }
 
   async getTheme() {
-    // await this.updateComplete;
     if(!this.type) return null;
-    let key = `card-mod-${this.type}-yaml`;
-    let compressed = window.getComputedStyle(this).getPropertyValue(`--${key}`);
-    if(!compressed) {
-      key = `card-mod-${this.type}`;
-      compressed = window.getComputedStyle(this).getPropertyValue(`--${key}`);
-    }
+    let el = this.parentElement ? this.parentElement : this;
+    const theme = window.getComputedStyle(el).getPropertyValue("--card-mod-theme");
 
-    if(!window.CardModCompressedStyles ||
-      !window.CardModCompressedStyles[key] ||
-      !window.CardModCompressedStyles[key][compressed]) return null;
-    return window.CardModCompressedStyles[key][compressed];
+    const themes = hass().themes.themes;
+    if(!themes[theme]) return null;
+    if(themes[theme][`card-mod-${this.type}-yaml`])
+      return await yaml2json(themes[theme][`card-mod-${this.type}-yaml`])
+    if(themes[theme][`card-mod-${this.type}`])
+      return themes[theme][`card-mod-${this.type}`]
+    return null;
   }
 
   set template(data) {

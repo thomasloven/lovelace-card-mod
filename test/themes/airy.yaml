@@ -1,48 +1,152 @@
 airy:
-  primary-color: darkseagreen
+  card-mod-theme: airy
+  primary-color: darkgreen
   ha-card-background: none
   ha-card-box-shadow: none
-  lovelace-background: url("https://source.unsplash.com/user/anniespratt/2560x1440")
+  llovelace-background: url("https://source.unsplash.com/user/anniespratt/2560x1440")
 
+
+  disabled-text-color: gray
 
   theme-box-shadow:  0px  2px  1px -1px rgba(0, 0, 0, 0.2),
                0px  1px  1px  0px rgba(0, 0, 0, 0.14),
                0px  1px  3px  0px rgba(0, 0, 0, 0.12)
+  theme-border-radius: 5px
 
-  background-1: rgba(200, 200, 200, 0.5)
-  background-2: rgba(150, 150, 150, 0.5)
+  background-1: rgba(250, 250, 250, 0.5)
+  background-2: rgba(150, 150, 150, 0.6)
+  bg-filter: grayscale(0.7) blur(5px)
 
-  #card-mod-view: |
-  #  #badges, #columns {
-  #    backdrop-filter: grayscale(0.9) blur(5px);
-  #  }
+  theme-red: firebrick
+  theme-green: forestgreen
+  theme-blue: deepskyblue
+
+  ha-label-badge-title-font-size: 1em
+
+  card-mod-view: |
+    :host {
+      background: none !important;
+      display: flex !important;
+    }
+    #badges {
+      padding: 8px;
+      display: flex !important;
+      justify-content: start;
+      flex-direction: column;
+    }
+    #columns .column > * {
+      margin: 32px 16px;
+    }
+
+  card-mod-root: |
+    ha-app-layout {
+      background: var(--llovelace-background) !important;
+    }
+    app-header {
+      background: var(--background-1) !important;
+      backdrop-filter: var(--bg-filter);
+      box-shadow:  var(--theme-box-shadow);
+    }
+    app-toolbar {
+      background: none !important;
+    }
+
   card-mod-card: |
     ha-card {
-      backdrop-filter: grayscale(0.9) blur(5px);
-      border-radius: 10px;
+      backdrop-filter: var(--bg-filter);
+      border-radius: var(--theme-border-radius);
       background: var(--background-1);
+      box-shadow:  var(--theme-box-shadow);
+    }
+    ha-card.type-entities {
+      background: none;
+      backdrop-filter: none;
+      box-shadow:  none;
     }
     .card-header {
       text-align: center;
       display: block !important;
-      padding-bottom: 16px;
+      padding: 8px;
       margin-bottom: 12px;
       font-variant: small-caps;
-      background: var(--background-2);
-      border-radius: 10px;
+    }
+
+    .type-entities .card-header {
+      background: var(--background-1);
+      backdrop-filter: var(--bg-filter);
+      border-radius: var(--theme-border-radius);
+      box-shadow:  var(--theme-box-shadow);
+      margin-bottom: 24px;
     }
     .card-header hui-entities-toggle {
       display: none;
     }
 
-  card-mod-row: |
-    :host {
-      display: block;
-      background: var(--background-1);
-      box-shadow:  var(--theme-box-shadow);
-      padding-right: 8px;
-      border-radius: 10px;
-    }
-    :host(:hover) {
-      background: var(--background-2);
-    }
+  card-mod-row-yaml: |
+    .: |
+      :host {
+        display: block;
+        background: var(--background-1);
+        box-shadow:  var(--theme-box-shadow);
+        padding-right: 8px;
+        border-radius: var(--theme-border-radius);
+        backdrop-filter: var(--bg-filter);
+        margin: 0 -16px;
+        /* Make icons red/green for on/off values and blue otherwise */
+        --paper-item-icon-color: {% if not states(config.entity) %} var(--theme-blue);
+                                 {% elif is_state(config.entity, 'on') %} var(--theme-green);
+                                 {% elif is_state(config.entity, 'off') %} var(--theme-red);
+                                 {% else %} var(--theme-blue); {% endif %}
+      }
+      :host(:hover) {
+        background: var(--background-2);
+      }
+    "*:first-child":
+      $: |
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(359deg);
+          }
+        }
+        @keyframes spin2 {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(-359deg);
+          }
+        }
+        state-badge {
+          {% if config.entity.startswith('fan.') and is_state(config.entity, 'on') %}
+          animation: spin 5s infinite linear;
+          {% endif %}
+        }
+
+  card-mod-badge-yaml: |
+    .: |
+      :host {
+        background: var(--background-1);
+        border-radius: var(--theme-border-radius);
+        backdrop-filter: var(--bg-filter);
+        box-shadow:  var(--theme-box-shadow);
+        padding: 8px;
+        /* Make badge borders red/green for binary sensors and blue otherwise */
+        --label-badge-blue: {% if not states(config.entity) %} var(--theme-blue);
+                                 {% elif is_state(config.entity, 'on') %} var(--theme-green);
+                                 {% elif is_state(config.entity, 'off') %} var(--theme-red);
+                                 {% else %} var(--theme-blue); {% endif %}
+        --label-badge-red: teal;
+        margin-bottom: 24px;
+      }
+
+    # Make badges have transparent background
+    ha-state-label-badge:
+      $:
+        ha-label-badge:
+          $: |
+            .label-badge {
+              background: none !important;
+            }

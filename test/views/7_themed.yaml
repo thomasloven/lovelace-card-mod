@@ -1,0 +1,99 @@
+title: Home
+theme: airy
+badges:
+  - entity: binary_sensor.updater
+  - entity: binary_sensor.basement_floor_wet
+  - entity: binary_sensor.movement_backyard
+  - entity: mailbox.demomailbox
+  - entity: sensor.outside_temperature
+  - entity: sensor.outside_humidity
+  - entity: sun.sun
+cards:
+  - type: entities
+    entities:
+      - air_quality.demo_air_quality_home
+      - air_quality.demo_air_quality_office
+    title: Air Quality
+  - type: alarm-panel
+    entity: alarm_control_panel.alarm
+  - type: entities
+    entities:
+      - entity: calendar.calendar_1
+        name: '1'
+      - entity: calendar.calendar_2
+        name: '2'
+    title: Calendar
+  - type: picture-entity
+    entity: camera.demo_camera
+  - type: thermostat
+    entity: climate.ecobee
+  - type: thermostat
+    entity: climate.heatpump
+  - type: thermostat
+    entity: climate.hvac
+  - type: entities
+    entities:
+      - cover.garage_door
+      - cover.hall_window
+      - cover.kitchen_window
+      - cover.living_room_window
+    title: Cover
+  - type: entities
+    entities:
+      - fan.ceiling_fan
+      - fan.living_room_fan
+    title: Fan
+  - type: entities
+    entities:
+      - image_processing.demo_alpr
+      - image_processing.demo_face
+    title: Image processing
+  - type: entities
+    entities:
+      - input_number.x_pos
+      - input_number.y_pos
+    title: Input number
+  - type: entities
+    entities:
+      - input_select.background
+    title: Input select
+  - type: entities
+    entities:
+      - light.bed_light
+      - light.ceiling_lights
+      - light.kitchen_lights
+    title: Light
+  - type: entities
+    entities:
+      - lock.front_door
+      - lock.kitchen_door
+      - lock.openable_lock
+    title: Lock
+  - type: media-control
+    entity: media_player.bedroom
+  - type: media-control
+    entity: media_player.living_room
+  - type: media-control
+    entity: media_player.lounge_room
+  - type: media-control
+    entity: media_player.walkman
+  - type: entities
+    entities:
+      - switch.ac
+      - switch.decorative_lights
+    title: Switch
+  - type: entities
+    entities:
+      - vacuum.0_ground_floor
+      - vacuum.1_first_floor
+      - vacuum.2_second_floor
+      - vacuum.3_third_floor
+      - vacuum.4_fourth_floor
+      - vacuum.5_fifth_floor
+    title: Vacuum
+  - type: entities
+    entities:
+      - water_heater.demo_water_heater
+      - water_heater.demo_water_heater_celsius
+    title: Water Heater
+

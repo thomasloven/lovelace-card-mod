@@ -9,3 +9,4 @@ views:
   - !include views/6_mod_card.yaml
   - !include views/tricks.yaml
   - !include views/answers.yaml
+  - !include views/7_themed.yaml

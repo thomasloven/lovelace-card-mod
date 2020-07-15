@@ -32,6 +32,11 @@ customElements.whenDefined('ha-card').then(() => {
 
     if(!config) return;
 
+    if(config.class)
+      this.classList.add(config.class);
+    if(config.type)
+      this.classList.add(`type-${config.type.replace(":","-")}`);
+
     const apply = () => applyToElement(this, "card", config.style, {config}, config.entity_ids, false);
 
     apply();
