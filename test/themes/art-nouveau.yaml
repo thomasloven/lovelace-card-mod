@@ -13,7 +13,9 @@ art-nouveau:
   primary-text-color: var(--bg-color2)
   app-header-text-color: var(--bg-color2)
   app-toolbar-font-size: 32px
-
+  switch-unchecked-button-color: var(--bg-color2)
+  switch-unchecked-track-color: var(--bg-color3)
+  switch-checked-track-color: var(--bg-color3)
 
   theme-card-background: rgba(0, 0, 0, 0.8)
   theme-card-border-radius: 10px 30px 10px
@@ -161,3 +163,33 @@ art-nouveau:
                   {% endif %}
 
               }
+
+  card-mod-more-info-yaml: |
+    $: |
+      :host {
+        --paper-item-icon-color: {% if not states(config.entityId) %} var(--warning-color);
+          {% elif is_state(config.entityId, 'undefined') %} var(--warning-color);
+          {% elif is_state(config.entityId, 'on') %} var(--ok-color);
+          {% elif is_state(config.entityId, 'open') %} var(--ok-color);
+          {% elif is_state(config.entityId, 'unlocked') %} var(--ok-color);
+          {% elif is_state(config.entityId, 'off') %} var(--error-color);
+          {% elif is_state(config.entityId, 'closed') %} var(--error-color);
+          {% elif is_state(config.entityId, 'locked') %} var(--error-color);
+          {% else %} var(--info-color);
+          {% endif %}
+      }
+      .mdc-dialog .mdc-dialog__container .mdc-dialog__surface {
+        background: var(--theme-card-background);
+        border-radius: var(--theme-card-border-radius);
+        border: var(--theme-thick-border);
+      }
+    ha-header-bar:
+      .: |
+        div.main-title {
+          font-variant: small-caps;
+        }
+      $: |
+        .mdc-top-app-bar {
+          background: none !important;
+          border-bottom: var(--theme-thin-border);
+        }
