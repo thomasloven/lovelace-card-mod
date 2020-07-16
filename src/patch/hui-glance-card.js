@@ -3,6 +3,8 @@ import { applyToElement } from "../card-mod";
 
 customElements.whenDefined('hui-glance-card').then(() => {
   const GlanceCard = customElements.get('hui-glance-card');
+  if(GlanceCard.prototype.cardmod_patched) return;
+  GlanceCard.prototype.cardmod_patched = true;
 
   GlanceCard.prototype.firstUpdated = function () {
     const entities = this.shadowRoot.querySelectorAll("ha-card div.entity");

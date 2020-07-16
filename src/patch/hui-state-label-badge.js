@@ -3,6 +3,8 @@ import { applyToElement } from "../card-mod";
 
 customElements.whenDefined('hui-state-label-badge').then(() => {
     const HuiStateLabelBadge = customElements.get('hui-state-label-badge');
+    if(HuiStateLabelBadge.prototype.cardmod_patched) return;
+    HuiStateLabelBadge.prototype.cardmod_patched = true;
 
     HuiStateLabelBadge.prototype.firstUpdated = function() {
         const config = this._config;

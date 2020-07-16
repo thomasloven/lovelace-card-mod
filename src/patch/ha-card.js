@@ -3,6 +3,8 @@ import { applyToElement } from "../card-mod";
 
 customElements.whenDefined('ha-card').then(() => {
   const HaCard = customElements.get('ha-card');
+  if(HaCard.prototype.cardmod_patched) return;
+  HaCard.prototype.cardmod_patched = true;
 
   const findConfig = function(node) {
     if(node.config)

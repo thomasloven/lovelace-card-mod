@@ -3,7 +3,7 @@ airy:
   primary-color: darkgreen
   ha-card-background: none
   ha-card-box-shadow: none
-  llovelace-background: url("https://source.unsplash.com/user/anniespratt/2560x1440")
+  background-image: url("https://thumbs.dreamstime.com/b/green-leaf-seamless-texture-detail-close-image-tree-macro-pattern-35841066.jpg")
 
 
   disabled-text-color: gray
@@ -11,7 +11,7 @@ airy:
   theme-box-shadow:  0px  2px  1px -1px rgba(0, 0, 0, 0.2),
                0px  1px  1px  0px rgba(0, 0, 0, 0.14),
                0px  1px  3px  0px rgba(0, 0, 0, 0.12)
-  theme-border-radius: 5px
+  theme-border-radius: 10px
 
   background-1: rgba(250, 250, 250, 0.5)
   background-2: rgba(150, 150, 150, 0.6)
@@ -20,6 +20,7 @@ airy:
   theme-red: firebrick
   theme-green: forestgreen
   theme-blue: deepskyblue
+  paper-item-icon-active-color: var(--theme-green)
 
   ha-label-badge-title-font-size: 1em
 
@@ -40,7 +41,8 @@ airy:
 
   card-mod-root: |
     ha-app-layout {
-      background: var(--llovelace-background) !important;
+      background: var(--background-image) !important;
+      background-size: cover;
     }
     app-header {
       background: var(--background-1) !important;
@@ -58,7 +60,8 @@ airy:
       background: var(--background-1);
       box-shadow:  var(--theme-box-shadow);
     }
-    ha-card.type-entities {
+    ha-card.type-entities,
+    ha-card.type-glance {
       background: none;
       backdrop-filter: none;
       box-shadow:  none;
@@ -71,7 +74,8 @@ airy:
       font-variant: small-caps;
     }
 
-    .type-entities .card-header {
+    .type-entities .card-header,
+    .type-glance .card-header {
       background: var(--background-1);
       backdrop-filter: var(--bg-filter);
       border-radius: var(--theme-border-radius);
@@ -80,6 +84,51 @@ airy:
     }
     .card-header hui-entities-toggle {
       display: none;
+    }
+
+  card-mod-glance: |
+    :host {
+      display: block;
+      background: var(--background-1);
+      box-shadow:  var(--theme-box-shadow);
+      border-radius: var(--theme-border-radius);
+      backdrop-filter: var(--bg-filter);
+      padding: 4px !important;
+      margin: 0 4px 12px;
+      width: calc(var(--glance-column-width, 20%) - 8px) !important;
+      /* Make icons red/green for on/off values and blue otherwise */
+      --paper-item-icon-color: {% if not states(config.entity) %} var(--theme-blue);
+        {% elif is_state(config.entity, 'on') %} var(--theme-green);
+        {% elif is_state(config.entity, 'open') %} var(--theme-green);
+        {% elif is_state(config.entity, 'unlocked') %} var(--theme-green);
+        {% elif is_state(config.entity, 'off') %} var(--theme-red);
+        {% elif is_state(config.entity, 'closed') %} var(--theme-red);
+        {% elif is_state(config.entity, 'locked') %} var(--theme-red);
+        {% else %} var(--theme-blue); {% endif %}
+    }
+    :host(:hover) {
+      background: var(--background-2);
+    }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(359deg);
+      }
+    }
+    @keyframes spin2 {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(-359deg);
+      }
+    }
+    state-badge {
+      {% if config.entity.startswith('fan.') and is_state(config.entity, 'on') %}
+      animation: spin 5s infinite linear;
+      {% endif %}
     }
 
   card-mod-row-yaml: |
@@ -94,9 +143,13 @@ airy:
         margin: 0 -16px;
         /* Make icons red/green for on/off values and blue otherwise */
         --paper-item-icon-color: {% if not states(config.entity) %} var(--theme-blue);
-                                 {% elif is_state(config.entity, 'on') %} var(--theme-green);
-                                 {% elif is_state(config.entity, 'off') %} var(--theme-red);
-                                 {% else %} var(--theme-blue); {% endif %}
+          {% elif is_state(config.entity, 'on') %} var(--theme-green);
+          {% elif is_state(config.entity, 'open') %} var(--theme-green);
+          {% elif is_state(config.entity, 'unlocked') %} var(--theme-green);
+          {% elif is_state(config.entity, 'off') %} var(--theme-red);
+          {% elif is_state(config.entity, 'closed') %} var(--theme-red);
+          {% elif is_state(config.entity, 'locked') %} var(--theme-red);
+          {% else %} var(--theme-blue); {% endif %}
       }
       :host(:hover) {
         background: var(--background-2);
@@ -135,9 +188,13 @@ airy:
         padding: 8px;
         /* Make badge borders red/green for binary sensors and blue otherwise */
         --label-badge-blue: {% if not states(config.entity) %} var(--theme-blue);
-                                 {% elif is_state(config.entity, 'on') %} var(--theme-green);
-                                 {% elif is_state(config.entity, 'off') %} var(--theme-red);
-                                 {% else %} var(--theme-blue); {% endif %}
+          {% elif is_state(config.entity, 'on') %} var(--theme-green);
+          {% elif is_state(config.entity, 'open') %} var(--theme-green);
+          {% elif is_state(config.entity, 'unlocked') %} var(--theme-green);
+          {% elif is_state(config.entity, 'off') %} var(--theme-red);
+          {% elif is_state(config.entity, 'closed') %} var(--theme-red);
+          {% elif is_state(config.entity, 'locked') %} var(--theme-red);
+          {% else %} var(--theme-blue); {% endif %}
         --label-badge-red: teal;
         margin-bottom: 24px;
       }
@@ -150,3 +207,25 @@ airy:
             .label-badge {
               background: none !important;
             }
+
+  card-mod-more-info-yaml: |
+    $: |
+      .mdc-dialog {
+        backdrop-filter: var(--bg-filter);
+        background: {% if is_state(config.entityId, 'on') %}
+          rgba(0, 255, 0, 0.2);
+          {% elif is_state(config.entityId, 'off') %}
+          rgba(255,0,0,0.2);
+          {% else %}
+          rgba(0,0,255,0.2);
+          {% endif %}
+      }
+      .mdc-dialog .mdc-dialog__container .mdc-dialog__surface {
+        background: rgba(250,250,250,0.7);
+        border-radius: var(--theme-border-radius);
+      }
+    ha-header-bar:
+      $: |
+        .mdc-top-app-bar {
+          background: none !important;
+        }

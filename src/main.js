@@ -5,4 +5,5 @@ import "./patch/hui-glance-card";
 import "./patch/hui-state-label-badge";
 import "./patch/hui-view";
 import "./patch/hui-root";
+import "./patch/ha-more-info-dialog";
 import "./mod-card"

@@ -12,14 +12,15 @@ export const applyToElement = async (el, type, template, variables, entity_ids, 
     await el.updateComplete;
 
   el._cardMod = el._cardMod || document.createElement("card-mod");
+  const target = shadow ? el.shadowRoot : el;
+  target.appendChild(el._cardMod);
+  await el.updateComplete;
   el._cardMod.type = type;
   el._cardMod.template = {
     template,
     variables,
     entity_ids,
   };
-  const target = shadow ? el.shadowRoot : el;
-  target.appendChild(el._cardMod);
 }
 
 class CardMod extends LitElement {
@@ -54,6 +55,7 @@ class CardMod extends LitElement {
   }
 
   set template(data) {
+    if(!data) return;
     this._data = JSON.parse(JSON.stringify(data));
 
     this._setTemplate(this._data);

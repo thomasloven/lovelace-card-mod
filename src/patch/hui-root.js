@@ -2,11 +2,12 @@ import {fireEvent} from "card-tools/src/event.js";
 import { applyToElement } from "../card-mod";
 
 customElements.whenDefined("hui-root").then(() => {
-  console.log("pathing hui-root");
   const huiRoot = customElements.get("hui-root");
+  if(huiRoot.prototype.cardmod_patched) return;
+  huiRoot.prototype.cardmod_patched = true;
 
   huiRoot.prototype.firstUpdated = async function() {
-    const apply = () => {console.log("Applying"); applyToElement(this, "root", "", {}, []);};
+    const apply = () => {applyToElement(this, "root", "", {}, [])};
 
     apply();
   };

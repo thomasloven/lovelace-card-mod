@@ -3,6 +3,8 @@ import { applyToElement } from "../card-mod";
 
 customElements.whenDefined('hui-entities-card').then(() => {
   const EntitiesCard = customElements.get('hui-entities-card');
+  if(EntitiesCard.prototype.cardmod_patched) return;
+  EntitiesCard.prototype.cardmod_patched = true;
 
   const oldRenderEntity = EntitiesCard.prototype.renderEntity;
   EntitiesCard.prototype.renderEntity = function(config) {
