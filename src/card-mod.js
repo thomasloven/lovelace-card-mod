@@ -34,6 +34,11 @@ class CardMod extends LitElement {
 
   static get applyToElement() { return applyToElement; }
 
+  constructor() {
+    super();
+    document.querySelector("home-assistant").addEventListener("settheme", () => {this._setTemplate(this._data)});
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.template = this._data;
@@ -62,8 +67,14 @@ class CardMod extends LitElement {
   }
 
   async _setTemplate(data) {
-    if(!data.template && !this._parent) {
-      data.template = await this.getTheme();
+    if(!this._parent) {
+      data.theme_template = await this.getTheme();
+      if(typeof(data.template) === "string") {
+        data.template = {".": data.template};
+      }
+      if(typeof(data.theme_template) === "string") {
+        data.theme_template = {".": data.theme_template};
+      }
     }
 
     if(data.template && JSON.stringify(data.template).includes("config.entity") && !data.entity_ids) {
@@ -81,13 +92,39 @@ class CardMod extends LitElement {
     }
   }
 
+  _mergeDeep(target, source) {
+    const isObject = (i) => {
+      return (i && typeof i === "object" && !Array.isArray(i));
+    };
+    if (isObject(target) && isObject(source)) {
+      for (const key in source) {
+        if (isObject(source[key])) {
+          if(!target[key]) Object.assign(target, { [key]: {} });
+          if(typeof(target[key]) === "string")
+            target[key] = {".": target[key]};
+          this._mergeDeep(target[key], source[key]);
+        } else {
+          if(target[key])
+            target[key] = source[key] + target[key];
+          else
+            target[key] = source[key];
+          // Object.assign(target, { [key]: source[key] });
+        }
+      }
+    }
+    return target;
+  }
+
   async setStyle(data) {
 
-    let { template, variables, entity_ids } = data;
+    let { template, theme_template, variables, entity_ids } = data;
 
     await this.unStyle();
 
-    if(!template) template = "";
+    if(!template) template = {};
+    template = JSON.parse(JSON.stringify(template));
+    this._mergeDeep(template, theme_template);
+
     if(typeof template === "string") {
       this._renderedStyles = template;
       if(this._renderer) {
