@@ -79,10 +79,10 @@ class CardMod extends LitElement {
       }
     }
 
-    if(data.template && JSON.stringify(data.template).includes("config.entity") && !data.entity_ids) {
-      if(data.variables.config && data.variables.config.entity)
-        data.entity_ids = [data.variables.config.entity]
-    }
+    // if(data.template && JSON.stringify(data.template).includes("config.entity") && !data.entity_ids) {
+    //   if(data.variables.config && data.variables.config.entity)
+    //     data.entity_ids = [data.variables.config.entity]
+    // }
 
     await this.setStyle(data);
   }
@@ -144,7 +144,7 @@ class CardMod extends LitElement {
           (res) => {
             this._renderedStyles = res;
           },
-          { template, variables, entity_ids }
+          { template, variables}
         )
       }
       return;

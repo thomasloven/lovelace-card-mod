@@ -45,7 +45,7 @@ art-nouveau:
       background: var(--theme-card-background) !important;
       border-bottom: var(--theme-thick-border);
       padding-bottom: 3px;
-      max-height: 50px;
+      transform: none !important;
     }
     app-toolbar {
       background: none !important;
@@ -55,17 +55,18 @@ art-nouveau:
       font-variant: small-caps;
     }
 
-  card-mod-view: |
-    :host {
-      background: none !important;
-    }
-    #badges {
-      display: flex !important;
-      justify-content: space-around;
-    }
-    #columns .column > * {
-      margin: 32px 16px;
-    }
+  card-mod-view-yaml: |
+    "*:first-child$": |
+      :host {
+        background: none !important;
+      }
+      #badges {
+        display: flex !important;
+        justify-content: space-around;
+      }
+      #columns .column > * {
+        margin: 32px 16px;
+      }
 
   card-mod-card: |
     ha-card {
@@ -133,6 +134,7 @@ art-nouveau:
   card-mod-badge-yaml: |
     .: |
       :host {
+        display: inline-block;
         background: var(--theme-card-background);
         border-radius: var(--theme-card-border-radius);
         border: var(--theme-thick-border);
