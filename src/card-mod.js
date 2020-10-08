@@ -13,9 +13,10 @@ export const applyToElement = async (el, type, template, variables, entity_ids, 
     await el.updateComplete;
 
   el._cardMod = el._cardMod || document.createElement("card-mod");
-  const target = shadow ? el.shadowRoot : el;
+  const target = shadow ? (el.shadowRoot || el) : el;
   target.appendChild(el._cardMod);
-  await el.updateComplete;
+  if(el.updateComplete)
+    await el.updateComplete;
   el._cardMod.type = type;
   el._cardMod.template = {
     template,
