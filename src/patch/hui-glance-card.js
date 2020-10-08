@@ -45,6 +45,9 @@ customElements.whenDefined('hui-glance-card').then(() => {
       if(!config) return;
       let entity_ids = config.entity_ids;
 
+      if(config.class)
+        e.classList.add(config.class);
+
       const apply = () => applyToElement(e, "glance", config.style, {config}, config.entity_ids);
 
       apply();

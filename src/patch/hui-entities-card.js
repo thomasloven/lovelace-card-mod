@@ -18,13 +18,15 @@ customElements.whenDefined('hui-entities-card').then(() => {
 
     let entity_ids = config.entity_ids;
 
+    if(config.class)
+      row.classList.add(config.class);
+
     const apply = () => applyToElement(row, "row", config.style, {config}, config.entity_ids);
 
     apply();
     if(retval.values[0])
       retval.values[0].addEventListener("ll-rebuild", apply);
     return retval;
-    window.addEventListener("location-changed", apply);
   }
 
   fireEvent('ll-rebuild', {});

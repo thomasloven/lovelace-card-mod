@@ -14,6 +14,9 @@ customElements.whenDefined('hui-state-label-badge').then(() => {
 
       let entity_ids = config.entity_ids;
 
+      if(config.class)
+        this.classList.add(config.class);
+
       const apply = () => applyToElement(this, "badge", config.style, {config}, config.entity_ids);
 
       apply();
