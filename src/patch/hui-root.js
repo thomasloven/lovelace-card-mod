@@ -6,7 +6,9 @@ customElements.whenDefined("hui-root").then(() => {
   if(huiRoot.prototype.cardmod_patched) return;
   huiRoot.prototype.cardmod_patched = true;
 
+  const oldFirstUpdated = huiRoot.prototype.firstUpdated;
   huiRoot.prototype.firstUpdated = async function() {
+    if(oldFirstUpdated) oldFirstUpdated();
     const apply = () => {applyToElement(this, "root", "", {}, [])};
 
     apply();

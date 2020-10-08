@@ -6,11 +6,11 @@ customElements.whenDefined("ha-more-info-dialog").then(() => {
   if(HaMoreInfoDialog.prototype.cardmod_patched) return;
   HaMoreInfoDialog.prototype.cardmod_patched = true;
 
-  const original = HaMoreInfoDialog.prototype.showDialog;
+  const oldShowDialog = HaMoreInfoDialog.prototype.showDialog;
   HaMoreInfoDialog.prototype.showDialog = function(params) {
     const apply = () => {applyToElement(this.shadowRoot.querySelector("ha-dialog"), "more-info", "", {config: params}, [params.entityId], false)};
 
-    original.bind(this)(params);
+    oldShowDialog.bind(this)(params);
 
     this.requestUpdate().then( async() => {
       await this.shadowRoot.querySelector("ha-dialog").updateComplete;

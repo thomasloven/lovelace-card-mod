@@ -56,3 +56,16 @@ cards:
         card:
           type: alarm-panel
           entity: alarm_control_panel.alarm
+
+  - type: custom:mod-card
+    style: |
+      ha-card {
+        border: 1px solid green;
+      }
+    card:
+      type: vertical-stack
+      cards:
+        - type: light
+          entity: light.bed_light
+        - type: light
+          entity: light.bed_light

@@ -117,14 +117,6 @@ airy:
         transform: rotate(359deg);
       }
     }
-    @keyframes spin2 {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(-359deg);
-      }
-    }
     state-badge {
       {% if config.entity.startswith('fan.') and is_state(config.entity, 'on') %}
       animation: spin 5s infinite linear;
