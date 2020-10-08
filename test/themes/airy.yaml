@@ -154,29 +154,28 @@ airy:
       :host(:hover) {
         background: var(--background-2);
       }
-    "*:first-child":
-      $: |
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(359deg);
-          }
+    "*:first-child$": |
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-        @keyframes spin2 {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(-359deg);
-          }
+        100% {
+          transform: rotate(359deg);
         }
-        state-badge {
-          {% if config.entity.startswith('fan.') and is_state(config.entity, 'on') %}
-          animation: spin 5s infinite linear;
-          {% endif %}
+      }
+      @keyframes spin2 {
+        0% {
+          transform: rotate(0deg);
         }
+        100% {
+          transform: rotate(-359deg);
+        }
+      }
+      state-badge {
+        {% if config.entity.startswith('fan.') and is_state(config.entity, 'on') %}
+        animation: spin 5s infinite linear;
+        {% endif %}
+      }
 
   card-mod-badge-yaml: |
     .: |
@@ -200,13 +199,10 @@ airy:
       }
 
     # Make badges have transparent background
-    ha-state-label-badge:
-      $:
-        ha-label-badge:
-          $: |
-            .label-badge {
-              background: none !important;
-            }
+    ha-state-label-badge $ ha-label-badge $: |
+      .label-badge {
+        background: none !important;
+      }
 
   card-mod-more-info-yaml: |
     $: |
@@ -224,8 +220,7 @@ airy:
         background: rgba(250,250,250,0.7);
         border-radius: var(--theme-border-radius);
       }
-    ha-header-bar:
-      $: |
-        .mdc-top-app-bar {
-          background: none !important;
-        }
+    ha-header-bar $: |
+      .mdc-top-app-bar {
+        background: none !important;
+      }

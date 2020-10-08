@@ -2,6 +2,7 @@ import { LitElement, html } from "card-tools/src/lit-element";
 import { subscribeRenderTemplate, hasTemplate } from "card-tools/src/templates";
 import { hass } from "card-tools/src/hass";
 import { yaml2json } from "card-tools/src/yaml";
+import { selectTree } from "card-tools/src/helpers";
 
 const EMPTY_TEMPLATE = {template: "", variables: {}, entity_ids: []};
 
@@ -63,7 +64,7 @@ class CardMod extends LitElement {
     if(!data) return;
     this._data = JSON.parse(JSON.stringify(data));
 
-    this._setTemplate(this._data);
+    this.themeApplied = this._setTemplate(this._data);
   }
 
   async _setTemplate(data) {
@@ -108,7 +109,6 @@ class CardMod extends LitElement {
             target[key] = source[key] + target[key];
           else
             target[key] = source[key];
-          // Object.assign(target, { [key]: source[key] });
         }
       }
     }
@@ -158,23 +158,21 @@ class CardMod extends LitElement {
       if(k === ".") {
         this.setStyle({template: template[k], variables, entity_ids});
         continue;
-      } else if(k === "$") {
-        if(parent.localName === "ha-card") debugger;
-        next = [parent.shadowRoot];
       } else {
-        next = parent.querySelectorAll(k);
+        next = await selectTree(parent, k, true);
       }
       if(!next.length) continue;
       for(const el of next) {
         if(!el) continue;
         let styleEl = el.querySelector(":scope > card-mod");
-        if(!styleEl || styleEl._parent !== this) {
+        if(!styleEl || styleEl._parent !== (this._parent || this)) {
           styleEl = document.createElement("card-mod");
           this._styledChildren.add(styleEl);
-          styleEl._parent = this;
+          styleEl._parent = (this._parent || this);
         }
         styleEl.template = {template: template[k], variables, entity_ids};
         el.appendChild(styleEl);
+        await styleEl.themeApplied;
       }
     }
 

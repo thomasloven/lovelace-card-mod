@@ -33,15 +33,14 @@ cards:
                 button {
                   font-size: 24px !important;
                 }
-            "#keypad mwc-button:nth-of-type(12)":
-              $: |
+            "#keypad mwc-button:nth-of-type(12)$": |
                 button {
                   font-size: 16px !important;
                   --mdc-theme-primary: green;
                 }
           ```
           {%endraw%}
-          Hint: More specific rules first
+          Hint: More specific rules last
       - type: alarm-panel
         card_icon: mdi:bell
         name: Alarm Panel
@@ -58,8 +57,7 @@ cards:
               button {
                 font-size: 24px !important;
               }
-          "#keypad mwc-button:nth-of-type(12)":
-            $: |
+          "#keypad mwc-button:nth-of-type(12)$": |
               button {
                 font-size: 16px !important;
                 --mdc-theme-primary: green;

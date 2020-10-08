@@ -6,8 +6,10 @@ art-nouveau:
   # https://es.vecteezy.com/arte-vectorial/685708-patron-de-granate-rojo-geometrico-art-deco-sin-costura-simple
   
   bg-color1: rgb(107, 14, 12)
-  bg-color2: rgb(182, 127, 82)
-  bg-color3: rgb(156, 108, 65)
+  # bg-color2: rgb(182, 127, 82)
+  bg-color2: rgb(232, 177, 132)
+  # bg-color3: rgb(156, 108, 65)
+  bg-color3: rgb(206, 158, 145)
 
   primary-color: var(--bg-color3)
   primary-text-color: var(--bg-color2)
@@ -43,6 +45,7 @@ art-nouveau:
       background: var(--theme-card-background) !important;
       border-bottom: var(--theme-thick-border);
       padding-bottom: 3px;
+      max-height: 50px;
     }
     app-toolbar {
       background: none !important;
@@ -142,27 +145,22 @@ art-nouveau:
         box-shadow: var(--shadow-2);
       }
 
-    ha-state-label-badge:
-      $:
-        ha-label-badge:
-          $:
-            .: |
-              .badge-container .label-badge {
-                color: var(--primary-text-color);
-                border-radius: 8px 20px 8px 8px;
-                --ha-label-badge-color: var(--bg-color3);
-                background: {% if not states(config.entity) %} var(--warning-color);
-                  {% elif is_state(config.entity, 'undefined') %} var(--warning-color);
-                  {% elif is_state(config.entity, 'on') %} var(--ok-color);
-                  {% elif is_state(config.entity, 'open') %} var(--ok-color);
-                  {% elif is_state(config.entity, 'unlocked') %} var(--ok-color);
-                  {% elif is_state(config.entity, 'off') %} var(--error-color);
-                  {% elif is_state(config.entity, 'closed') %} var(--error-color);
-                  {% elif is_state(config.entity, 'locked') %} var(--error-color);
-                  {% else %} var(--info-color);
-                  {% endif %}
-
-              }
+    ha-state-label-badge $ ha-label-badge $: |
+      .badge-container .label-badge {
+        color: var(--primary-text-color);
+        border-radius: 8px 20px 8px 8px;
+        --ha-label-badge-color: var(--bg-color3);
+        background: {% if not states(config.entity) %} var(--warning-color);
+          {% elif is_state(config.entity, 'undefined') %} var(--warning-color);
+          {% elif is_state(config.entity, 'on') %} var(--ok-color);
+          {% elif is_state(config.entity, 'open') %} var(--ok-color);
+          {% elif is_state(config.entity, 'unlocked') %} var(--ok-color);
+          {% elif is_state(config.entity, 'off') %} var(--error-color);
+          {% elif is_state(config.entity, 'closed') %} var(--error-color);
+          {% elif is_state(config.entity, 'locked') %} var(--error-color);
+          {% else %} var(--info-color);
+          {% endif %}
+      }
 
   card-mod-more-info-yaml: |
     $: |
