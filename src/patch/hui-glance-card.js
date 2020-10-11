@@ -7,8 +7,8 @@ customElements.whenDefined('hui-glance-card').then(() => {
   GlanceCard.prototype.cardmod_patched = true;
 
   const oldFirstUpdated = GlanceCard.prototype.firstUpdated;
-  GlanceCard.prototype.firstUpdated = function () {
-    if(oldFirstUpdated) oldFirstUpdated();
+  GlanceCard.prototype.firstUpdated = function (changedProperties) {
+    if(oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
     const entities = this.shadowRoot.querySelectorAll("ha-card div.entity");
     entities.forEach((e) => {
       const root = e.attachShadow({mode: "open"});
