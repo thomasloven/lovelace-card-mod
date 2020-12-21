@@ -1,0 +1,8 @@
+contact_links:
+  - name: How do I do ___?
+    url: https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744
+    about: Please ask and answer questions here.
+  - name: How do I do ___ in my card-mod themes?
+    url: https://community.home-assistant.io/t/card-mod-super-charge-your-themes/212176
+    about: Please ask and answer theme-specific questions here.
+  
