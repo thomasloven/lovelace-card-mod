@@ -25,7 +25,7 @@ What happened instead:
 
 
 ```yaml
-# The least ammount of code possible to reproduce my error
+# The least amount of code possible to reproduce my error
 
 
 
