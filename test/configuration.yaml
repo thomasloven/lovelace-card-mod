@@ -8,7 +8,7 @@ lovelace:
     lovelace-yaml:
       mode: yaml
       title: yaml
-      filename: lovelace.yaml
+      filename: test/lovelace.yaml
 
 input_select:
   background:
@@ -27,4 +27,4 @@ input_number:
     max: 100
 
 frontend:
-  themes: !include_dir_merge_named themes/
+  themes: !include_dir_merge_named test/themes/
