@@ -1,5 +1,4 @@
-card-mod
-========
+# card-mod
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
 
@@ -18,13 +17,14 @@ resources:
 ```
 
 ## Usage
-This is *not* a new card. Instead it *changes the way pretty much any other card works*.
+
+This is _not_ a new card. Instead it _changes the way pretty much any other card works_.
 
 Specifically, it looks for `style:` in any cards configuration, and applies the [CSS](https://www.w3schools.com/css/) specified there to the card.
 
 The basis of almost all lovelace cards is a `ha-card` element, so that's probably where you'd want to start.
 
-Note that some cards (`conditional`, `entity-filter`, `horizontal-stack` and `vertical-stack` as well as some custom cards, like `layout-card`, `auto-entities` and `state-switch` among others) do *not* have a `ha-card` element, and `card-mod` will thus **not** work for those. There is a workaround, though. See [mod-card below](#mod-card).
+Note that some cards (`conditional`, `entity-filter`, `horizontal-stack` and `vertical-stack` as well as some custom cards, like `layout-card`, `auto-entities` and `state-switch` among others) do _not_ have a `ha-card` element, and `card-mod` will thus **not** work for those. There is a workaround, though. See [mod-card below](#mod-card).
 
 ---
 
@@ -47,7 +47,7 @@ entities:
 
 ---
 
-By using the element inspector of your browser ([chrome](https://developers.google.com/web/tools/chrome-devtools/inspect-styles/), [firefox](https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Open_the_Inspector), [safari](https://discussions.apple.com/thread/5508711), [explorer](https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/samples/gg589500(v=vs.85))) you can find out how cards are built up and what styles they are using.
+By using the element inspector of your browser ([chrome](https://developers.google.com/web/tools/chrome-devtools/inspect-styles/), [firefox](https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Open_the_Inspector), [safari](https://discussions.apple.com/thread/5508711), [explorer](<https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/samples/gg589500(v=vs.85)>)) you can find out how cards are built up and what styles they are using.
 
 **Example** \
 Make a `glance` card use smallcaps and change the font size of the title
@@ -106,12 +106,9 @@ style: |
 
 ![Animated](https://user-images.githubusercontent.com/1299821/59151697-f46b0700-8a37-11e9-842e-a1088be149b4.gif)
 
-
 ## More examples
-More examples are available [here](https://github.com/thomasloven/lovelace-card-mod/blob/master/src/example.yaml).
 
-![more](https://user-images.githubusercontent.com/1299821/63809565-eb951d80-c922-11e9-8630-697befb3c95f.png)
-
+More examples are available [among the tests](https://github.com/thomasloven/lovelace-card-mod/tree/master/test/views) and [in the wiki](https://github.com/thomasloven/lovelace-card-mod/wiki).
 
 ## Styling entity and glance cards
 
@@ -172,9 +169,11 @@ badges:
                 border-style: dashed !important;
               }
 ```
+
 ![badges](https://user-images.githubusercontent.com/1299821/71958861-9da5f580-31f1-11ea-8c70-b1d6b3a69f9b.png)
 
 ## Templating
+
 Jinja templates have access to a few special variables. Those are:
 
 - `config` - an object containing the card, entity row or glance button configuration
@@ -186,7 +185,7 @@ Jinja templates have access to a few special variables. Those are:
 
 When exploring the cards using the element inspector, you might run into something called a `shadow-root` and notice that you can't apply styles to anything inside that.
 
-In this case, you can make `style:` a dictionary instead of a string, where each key is a [`querySelector` string](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) and it's value styles to apply to it - *recursively*. A key of `$` means go into a `shadow-root` and a key of `.` the current element.
+In this case, you can make `style:` a dictionary instead of a string, where each key is a [`querySelector` string](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) and it's value styles to apply to it - _recursively_. A key of `$` means go into a `shadow-root` and a key of `.` the current element.
 
 This is not for the faint of heart.
 
@@ -226,11 +225,11 @@ entity: alarm_control_panel.alarm
 
 ## Mod-card
 
-** IMPORTANT: *** `mod-card` is a *workaround* for the *very few* cases where normal usage of card-mod does not work.
-I *cannot* stress this enough (apparently). If you every find yourself typing `type: custom:mod-card`, stop, go back, read this readme all the way through **again**, and realized that in approximately 10 out of 10 cases, you should NOT use `mod-card`.
+** IMPORTANT: \*** `mod-card` is a _workaround_ for the _very few_ cases where normal usage of card-mod does not work.
+I _cannot_ stress this enough (apparently). If you every find yourself typing `type: custom:mod-card`, stop, go back, read this readme all the way through **again**, and realized that in approximately 10 out of 10 cases, you should NOT use `mod-card`.
 
 There are some cards where card-mod just won't work.
-Those cards often are not really *cards* at all, but change how other cards work. Examples include: `conditional`, `entity-filter`, `horizontal-stack` and `vertical-stack` as well as some custom cards, like `layout-card`, `auto-entities` and `state-switch` among others.
+Those cards often are not really _cards_ at all, but change how other cards work. Examples include: `conditional`, `entity-filter`, `horizontal-stack` and `vertical-stack` as well as some custom cards, like `layout-card`, `auto-entities` and `state-switch` among others.
 
 For those cases, a special `mod-card` is provided as a **workaround**:
 
@@ -248,6 +247,7 @@ card:
     - type: light
       entity: light.kitchen_lights
 ```
+
 ![mod-card](https://user-images.githubusercontent.com/1299821/68621707-b71c1100-04d0-11ea-8473-965dbd77b762.png)
 
 > Note: mod-card sets it's own `background` to `transparent`. That means, `--ha-card-background` will have no effect on mod-card itself. Instead, you have to modify the `background` property directly.
@@ -258,19 +258,19 @@ The cardHeight is set with the `report_size:` option:
 ```yaml
 type: custom:mod-card
 report_size: 5
-card:
-  ... etc ...
+card: ... etc ...
 ```
-
 
 # FAQ
 
 ### How do I convert my old card-modder configuration to card-mod?
+
 For cards, you just have to wrap everything in `ha-card {}` and format it as CSS.
 
-And don't forget to *remove* (not replace with anything else) `card-modder`.
+And don't forget to _remove_ (not replace with anything else) `card-modder`.
 
 So, you go from:
+
 ```yaml
 type: custom:card-modder
 card:
@@ -283,6 +283,7 @@ style:
 ```
 
 to
+
 ```yaml
 type: entities
 entities:
@@ -297,4 +298,5 @@ style: |
 For rows in an entities card, you replace `ha-card` with `:host` as described above.
 
 ---
+
 <a href="https://www.buymeacoffee.com/uqD6KHCdJ" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
