@@ -2733,6 +2733,71 @@ async function selectTree(root, path, all=false, timeout=10000) {
   });
 }
 
+const _load_yaml2json = async () => {
+  if(customElements.get("developer-tools-event")) return;
+
+  await customElements.whenDefined("partial-panel-resolver");
+  const ppr = document.createElement('partial-panel-resolver');
+
+  ppr.hass = {panels: [{
+    url_path: "tmp",
+    component_name: "developer-tools",
+  }]};
+  ppr._updateRoutes();
+
+  await ppr.routerOptions.routes.tmp.load();
+
+  await customElements.whenDefined("developer-tools-router");
+  const dtr = document.createElement("developer-tools-router");
+  await dtr.routerOptions.routes.event.load();
+};
+
+const yaml2json = async (yaml) => {
+  await _load_yaml2json();
+  const el = document.createElement("developer-tools-event");
+  return el._computeParsedEventData(yaml);
+};
+
+async function get_theme(root) {
+    if (!root.type)
+        return null;
+    const el = root.parentElement ? root.parentElement : root;
+    const theme = window
+        .getComputedStyle(el)
+        .getPropertyValue("--card-mod-theme");
+    const themes = hass().themes.themes;
+    if (!themes[theme])
+        return {};
+    if (themes[theme][`card-mod-${root.type}-yaml`])
+        return await yaml2json(themes[theme][`card-mod-${root.type}-yaml`]);
+    if (themes[theme][`card-mod-${root.type}`])
+        return { ".": themes[theme][`card-mod-${root.type}`] };
+    return {};
+}
+function merge_deep(target, source) {
+    const isObject = (i) => {
+        return i && typeof i === "object" && !Array.isArray(i);
+    };
+    if (isObject(target) && isObject(source)) {
+        for (const key in source) {
+            if (isObject(source[key])) {
+                if (!target[key])
+                    Object.assign(target, { [key]: {} });
+                if (typeof target[key] === "string")
+                    target[key] = { ".": target[key] };
+                this._mergeDeep(target[key], source[key]);
+            }
+            else {
+                if (target[key])
+                    target[key] = source[key] + target[key];
+                else
+                    target[key] = source[key];
+            }
+        }
+    }
+    return target;
+}
+
 const applyToElement = async (el, type, template, variables, entity_ids, shadow = true) => {
     var _a;
     if ((_a = el.localName) === null || _a === void 0 ? void 0 : _a.includes("-"))
@@ -2757,7 +2822,13 @@ class CardMod extends LitElement {
     constructor() {
         super();
         this._rendered_template = "";
-        this._renderChildren = [];
+        this._renderChildren = new Set();
+        document.querySelector("home-assistant").addEventListener("settheme", () => {
+            if (this._tplinput) {
+                this.template = this._tplinput;
+                console.log("Rerender");
+            }
+        });
     }
     static get properties() {
         return {
@@ -2769,9 +2840,9 @@ class CardMod extends LitElement {
     }
     connectedCallback() {
         super.connectedCallback();
-        //this._subscribe(this._template);
-        if (this._tplinput)
+        if (this._tplinput) {
             this.template = this._tplinput;
+        }
         this.setAttribute("slot", "none");
     }
     disconnectedCallback() {
@@ -2780,26 +2851,32 @@ class CardMod extends LitElement {
     }
     set template(tpl) {
         this._tplinput = tpl;
-        this._unsubscribe().then(() => this._subscribe(tpl));
+        this._unsubscribe().then(() => this._subscribe(this._tplinput));
     }
     async _subscribe(template) {
         var _a, _b;
-        if (template.template == undefined)
+        const variables = template.variables;
+        let tpl = JSON.parse(JSON.stringify(template.template || {}));
+        if (typeof tpl === "string")
+            tpl = { ".": tpl };
+        const theme_template = await get_theme(this);
+        merge_deep(tpl, theme_template);
+        if (tpl == undefined)
             return;
-        if (typeof template.template === "string") {
-            this._template = template;
+        if (typeof tpl === "string") {
+            this._template = { template: tpl, variables };
         }
         else {
             const parent = this.parentElement || this.parentNode;
-            for (const [key, value] of Object.entries(template.template)) {
+            for (const [key, value] of Object.entries(tpl)) {
                 if (key === ".") {
-                    this._template = { template: value, variables: template.variables };
+                    this._template = { template: value, variables };
                 }
                 else {
                     selectTree(parent, key, true).then((nodes) => {
                         for (const el of nodes) {
-                            applyToElement(el, this.type, value, template.variables, [], false);
-                            this._renderChildren.push(el._cardMod);
+                            applyToElement(el, undefined, value, variables, [], false);
+                            this._renderChildren.add(el._cardMod);
                         }
                     });
                 }
@@ -2819,6 +2896,7 @@ class CardMod extends LitElement {
         for (const c of this._renderChildren) {
             if (c)
                 c.template = { template: "", variables: {} };
+            this._renderChildren.delete(c);
         }
     }
     _template_rendered(result) {
