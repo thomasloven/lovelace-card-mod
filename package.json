@@ -1,19 +1,23 @@
 {
   "name": "card-mod",
   "private": true,
-  "version": "2.0.3",
+  "version": "2.1.0b0",
   "description": "",
   "scripts": {
-    "build": "webpack",
-    "watch": "webpack --watch --mode=development",
+    "build": "rollup -c",
+    "watch": "rollup -c --watch",
     "update-card-tools": "npm uninstall card-tools && npm install thomasloven/lovelace-card-tools"
   },
   "keywords": [],
   "author": "Thomas Lovén",
   "license": "MIT",
   "devDependencies": {
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12"
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "rollup": "^2.39.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "typescript": "^4.1.5"
   },
   "dependencies": {
     "card-tools": "github:thomasloven/lovelace-card-tools"
