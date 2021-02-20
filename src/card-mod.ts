@@ -48,6 +48,7 @@ export const applyToElement = async (
     variables,
     entity_ids,
   };
+  return el._cardMod;
 };
 
 class CardMod extends LitElement {

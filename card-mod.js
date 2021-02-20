@@ -2815,6 +2815,7 @@ const applyToElement = async (el, type, template, variables, entity_ids, shadow 
         variables,
         entity_ids,
     };
+    return el._cardMod;
 };
 class CardMod extends LitElement {
     constructor() {
@@ -2978,7 +2979,18 @@ customElements.whenDefined("ha-card").then(() => {
             this.classList.add(config.class);
         if (config.type)
             this.classList.add(`type-${config.type.replace(":", "-")}`);
-        applyToElement(this, "card", config.card_mod || config.style, { config }, config.entity_ids, false);
+        applyToElement(this, "card", config.card_mod || config.style, { config }, config.entity_ids, false).then((cardMod) => {
+            var _a, _b;
+            if ((_b = (_a = this.parentNode) === null || _a === void 0 ? void 0 : _a.host) === null || _b === void 0 ? void 0 : _b.setConfig) {
+                const _setConfig = this.parentNode.host.setConfig;
+                this.parentNode.host.setConfig = function (config) {
+                    _setConfig.bind(this)(config);
+                    if (config.card_mod) {
+                        cardMod.template = { template: config.card_mod, variables: config };
+                    }
+                };
+            }
+        });
     };
     fireEvent("ll-rebuild", {});
 });
@@ -3148,6 +3160,53 @@ customElements.whenDefined("ha-sidebar").then(() => {
     };
     fireEvent("ll-rebuild", {});
     selectTree(document, "home-assistant$home-assistant-main$app-drawer-layout app-drawer ha-sidebar", false).then((root) => root === null || root === void 0 ? void 0 : root.firstUpdated());
+});
+
+customElements.whenDefined("hui-card-element-editor").then(() => {
+    const HuiCardElementEditor = customElements.get("hui-card-element-editor");
+    const _getConfigElement = HuiCardElementEditor.prototype.getConfigElement;
+    HuiCardElementEditor.prototype.getConfigElement = async function () {
+        const retval = await _getConfigElement.bind(this)();
+        if (retval) {
+            const _setConfig = retval.setConfig;
+            retval.setConfig = function (config) {
+                const newConfig = JSON.parse(JSON.stringify(config));
+                this._cardModData = newConfig.card_mod;
+                delete newConfig.card_mod;
+                _setConfig.bind(this)(newConfig);
+            };
+        }
+        return retval;
+    };
+    const __handleUIConfigChanged = HuiCardElementEditor.prototype._handleUIConfigChanged;
+    HuiCardElementEditor.prototype._handleUIConfigChanged = function (ev) {
+        if (this._configElement && this._configElement._cardModData)
+            ev.detail.config.card_mod = this._configElement._cardModData;
+        __handleUIConfigChanged.bind(this)(ev);
+    };
+});
+customElements.whenDefined("hui-dialog-edit-card").then(() => {
+    const HuiDialogEditCard = customElements.get("hui-dialog-edit-card");
+    const _updated = HuiDialogEditCard.prototype.updated;
+    HuiDialogEditCard.prototype.updated = function (changedProps) {
+        _updated.bind(this)(changedProps);
+        this.updateComplete.then(async () => {
+            var _a;
+            if (!this._cardModStar) {
+                this._cardModStar = document.createElement("ha-icon");
+                this._cardModStar.icon = "mdi:star-four-points-outline";
+            }
+            const button = this.shadowRoot.querySelector("mwc-button[slot=secondaryAction]");
+            if (!button)
+                return;
+            if ((_a = this._cardConfig) === null || _a === void 0 ? void 0 : _a.card_mod) {
+                button.appendChild(this._cardModStar);
+            }
+            else if (button.contains(this._cardModStar)) {
+                button.removeChild(this._cardModStar);
+            }
+        });
+    };
 });
 
 const CUSTOM_TYPE_PREFIX = "custom:";

@@ -46,7 +46,17 @@ customElements.whenDefined("ha-card").then(() => {
       { config },
       config.entity_ids,
       false
-    );
+    ).then((cardMod) => {
+      if (this.parentNode?.host?.setConfig) {
+        const _setConfig = this.parentNode.host.setConfig;
+        this.parentNode.host.setConfig = function (config) {
+          _setConfig.bind(this)(config);
+          if (config.card_mod) {
+            cardMod.template = { template: config.card_mod, variables: config };
+          }
+        };
+      }
+    });
   };
 
   fireEvent("ll-rebuild", {});

@@ -7,4 +7,5 @@ import "./patch/hui-view";
 import "./patch/hui-root";
 import "./patch/ha-more-info-dialog";
 import "./patch/ha-sidebar";
+import "./patch/hui-card-element-editor";
 import "./mod-card";
