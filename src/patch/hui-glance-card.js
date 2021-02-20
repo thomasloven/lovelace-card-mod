@@ -1,17 +1,17 @@
-import {fireEvent} from "card-tools/src/event.js";
+import { fireEvent } from "card-tools/src/event.js";
 import { applyToElement } from "../card-mod";
 
-customElements.whenDefined('hui-glance-card').then(() => {
-  const GlanceCard = customElements.get('hui-glance-card');
-  if(GlanceCard.prototype.cardmod_patched) return;
+customElements.whenDefined("hui-glance-card").then(() => {
+  const GlanceCard = customElements.get("hui-glance-card");
+  if (GlanceCard.prototype.cardmod_patched) return;
   GlanceCard.prototype.cardmod_patched = true;
 
   const oldFirstUpdated = GlanceCard.prototype.firstUpdated;
   GlanceCard.prototype.firstUpdated = function (changedProperties) {
-    if(oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
+    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
     const entities = this.shadowRoot.querySelectorAll("ha-card div.entity");
     entities.forEach((e) => {
-      const root = e.attachShadow({mode: "open"});
+      const root = e.attachShadow({ mode: "open" });
       [...e.children].forEach((el) => root.appendChild(el));
       const styletag = document.createElement("style");
       root.appendChild(styletag);
@@ -42,17 +42,23 @@ customElements.whenDefined('hui-glance-card').then(() => {
       `;
 
       const config = e.config || e.entityConf;
-      if(!config) return;
+      if (!config) return;
       let entity_ids = config.entity_ids;
 
-      if(config.class)
-        e.classList.add(config.class);
+      if (config.class) e.classList.add(config.class);
 
-      const apply = () => applyToElement(e, "glance", config.style, {config}, config.entity_ids);
+      const apply = () =>
+        applyToElement(
+          e,
+          "glance",
+          config.style,
+          { config },
+          config.entity_ids
+        );
 
       apply();
     });
-  }
+  };
 
-  fireEvent('ll-rebuild', {});
+  fireEvent("ll-rebuild", {});
 });

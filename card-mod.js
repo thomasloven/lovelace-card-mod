@@ -2956,96 +2956,95 @@ function fireEvent(ev, detail, entity=null) {
   }
 }
 
-customElements.whenDefined('ha-card').then(() => {
-  const HaCard = customElements.get('ha-card');
-  if(HaCard.prototype.cardmod_patched) return;
+customElements.whenDefined("ha-card").then(() => {
+  const HaCard = customElements.get("ha-card");
+  if (HaCard.prototype.cardmod_patched) return;
   HaCard.prototype.cardmod_patched = true;
 
-  const findConfig = function(node) {
-    if(node.config)
-      return node.config;
-    if(node._config)
-      return node._config;
-    if(node.host)
-      return findConfig(node.host);
-    if(node.parentElement)
-      return findConfig(node.parentElement);
-    if(node.parentNode)
-      return findConfig(node.parentNode);
+  const findConfig = function (node) {
+    if (node.config) return node.config;
+    if (node._config) return node._config;
+    if (node.host) return findConfig(node.host);
+    if (node.parentElement) return findConfig(node.parentElement);
+    if (node.parentNode) return findConfig(node.parentNode);
     return null;
   };
 
-
   const oldFirstUpdated = HaCard.prototype.firstUpdated;
-  HaCard.prototype.firstUpdated = function(changedProperties) {
-    if(oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
+  HaCard.prototype.firstUpdated = function (changedProperties) {
+    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
     // Move the header inside the slot instead of in the shadowDOM
     // makes it easier to style it consistently
     const header = this.shadowRoot.querySelector(".card-header");
-    if(header)
-    {
+    if (header) {
       this.insertBefore(header, this.children[0]);
     }
 
     const config = findConfig(this);
 
-    if(!config) return;
+    if (!config) return;
 
-    if(config.class)
-      this.classList.add(config.class);
-    if(config.type)
-      this.classList.add(`type-${config.type.replace(":","-")}`);
+    if (config.class) this.classList.add(config.class);
+    if (config.type)
+      this.classList.add(`type-${config.type.replace(":", "-")}`);
 
-    const apply = () => applyToElement(this, "card", config.style, {config}, config.entity_ids, false);
+    const apply = () =>
+      applyToElement(
+        this,
+        "card",
+        config.style,
+        { config },
+        config.entity_ids,
+        false
+      );
 
     apply();
   };
 
-  fireEvent('ll-rebuild', {});
+  fireEvent("ll-rebuild", {});
 });
 
-customElements.whenDefined('hui-entities-card').then(() => {
-  const EntitiesCard = customElements.get('hui-entities-card');
-  if(EntitiesCard.prototype.cardmod_patched) return;
+customElements.whenDefined("hui-entities-card").then(() => {
+  const EntitiesCard = customElements.get("hui-entities-card");
+  if (EntitiesCard.prototype.cardmod_patched) return;
   EntitiesCard.prototype.cardmod_patched = true;
 
   const oldRenderEntity = EntitiesCard.prototype.renderEntity;
-  EntitiesCard.prototype.renderEntity = function(config) {
-
+  EntitiesCard.prototype.renderEntity = function (config) {
     const retval = oldRenderEntity.bind(this)(config);
 
-    if(!config) return retval;
-    if(!retval || !retval.values) return retval;
+    if (!config) return retval;
+    if (!retval || !retval.values) return retval;
     const row = retval.values[0];
-    if(!row) return retval;
+    if (!row) return retval;
 
     config.entity_ids;
 
-    if(config.class)
-      row.classList.add(config.class);
+    if (config.class) row.classList.add(config.class);
 
-    const apply = () => applyToElement(row, "row", config.style, {config}, config.entity_ids);
+    const apply = () =>
+      applyToElement(row, "row", config.style, { config }, config.entity_ids);
 
     apply();
-    if(retval.values[0])
+    if (retval.values[0])
       retval.values[0].addEventListener("ll-rebuild", apply);
     return retval;
   };
 
-  fireEvent('ll-rebuild', {});
+  fireEvent("ll-rebuild", {});
 });
 
-customElements.whenDefined('hui-glance-card').then(() => {
-  const GlanceCard = customElements.get('hui-glance-card');
-  if(GlanceCard.prototype.cardmod_patched) return;
+customElements.whenDefined("hui-glance-card").then(() => {
+  const GlanceCard = customElements.get("hui-glance-card");
+  if (GlanceCard.prototype.cardmod_patched) return;
   GlanceCard.prototype.cardmod_patched = true;
 
   const oldFirstUpdated = GlanceCard.prototype.firstUpdated;
   GlanceCard.prototype.firstUpdated = function (changedProperties) {
-    if(oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
+    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
     const entities = this.shadowRoot.querySelectorAll("ha-card div.entity");
     entities.forEach((e) => {
-      const root = e.attachShadow({mode: "open"});
+      const root = e.attachShadow({ mode: "open" });
       [...e.children].forEach((el) => root.appendChild(el));
       const styletag = document.createElement("style");
       root.appendChild(styletag);
@@ -3076,19 +3075,25 @@ customElements.whenDefined('hui-glance-card').then(() => {
       `;
 
       const config = e.config || e.entityConf;
-      if(!config) return;
+      if (!config) return;
       config.entity_ids;
 
-      if(config.class)
-        e.classList.add(config.class);
+      if (config.class) e.classList.add(config.class);
 
-      const apply = () => applyToElement(e, "glance", config.style, {config}, config.entity_ids);
+      const apply = () =>
+        applyToElement(
+          e,
+          "glance",
+          config.style,
+          { config },
+          config.entity_ids
+        );
 
       apply();
     });
   };
 
-  fireEvent('ll-rebuild', {});
+  fireEvent("ll-rebuild", {});
 });
 
 customElements.whenDefined('hui-state-label-badge').then(() => {
@@ -3117,30 +3122,31 @@ customElements.whenDefined('hui-state-label-badge').then(() => {
 
 customElements.whenDefined("hui-view").then(() => {
   const huiView = customElements.get("hui-view");
-  if(huiView.prototype.cardmod_patched) return;
+  if (huiView.prototype.cardmod_patched) return;
   huiView.prototype.cardmod_patched = true;
 
   const oldFirstUpdated = huiView.prototype.firstUpdated;
-  huiView.prototype.firstUpdated = function(changedProperties) {
-    if(oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
+  huiView.prototype.firstUpdated = function (changedProperties) {
+    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
     const apply = () => applyToElement(this, "view", "", {}, []);
 
     apply();
   };
 
   fireEvent("ll-rebuild", {});
-
 });
 
 customElements.whenDefined("hui-root").then(() => {
   const huiRoot = customElements.get("hui-root");
-  if(huiRoot.prototype.cardmod_patched) return;
+  if (huiRoot.prototype.cardmod_patched) return;
   huiRoot.prototype.cardmod_patched = true;
 
   const oldFirstUpdated = huiRoot.prototype.firstUpdated;
-  huiRoot.prototype.firstUpdated = async function(changedProperties) {
-    if(oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    const apply = () => {applyToElement(this, "root", "", {}, []);};
+  huiRoot.prototype.firstUpdated = async function (changedProperties) {
+    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
+    const apply = () => {
+      applyToElement(this, "root", "", {}, []);
+    };
 
     apply();
   };
@@ -3155,38 +3161,43 @@ customElements.whenDefined("hui-root").then(() => {
   root = root && root.querySelector("ha-panel-lovelace");
   root = root && root.shadowRoot;
   root = root && root.querySelector("hui-root");
-  if(root)
-    root.firstUpdated();
-
+  if (root) root.firstUpdated();
 });
 
 customElements.whenDefined("ha-more-info-dialog").then(() => {
-
   const HaMoreInfoDialog = customElements.get("ha-more-info-dialog");
-  if(HaMoreInfoDialog.prototype.cardmod_patched) return;
+  if (HaMoreInfoDialog.prototype.cardmod_patched) return;
   HaMoreInfoDialog.prototype.cardmod_patched = true;
 
   const oldShowDialog = HaMoreInfoDialog.prototype.showDialog;
-  HaMoreInfoDialog.prototype.showDialog = function(params) {
-    const apply = () => {applyToElement(this.shadowRoot.querySelector("ha-dialog"), "more-info", "", {config: params}, [params.entityId], false);};
+  HaMoreInfoDialog.prototype.showDialog = function (params) {
+    const apply = () => {
+      applyToElement(
+        this.shadowRoot.querySelector("ha-dialog"),
+        "more-info",
+        "",
+        { config: params },
+        [params.entityId],
+        false
+      );
+    };
 
     oldShowDialog.bind(this)(params);
 
-    this.requestUpdate().then( async() => {
+    this.requestUpdate().then(async () => {
       await this.shadowRoot.querySelector("ha-dialog").updateComplete;
       apply();
-
     });
   };
 
-    let root = document.querySelector("home-assistant");
-    root = root && root.shadowRoot;
-    root = root && root.querySelector("ha-more-info-dialog");
+  let root = document.querySelector("home-assistant");
+  root = root && root.shadowRoot;
+  root = root && root.querySelector("ha-more-info-dialog");
 
-    if(root) {
-      root.showDialog = HaMoreInfoDialog.prototype.showDialog.bind(root);
-      root.showDialog({entityId: root.entityId});
-    }
+  if (root) {
+    root.showDialog = HaMoreInfoDialog.prototype.showDialog.bind(root);
+    root.showDialog({ entityId: root.entityId });
+  }
 });
 
 customElements.whenDefined("ha-sidebar").then(() => {
