@@ -36,12 +36,28 @@ art-nouveau:
 
   card-mod-sidebar: |
     :host {
-      background: black !important;
+      background: var(--background-image);
       border-right: var(--theme-thin-border) !important;
       --divider-color: var(--bg-color3);
     }
     :host([expanded]) {
       border-right: var(--theme-thick-border) !important;
+      --item-border-radius: var(--theme-card-border-radius);
+    }
+    :host::before {
+      background: var(--theme-card-background);
+    }
+    div.menu {
+      background: var(--theme-card-background);
+    }
+    paper-icon-item[role=option], paper-icon-item[aria-role=option] {
+      border: var(--theme-thick-border);
+      border-radius: var(--item-border-radius);
+      background: var(--theme-card-background);
+      --sidebar-icon-color: var(--sidebar-selected-icon-color);
+    }
+    .iron-selected paper-icon-item {
+      background: var(--theme-card-background);
     }
 
   card-mod-root: |

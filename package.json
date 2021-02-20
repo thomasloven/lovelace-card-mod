@@ -1,7 +1,7 @@
 {
   "name": "card-mod",
   "private": true,
-  "version": "2.1.0b0",
+  "version": "3.0.0b0",
   "description": "",
   "scripts": {
     "build": "rollup -c",
