@@ -1,10 +1,9 @@
 art-nouveau:
   card-mod-theme: art-nouveau
 
-
   background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTR-Hllcy5CR5U90nMlW8bZA_VM7w4VlP2lZg&usqp=CAU")
   # https://es.vecteezy.com/arte-vectorial/685708-patron-de-granate-rojo-geometrico-art-deco-sin-costura-simple
-  
+
   bg-color1: rgb(107, 14, 12)
   # bg-color2: rgb(182, 127, 82)
   bg-color2: rgb(232, 177, 132)
@@ -35,6 +34,15 @@ art-nouveau:
   shadow-2: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)
   shadow-transition: all 0.3s cubic-bezier(.25,.8,.25,1)
 
+  card-mod-sidebar: |
+    :host {
+      background: black !important;
+      border-right: var(--theme-thin-border) !important;
+      --divider-color: var(--bg-color3);
+    }
+    :host([expanded]) {
+      border-right: var(--theme-thick-border) !important;
+    }
 
   card-mod-root: |
     ha-app-layout {
@@ -56,6 +64,10 @@ art-nouveau:
     }
 
   card-mod-view-yaml: |
+    .: |
+      hui-view {
+        background: none !important;
+      }
     "*:first-child$": |
       :host {
         background: none !important;
@@ -129,7 +141,6 @@ art-nouveau:
         {% else %} var(--info-color);
         {% endif %}
     }
-
 
   card-mod-badge-yaml: |
     .: |
