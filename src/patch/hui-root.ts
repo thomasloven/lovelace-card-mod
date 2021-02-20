@@ -1,4 +1,5 @@
 import { fireEvent } from "card-tools/src/event.js";
+import { selectTree } from "card-tools/src/helpers";
 import { applyToElement } from "../card-mod";
 
 customElements.whenDefined("hui-root").then(() => {
@@ -9,22 +10,16 @@ customElements.whenDefined("hui-root").then(() => {
   const oldFirstUpdated = huiRoot.prototype.firstUpdated;
   huiRoot.prototype.firstUpdated = async function (changedProperties) {
     if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    const apply = () => {
-      applyToElement(this, "root", "", {}, []);
-    };
-
-    apply();
+    applyToElement(this, "root", "", {}, []);
   };
 
   fireEvent("ll-rebuild", {});
-  let root = document.querySelector("home-assistant");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("home-assistant-main");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("app-drawer-layout partial-panel-resolver");
 
-  root = root && root.querySelector("ha-panel-lovelace");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("hui-root");
-  if (root) root.firstUpdated();
+  selectTree(
+    document,
+    "home-assistant$home-assistant-main$app-drawer-layout partial-panel-resolver ha-panel-lovelace$hui-root",
+    false
+  ).then((root: any) => {
+    root?.firstUpdated();
+  });
 });

@@ -9,9 +9,7 @@ customElements.whenDefined("hui-view").then(() => {
   const oldFirstUpdated = huiView.prototype.firstUpdated;
   huiView.prototype.firstUpdated = function (changedProperties) {
     if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    const apply = () => applyToElement(this, "view", "", {}, []);
-
-    apply();
+    applyToElement(this, "view", "", {}, []);
   };
 
   fireEvent("ll-rebuild", {});

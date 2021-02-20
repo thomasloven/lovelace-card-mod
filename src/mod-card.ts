@@ -1,4 +1,4 @@
-import { LitElement, html } from "card-tools/src/lit-element";
+import { LitElement, html } from "lit-element";
 import { createCard } from "card-tools/src/lovelace-element";
 import { hass } from "card-tools/src/hass";
 
@@ -9,12 +9,14 @@ ha-card {
 }`;
 
 class ModCard extends LitElement {
+  _config?: any;
+  card: any;
   static get properties() {
     return {
       hass: {},
     };
   }
-  setConfig(config) {
+  setConfig(config: any) {
     this._config = JSON.parse(JSON.stringify(config));
     let style = this._config.card_mod || this._config.style;
 
@@ -38,14 +40,14 @@ class ModCard extends LitElement {
     return html` <ha-card modcard> ${this.card} </ha-card> `;
   }
 
-  set hass(hass) {
+  set hass(hass: any) {
     if (!this.card) return;
     this.card.hass = hass;
   }
 
   getCardSize() {
     if (this._config.report_size) return this._config.report_size;
-    let ret = this.shadowRoot;
+    let ret: any = this.shadowRoot;
     if (ret) ret = ret.querySelector("ha-card card-maker");
     if (ret) ret = ret.getCardSize;
     if (ret) ret = ret();

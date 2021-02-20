@@ -1,12 +1,18 @@
 import { fireEvent } from "card-tools/src/event.js";
 import { applyToElement } from "../card-mod";
 
+interface LovelaceCard extends Node {
+  config?: any;
+  _config?: any;
+  host?: LovelaceCard;
+}
+
 customElements.whenDefined("ha-card").then(() => {
   const HaCard = customElements.get("ha-card");
   if (HaCard.prototype.cardmod_patched) return;
   HaCard.prototype.cardmod_patched = true;
 
-  const findConfig = function (node) {
+  const findConfig = function (node: LovelaceCard) {
     if (node.config) return node.config;
     if (node._config) return node._config;
     if (node.host) return findConfig(node.host);
@@ -33,17 +39,14 @@ customElements.whenDefined("ha-card").then(() => {
     if (config.type)
       this.classList.add(`type-${config.type.replace(":", "-")}`);
 
-    const apply = () =>
-      applyToElement(
-        this,
-        "card",
-        config.card_mod || config.style,
-        { config },
-        config.entity_ids,
-        false
-      );
-
-    apply();
+    applyToElement(
+      this,
+      "card",
+      config.card_mod || config.style,
+      { config },
+      config.entity_ids,
+      false
+    );
   };
 
   fireEvent("ll-rebuild", {});

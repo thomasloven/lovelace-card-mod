@@ -1,3 +1,4 @@
+import { selectTree } from "card-tools/src/helpers";
 import { applyToElement } from "../card-mod";
 
 customElements.whenDefined("ha-more-info-dialog").then(() => {
@@ -7,7 +8,9 @@ customElements.whenDefined("ha-more-info-dialog").then(() => {
 
   const oldShowDialog = HaMoreInfoDialog.prototype.showDialog;
   HaMoreInfoDialog.prototype.showDialog = function (params) {
-    const apply = () => {
+    oldShowDialog.bind(this)(params);
+
+    this.requestUpdate().then(async () => {
       applyToElement(
         this.shadowRoot.querySelector("ha-dialog"),
         "more-info",
@@ -16,22 +19,15 @@ customElements.whenDefined("ha-more-info-dialog").then(() => {
         [params.entityId],
         false
       );
-    };
-
-    oldShowDialog.bind(this)(params);
-
-    this.requestUpdate().then(async () => {
-      await this.shadowRoot.querySelector("ha-dialog").updateComplete;
-      apply();
     });
   };
 
-  let root = document.querySelector("home-assistant");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("ha-more-info-dialog");
-
-  if (root) {
-    root.showDialog = HaMoreInfoDialog.prototype.showDialog.bind(root);
-    root.showDialog({ entityId: root.entityId });
-  }
+  selectTree(document, "home-assistant$ha-more-info-dialog", false).then(
+    (root: any) => {
+      if (root) {
+        root.showDialog = HaMoreInfoDialog.prototype.showDialog.bind(root);
+        root.showDialog({ entityId: root.entityId });
+      }
+    }
+  );
 });

@@ -52,22 +52,17 @@ export const applyToElement = async (
 
 class CardMod extends LitElement {
   type: string;
+
   _template: Template;
   _rendered_template: string = "";
-  _renderer: (string) => void;
+  _renderer: (_: string) => void;
   _renderChildren: Set<CardMod> = new Set();
   _tplinput: any;
+  _ttplinput: any;
+
   _observer: MutationObserver = new MutationObserver((mutations) => {
-    if (this._tplinput) {
-      let trigger = false;
-      for (const m of mutations) {
-        if ((m.target as Element).localName !== "card-mod") {
-          trigger = true;
-        }
-      }
-      if (trigger) {
-        this.template = this._tplinput;
-      }
+    if (mutations.some((m) => (m.target as Element).localName !== "card-mod")) {
+      this.refresh();
     }
   });
 
@@ -85,19 +80,12 @@ class CardMod extends LitElement {
     super();
     document
       .querySelector("home-assistant")
-      .addEventListener("settheme", () => {
-        if (this._tplinput) {
-          this.template = this._tplinput;
-          console.log("Rerender");
-        }
-      });
+      .addEventListener("settheme", () => this.refresh());
   }
 
   connectedCallback() {
     super.connectedCallback();
-    if (this._tplinput) {
-      this.template = this._tplinput;
-    }
+    this.refresh();
     this.setAttribute("slot", "none");
   }
 
@@ -113,12 +101,19 @@ class CardMod extends LitElement {
     });
   }
 
-  async _subscribe(template: Template) {
+  refresh() {
+    if (this._tplinput) {
+      this.template = this._tplinput;
+    }
+  }
+
+  private async _subscribe(template: Template) {
     const variables = template.variables;
 
     let tpl = JSON.parse(JSON.stringify(template.template || {}));
     if (typeof tpl === "string") tpl = { ".": tpl };
     const theme_template = await get_theme(this);
+    this._ttplinput = theme_template;
     merge_deep(tpl, theme_template);
 
     if (tpl == undefined) return;
@@ -156,7 +151,7 @@ class CardMod extends LitElement {
     this._observer.observe(parent, { childList: true });
   }
 
-  async _unsubscribe() {
+  private async _unsubscribe() {
     this._observer.disconnect();
     await unbind_template(this._renderer);
     this._rendered_template = "";
@@ -166,7 +161,7 @@ class CardMod extends LitElement {
     }
   }
 
-  _template_rendered(result: string) {
+  private _template_rendered(result: string) {
     this._rendered_template = result;
   }
 

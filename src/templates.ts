@@ -5,7 +5,7 @@ interface CachedTemplate {
   variables: object;
   value: string;
   callbacks: Set<(string) => void>;
-  unsubscribe: Promise<() => void>;
+  unsubscribe: Promise<() => Promise<void>>;
 }
 
 interface RenderTemplateResult {
@@ -28,7 +28,6 @@ function template_updated(
     return;
   }
   cache.value = result.result;
-  cachedTemplates[key] = cache;
   cache.callbacks.forEach((f) => f(result.result));
 }
 
@@ -44,7 +43,7 @@ export async function bind_template(
   if (!cache) {
     callback("");
 
-    cache = {
+    cachedTemplates[cacheKey] = cache = {
       template,
       variables,
       value: "",
@@ -62,22 +61,19 @@ export async function bind_template(
     callback(cache.value);
     cache.callbacks.add(callback);
   }
-  cachedTemplates[cacheKey] = cache;
 }
 
 export async function unbind_template(
   callback: (string) => void
 ): Promise<void> {
-  let unsubscriber;
+  let unsubscriber: Promise<() => Promise<void>>;
   for (const [key, cache] of Object.entries(cachedTemplates)) {
     if (cache.callbacks.has(callback)) {
       cache.callbacks.delete(callback);
       if (cache.callbacks.size == 0) {
         unsubscriber = cache.unsubscribe;
         delete cachedTemplates[key];
-        break;
       }
-      cachedTemplates[key] = cache;
       break;
     }
   }

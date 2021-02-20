@@ -12,20 +12,15 @@ customElements.whenDefined("hui-state-label-badge").then(() => {
     const config = this._config;
     if (!config) return;
 
-    let entity_ids = config.entity_ids;
-
     if (config.class) this.classList.add(config.class);
 
-    const apply = () =>
-      applyToElement(
-        this,
-        "badge",
-        config.card_mod || config.style,
-        { config },
-        config.entity_ids
-      );
-
-    apply();
+    applyToElement(
+      this,
+      "badge",
+      config.card_mod || config.style,
+      { config },
+      config.entity_ids
+    );
   };
 
   fireEvent("ll-rebuild", {});

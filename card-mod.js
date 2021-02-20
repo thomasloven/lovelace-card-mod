@@ -2576,7 +2576,6 @@ function template_updated(key, result) {
         return;
     }
     cache.value = result.result;
-    cachedTemplates[key] = cache;
     cache.callbacks.forEach((f) => f(result.result));
 }
 async function bind_template(callback, template, variables) {
@@ -2585,7 +2584,7 @@ async function bind_template(callback, template, variables) {
     let cache = cachedTemplates[cacheKey];
     if (!cache) {
         callback("");
-        cache = {
+        cachedTemplates[cacheKey] = cache = {
             template,
             variables,
             value: "",
@@ -2601,7 +2600,6 @@ async function bind_template(callback, template, variables) {
         callback(cache.value);
         cache.callbacks.add(callback);
     }
-    cachedTemplates[cacheKey] = cache;
 }
 async function unbind_template(callback) {
     let unsubscriber;
@@ -2611,9 +2609,7 @@ async function unbind_template(callback) {
             if (cache.callbacks.size == 0) {
                 unsubscriber = cache.unsubscribe;
                 delete cachedTemplates[key];
-                break;
             }
-            cachedTemplates[key] = cache;
             break;
         }
     }
@@ -2787,7 +2783,7 @@ function merge_deep(target, source) {
                     Object.assign(target, { [key]: {} });
                 if (typeof target[key] === "string")
                     target[key] = { ".": target[key] };
-                this._mergeDeep(target[key], source[key]);
+                merge_deep(target[key], source[key]);
             }
             else {
                 if (target[key])
@@ -2826,26 +2822,13 @@ class CardMod extends LitElement {
         this._rendered_template = "";
         this._renderChildren = new Set();
         this._observer = new MutationObserver((mutations) => {
-            if (this._tplinput) {
-                let trigger = false;
-                for (const m of mutations) {
-                    if (m.target.localName !== "card-mod") {
-                        trigger = true;
-                    }
-                }
-                if (trigger) {
-                    this.template = this._tplinput;
-                }
+            if (mutations.some((m) => m.target.localName !== "card-mod")) {
+                this.refresh();
             }
         });
         document
             .querySelector("home-assistant")
-            .addEventListener("settheme", () => {
-            if (this._tplinput) {
-                this.template = this._tplinput;
-                console.log("Rerender");
-            }
-        });
+            .addEventListener("settheme", () => this.refresh());
     }
     static get properties() {
         return {
@@ -2857,9 +2840,7 @@ class CardMod extends LitElement {
     }
     connectedCallback() {
         super.connectedCallback();
-        if (this._tplinput) {
-            this.template = this._tplinput;
-        }
+        this.refresh();
         this.setAttribute("slot", "none");
     }
     disconnectedCallback() {
@@ -2872,6 +2853,11 @@ class CardMod extends LitElement {
             this._subscribe(this._tplinput);
         });
     }
+    refresh() {
+        if (this._tplinput) {
+            this.template = this._tplinput;
+        }
+    }
     async _subscribe(template) {
         var _a, _b;
         const variables = template.variables;
@@ -2879,6 +2865,7 @@ class CardMod extends LitElement {
         if (typeof tpl === "string")
             tpl = { ".": tpl };
         const theme_template = await get_theme(this);
+        this._ttplinput = theme_template;
         merge_deep(tpl, theme_template);
         if (tpl == undefined)
             return;
@@ -2957,104 +2944,88 @@ function fireEvent(ev, detail, entity=null) {
 }
 
 customElements.whenDefined("ha-card").then(() => {
-  const HaCard = customElements.get("ha-card");
-  if (HaCard.prototype.cardmod_patched) return;
-  HaCard.prototype.cardmod_patched = true;
-
-  const findConfig = function (node) {
-    if (node.config) return node.config;
-    if (node._config) return node._config;
-    if (node.host) return findConfig(node.host);
-    if (node.parentElement) return findConfig(node.parentElement);
-    if (node.parentNode) return findConfig(node.parentNode);
-    return null;
-  };
-
-  const oldFirstUpdated = HaCard.prototype.firstUpdated;
-  HaCard.prototype.firstUpdated = function (changedProperties) {
-    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    // Move the header inside the slot instead of in the shadowDOM
-    // makes it easier to style it consistently
-    const header = this.shadowRoot.querySelector(".card-header");
-    if (header) {
-      this.insertBefore(header, this.children[0]);
-    }
-
-    const config = findConfig(this);
-
-    if (!config) return;
-
-    if (config.class) this.classList.add(config.class);
-    if (config.type)
-      this.classList.add(`type-${config.type.replace(":", "-")}`);
-
-    const apply = () =>
-      applyToElement(
-        this,
-        "card",
-        config.card_mod || config.style,
-        { config },
-        config.entity_ids,
-        false
-      );
-
-    apply();
-  };
-
-  fireEvent("ll-rebuild", {});
+    const HaCard = customElements.get("ha-card");
+    if (HaCard.prototype.cardmod_patched)
+        return;
+    HaCard.prototype.cardmod_patched = true;
+    const findConfig = function (node) {
+        if (node.config)
+            return node.config;
+        if (node._config)
+            return node._config;
+        if (node.host)
+            return findConfig(node.host);
+        if (node.parentElement)
+            return findConfig(node.parentElement);
+        if (node.parentNode)
+            return findConfig(node.parentNode);
+        return null;
+    };
+    const oldFirstUpdated = HaCard.prototype.firstUpdated;
+    HaCard.prototype.firstUpdated = function (changedProperties) {
+        if (oldFirstUpdated)
+            oldFirstUpdated.bind(this)(changedProperties);
+        // Move the header inside the slot instead of in the shadowDOM
+        // makes it easier to style it consistently
+        const header = this.shadowRoot.querySelector(".card-header");
+        if (header) {
+            this.insertBefore(header, this.children[0]);
+        }
+        const config = findConfig(this);
+        if (!config)
+            return;
+        if (config.class)
+            this.classList.add(config.class);
+        if (config.type)
+            this.classList.add(`type-${config.type.replace(":", "-")}`);
+        applyToElement(this, "card", config.card_mod || config.style, { config }, config.entity_ids, false);
+    };
+    fireEvent("ll-rebuild", {});
 });
 
 customElements.whenDefined("hui-entities-card").then(() => {
-  const EntitiesCard = customElements.get("hui-entities-card");
-  if (EntitiesCard.prototype.cardmod_patched) return;
-  EntitiesCard.prototype.cardmod_patched = true;
-
-  const oldRenderEntity = EntitiesCard.prototype.renderEntity;
-  EntitiesCard.prototype.renderEntity = function (config) {
-    const retval = oldRenderEntity.bind(this)(config);
-
-    if (!config) return retval;
-    if (!retval || !retval.values) return retval;
-    const row = retval.values[0];
-    if (!row) return retval;
-
-    config.entity_ids;
-
-    if (config.class) row.classList.add(config.class);
-
-    const apply = () =>
-      applyToElement(
-        row,
-        "row",
-        config.card_mod || config.style,
-        { config },
-        config.entity_ids
-      );
-
-    apply();
-    if (retval.values[0])
-      retval.values[0].addEventListener("ll-rebuild", apply);
-    return retval;
-  };
-
-  fireEvent("ll-rebuild", {});
+    const EntitiesCard = customElements.get("hui-entities-card");
+    if (EntitiesCard.prototype.cardmod_patched)
+        return;
+    EntitiesCard.prototype.cardmod_patched = true;
+    const oldRenderEntity = EntitiesCard.prototype.renderEntity;
+    EntitiesCard.prototype.renderEntity = function (config) {
+        const retval = oldRenderEntity.bind(this)(config);
+        if (!config)
+            return retval;
+        if (!retval || !retval.values)
+            return retval;
+        const row = retval.values[0];
+        if (!row)
+            return retval;
+        config.entity_ids;
+        if (config.class)
+            row.classList.add(config.class);
+        const apply = () => applyToElement(row, "row", config.card_mod || config.style, { config }, config.entity_ids);
+        apply();
+        if (retval.values[0])
+            retval.values[0].addEventListener("ll-rebuild", apply);
+        return retval;
+    };
+    fireEvent("ll-rebuild", {});
 });
 
 customElements.whenDefined("hui-glance-card").then(() => {
-  const GlanceCard = customElements.get("hui-glance-card");
-  if (GlanceCard.prototype.cardmod_patched) return;
-  GlanceCard.prototype.cardmod_patched = true;
-
-  const oldFirstUpdated = GlanceCard.prototype.firstUpdated;
-  GlanceCard.prototype.firstUpdated = function (changedProperties) {
-    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    const entities = this.shadowRoot.querySelectorAll("ha-card div.entity");
-    entities.forEach((e) => {
-      const root = e.attachShadow({ mode: "open" });
-      [...e.children].forEach((el) => root.appendChild(el));
-      const styletag = document.createElement("style");
-      root.appendChild(styletag);
-      styletag.innerHTML = `
+    const GlanceCard = customElements.get("hui-glance-card");
+    if (GlanceCard.prototype.cardmod_patched)
+        return;
+    GlanceCard.prototype.cardmod_patched = true;
+    const oldFirstUpdated = GlanceCard.prototype.firstUpdated;
+    GlanceCard.prototype.firstUpdated = function (changedProperties) {
+        if (oldFirstUpdated)
+            oldFirstUpdated.bind(this)(changedProperties);
+        const entities = this.shadowRoot.querySelectorAll("ha-card div.entity");
+        entities.forEach((e) => {
+            const root = e.attachShadow({ mode: "open" });
+            [...e.children].forEach((el) => root.appendChild(el));
+            const styletag = document.createElement("style");
+            root.appendChild(styletag);
+            styletag.innerHTML = `
       :host {
         box-sizing: border-box;
         padding: 0 4px;
@@ -3079,172 +3050,105 @@ customElements.whenDefined("hui-glance-card").then(() => {
         margin: 8px 0;
       }
       `;
-
-      const config = e.config || e.entityConf;
-      if (!config) return;
-      config.entity_ids;
-
-      if (config.class) e.classList.add(config.class);
-
-      const apply = () =>
-        applyToElement(
-          e,
-          "glance",
-          config.card_mod || config.style,
-          { config },
-          config.entity_ids
-        );
-
-      apply();
-    });
-  };
-
-  fireEvent("ll-rebuild", {});
+            const config = e.config || e.entityConf;
+            if (!config)
+                return;
+            config.entity_ids;
+            if (config.class)
+                e.classList.add(config.class);
+            applyToElement(e, "glance", config.card_mod || config.style, { config }, config.entity_ids);
+        });
+    };
+    fireEvent("ll-rebuild", {});
 });
 
 customElements.whenDefined("hui-state-label-badge").then(() => {
-  const HuiStateLabelBadge = customElements.get("hui-state-label-badge");
-  if (HuiStateLabelBadge.prototype.cardmod_patched) return;
-  HuiStateLabelBadge.prototype.cardmod_patched = true;
-
-  const oldFirstUpdated = HuiStateLabelBadge.prototype.firstUpdated;
-  HuiStateLabelBadge.prototype.firstUpdated = function (changedProperties) {
-    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    const config = this._config;
-    if (!config) return;
-
-    config.entity_ids;
-
-    if (config.class) this.classList.add(config.class);
-
-    const apply = () =>
-      applyToElement(
-        this,
-        "badge",
-        config.card_mod || config.style,
-        { config },
-        config.entity_ids
-      );
-
-    apply();
-  };
-
-  fireEvent("ll-rebuild", {});
+    const HuiStateLabelBadge = customElements.get("hui-state-label-badge");
+    if (HuiStateLabelBadge.prototype.cardmod_patched)
+        return;
+    HuiStateLabelBadge.prototype.cardmod_patched = true;
+    const oldFirstUpdated = HuiStateLabelBadge.prototype.firstUpdated;
+    HuiStateLabelBadge.prototype.firstUpdated = function (changedProperties) {
+        if (oldFirstUpdated)
+            oldFirstUpdated.bind(this)(changedProperties);
+        const config = this._config;
+        if (!config)
+            return;
+        if (config.class)
+            this.classList.add(config.class);
+        applyToElement(this, "badge", config.card_mod || config.style, { config }, config.entity_ids);
+    };
+    fireEvent("ll-rebuild", {});
 });
 
 customElements.whenDefined("hui-view").then(() => {
-  const huiView = customElements.get("hui-view");
-  if (huiView.prototype.cardmod_patched) return;
-  huiView.prototype.cardmod_patched = true;
-
-  const oldFirstUpdated = huiView.prototype.firstUpdated;
-  huiView.prototype.firstUpdated = function (changedProperties) {
-    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    const apply = () => applyToElement(this, "view", "", {}, []);
-
-    apply();
-  };
-
-  fireEvent("ll-rebuild", {});
+    const huiView = customElements.get("hui-view");
+    if (huiView.prototype.cardmod_patched)
+        return;
+    huiView.prototype.cardmod_patched = true;
+    const oldFirstUpdated = huiView.prototype.firstUpdated;
+    huiView.prototype.firstUpdated = function (changedProperties) {
+        if (oldFirstUpdated)
+            oldFirstUpdated.bind(this)(changedProperties);
+        applyToElement(this, "view", "", {}, []);
+    };
+    fireEvent("ll-rebuild", {});
 });
 
 customElements.whenDefined("hui-root").then(() => {
-  const huiRoot = customElements.get("hui-root");
-  if (huiRoot.prototype.cardmod_patched) return;
-  huiRoot.prototype.cardmod_patched = true;
-
-  const oldFirstUpdated = huiRoot.prototype.firstUpdated;
-  huiRoot.prototype.firstUpdated = async function (changedProperties) {
-    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    const apply = () => {
-      applyToElement(this, "root", "", {}, []);
+    const huiRoot = customElements.get("hui-root");
+    if (huiRoot.prototype.cardmod_patched)
+        return;
+    huiRoot.prototype.cardmod_patched = true;
+    const oldFirstUpdated = huiRoot.prototype.firstUpdated;
+    huiRoot.prototype.firstUpdated = async function (changedProperties) {
+        if (oldFirstUpdated)
+            oldFirstUpdated.bind(this)(changedProperties);
+        applyToElement(this, "root", "", {}, []);
     };
-
-    apply();
-  };
-
-  fireEvent("ll-rebuild", {});
-  let root = document.querySelector("home-assistant");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("home-assistant-main");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("app-drawer-layout partial-panel-resolver");
-
-  root = root && root.querySelector("ha-panel-lovelace");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("hui-root");
-  if (root) root.firstUpdated();
+    fireEvent("ll-rebuild", {});
+    selectTree(document, "home-assistant$home-assistant-main$app-drawer-layout partial-panel-resolver ha-panel-lovelace$hui-root", false).then((root) => {
+        root === null || root === void 0 ? void 0 : root.firstUpdated();
+    });
 });
 
 customElements.whenDefined("ha-more-info-dialog").then(() => {
-  const HaMoreInfoDialog = customElements.get("ha-more-info-dialog");
-  if (HaMoreInfoDialog.prototype.cardmod_patched) return;
-  HaMoreInfoDialog.prototype.cardmod_patched = true;
-
-  const oldShowDialog = HaMoreInfoDialog.prototype.showDialog;
-  HaMoreInfoDialog.prototype.showDialog = function (params) {
-    const apply = () => {
-      applyToElement(
-        this.shadowRoot.querySelector("ha-dialog"),
-        "more-info",
-        "",
-        { config: params },
-        [params.entityId],
-        false
-      );
+    const HaMoreInfoDialog = customElements.get("ha-more-info-dialog");
+    if (HaMoreInfoDialog.prototype.cardmod_patched)
+        return;
+    HaMoreInfoDialog.prototype.cardmod_patched = true;
+    const oldShowDialog = HaMoreInfoDialog.prototype.showDialog;
+    HaMoreInfoDialog.prototype.showDialog = function (params) {
+        oldShowDialog.bind(this)(params);
+        this.requestUpdate().then(async () => {
+            applyToElement(this.shadowRoot.querySelector("ha-dialog"), "more-info", "", { config: params }, [params.entityId], false);
+        });
     };
-
-    oldShowDialog.bind(this)(params);
-
-    this.requestUpdate().then(async () => {
-      await this.shadowRoot.querySelector("ha-dialog").updateComplete;
-      apply();
+    selectTree(document, "home-assistant$ha-more-info-dialog", false).then((root) => {
+        if (root) {
+            root.showDialog = HaMoreInfoDialog.prototype.showDialog.bind(root);
+            root.showDialog({ entityId: root.entityId });
+        }
     });
-  };
-
-  let root = document.querySelector("home-assistant");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("ha-more-info-dialog");
-
-  if (root) {
-    root.showDialog = HaMoreInfoDialog.prototype.showDialog.bind(root);
-    root.showDialog({ entityId: root.entityId });
-  }
 });
 
 customElements.whenDefined("ha-sidebar").then(() => {
-  const haSidebar = customElements.get("ha-sidebar");
-  if (haSidebar.prototype.cardmod_patched) return;
-  haSidebar.prototype.cardmod_patched = true;
-
-  const oldFirstUpdated = haSidebar.prototype.firstUpdated;
-  haSidebar.prototype.firstUpdated = async function (changedProperties) {
-    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    const apply = () => {
-      applyToElement(this, "sidebar", "", {}, []);
+    const haSidebar = customElements.get("ha-sidebar");
+    if (haSidebar.prototype.cardmod_patched)
+        return;
+    haSidebar.prototype.cardmod_patched = true;
+    const oldFirstUpdated = haSidebar.prototype.firstUpdated;
+    haSidebar.prototype.firstUpdated = async function (changedProperties) {
+        if (oldFirstUpdated)
+            oldFirstUpdated.bind(this)(changedProperties);
+        const apply = () => {
+            applyToElement(this, "sidebar", "", {}, []);
+        };
+        apply();
     };
-
-    apply();
-  };
-
-  fireEvent("ll-rebuild", {});
-  let root = document.querySelector("home-assistant");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("home-assistant-main");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("app-drawer-layout app-drawer");
-
-  root = root && root.querySelector("ha-sidebar");
-  if (root) root.firstUpdated();
+    fireEvent("ll-rebuild", {});
+    selectTree(document, "home-assistant$home-assistant-main$app-drawer-layout app-drawer ha-sidebar", false).then((root) => root === null || root === void 0 ? void 0 : root.firstUpdated());
 });
-
-const LitElement$1 = customElements.get('home-assistant-main')
-  ? Object.getPrototypeOf(customElements.get('home-assistant-main'))
-  : Object.getPrototypeOf(customElements.get('hui-view'));
-
-const html$1 = LitElement$1.prototype.html;
-
-LitElement$1.prototype.css;
 
 const CUSTOM_TYPE_PREFIX = "custom:";
 
@@ -3341,51 +3245,52 @@ ha-card {
   background: none;
   box-shadow: none;
 }`;
-
-class ModCard extends LitElement$1 {
-  static get properties() {
-    return {
-      hass: {},
-    };
-  }
-  setConfig(config) {
-    this._config = JSON.parse(JSON.stringify(config));
-    let style = this._config.card_mod || this._config.style;
-
-    if (style === undefined) {
-      style = NO_STYLE;
-    } else if (typeof style === "string") {
-      style = NO_STYLE + style;
-    } else if (style["."]) {
-      style["."] = NO_STYLE + style["."];
-    } else {
-      style["."] = NO_STYLE;
+class ModCard extends LitElement {
+    static get properties() {
+        return {
+            hass: {},
+        };
     }
-
-    this._config.card_mod = style;
-
-    this.card = createCard(config.card);
-    this.card.hass = hass();
-  }
-
-  render() {
-    return html$1` <ha-card modcard> ${this.card} </ha-card> `;
-  }
-
-  set hass(hass) {
-    if (!this.card) return;
-    this.card.hass = hass;
-  }
-
-  getCardSize() {
-    if (this._config.report_size) return this._config.report_size;
-    let ret = this.shadowRoot;
-    if (ret) ret = ret.querySelector("ha-card card-maker");
-    if (ret) ret = ret.getCardSize;
-    if (ret) ret = ret();
-    if (ret) return ret;
-    return 1;
-  }
+    setConfig(config) {
+        this._config = JSON.parse(JSON.stringify(config));
+        let style = this._config.card_mod || this._config.style;
+        if (style === undefined) {
+            style = NO_STYLE;
+        }
+        else if (typeof style === "string") {
+            style = NO_STYLE + style;
+        }
+        else if (style["."]) {
+            style["."] = NO_STYLE + style["."];
+        }
+        else {
+            style["."] = NO_STYLE;
+        }
+        this._config.card_mod = style;
+        this.card = createCard(config.card);
+        this.card.hass = hass();
+    }
+    render() {
+        return html ` <ha-card modcard> ${this.card} </ha-card> `;
+    }
+    set hass(hass) {
+        if (!this.card)
+            return;
+        this.card.hass = hass;
+    }
+    getCardSize() {
+        if (this._config.report_size)
+            return this._config.report_size;
+        let ret = this.shadowRoot;
+        if (ret)
+            ret = ret.querySelector("ha-card card-maker");
+        if (ret)
+            ret = ret.getCardSize;
+        if (ret)
+            ret = ret();
+        if (ret)
+            return ret;
+        return 1;
+    }
 }
-
 customElements.define("mod-card", ModCard);

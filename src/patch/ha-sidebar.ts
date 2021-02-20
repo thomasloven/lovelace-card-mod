@@ -1,4 +1,5 @@
 import { fireEvent } from "card-tools/src/event.js";
+import { selectTree } from "card-tools/src/helpers";
 import { applyToElement } from "../card-mod";
 
 customElements.whenDefined("ha-sidebar").then(() => {
@@ -17,12 +18,9 @@ customElements.whenDefined("ha-sidebar").then(() => {
   };
 
   fireEvent("ll-rebuild", {});
-  let root = document.querySelector("home-assistant");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("home-assistant-main");
-  root = root && root.shadowRoot;
-  root = root && root.querySelector("app-drawer-layout app-drawer");
-
-  root = root && root.querySelector("ha-sidebar");
-  if (root) root.firstUpdated();
+  selectTree(
+    document,
+    "home-assistant$home-assistant-main$app-drawer-layout app-drawer ha-sidebar",
+    false
+  ).then((root) => root?.firstUpdated());
 });
