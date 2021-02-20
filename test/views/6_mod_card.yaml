@@ -1,7 +1,7 @@
 x-anchors:
   desc: &desc
     type: markdown
-    style: |
+    card_mod: |
       code {
         font-size: 8pt;
         line-height: normal;
@@ -27,7 +27,7 @@ cards:
                 content: "# 2"
               - type: markdown
                 content: "# 3"
-          style: |
+          card_mod: |
             ha-card {
               border: 1px solid green;
             }
@@ -42,7 +42,7 @@ cards:
               content: "# 2"
             - type: markdown
               content: "# 3"
-        style: |
+        card_mod: |
           ha-card {
             border: 1px solid green;
           }
@@ -58,7 +58,7 @@ cards:
           entity: alarm_control_panel.alarm
 
   - type: custom:mod-card
-    style: |
+    card_mod: |
       ha-card {
         border: 1px solid green;
       }

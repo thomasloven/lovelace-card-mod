@@ -51,7 +51,7 @@ customElements.whenDefined("hui-glance-card").then(() => {
         applyToElement(
           e,
           "glance",
-          config.style,
+          config.card_mod || config.style,
           { config },
           config.entity_ids
         );

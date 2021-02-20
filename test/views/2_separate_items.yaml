@@ -1,7 +1,7 @@
 x-anchors:
   desc: &desc
     type: markdown
-    style: |
+    card_mod: |
       code {
         font-size: 8pt;
         line-height: normal;
@@ -25,17 +25,17 @@ cards:
           show_header_toggle: false
           entities:
             - entity: light.bed_light
-              style: |
+              card_mod: |
                 :host {
                   color: red;
                 }
             - entity: light.ceiling_lights
-              style: |
+              card_mod: |
                 :host {
                   color: green;
                 }
             - entity: light.kitchen_lights
-              style: |
+              card_mod: |
                 :host {
                   color: blue;
                 }
@@ -44,17 +44,17 @@ cards:
         show_header_toggle: false
         entities:
           - entity: light.bed_light
-            style: |
+            card_mod: |
               :host {
                 color: red;
               }
           - entity: light.ceiling_lights
-            style: |
+            card_mod: |
               :host {
                 color: green;
               }
           - entity: light.kitchen_lights
-            style: |
+            card_mod: |
               :host {
                 color: blue;
               }
@@ -70,17 +70,17 @@ cards:
           type: glance
           entities:
             - entity: light.bed_light
-              style: |
+              card_mod: |
                 :host {
                   color: red;
                 }
             - entity: light.ceiling_lights
-              style: |
+              card_mod: |
                 :host {
                   color: green;
                 }
             - entity: light.kitchen_lights
-              style: |
+              card_mod: |
                 :host {
                   color: blue;
                 }
@@ -88,17 +88,17 @@ cards:
       - type: glance
         entities:
           - entity: light.bed_light
-            style: |
+            card_mod: |
               :host {
                 color: red;
               }
           - entity: light.ceiling_lights
-            style: |
+            card_mod: |
               :host {
                 color: green;
               }
           - entity: light.kitchen_lights
-            style: |
+            card_mod: |
               :host {
                 color: blue;
               }

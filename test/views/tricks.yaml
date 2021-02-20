@@ -1,7 +1,7 @@
 x-anchors:
   desc: &desc
     type: markdown
-    style: |
+    card_mod: |
       code {
         font-size: 8pt;
         line-height: normal;
@@ -10,14 +10,13 @@ x-anchors:
 
 title: Various tricks
 cards:
-
   - type: vertical-stack
     cards:
       - <<: *desc
         content: |
           ## CSS keyframes
           ```
-          style: |
+          card_mod: |
             @keyframes blink {
               50% {
                 background: red;
@@ -33,7 +32,7 @@ cards:
           - light.bed_light
           - light.ceiling_lights
           - light.kitchen_lights
-        style: |
+        card_mod: |
           @keyframes blink {
             50% {
               background: red;
@@ -67,7 +66,7 @@ cards:
           - light.bed_light
           - light.ceiling_lights
           - light.kitchen_lights
-        style: |
+        card_mod: |
           ha-card {
             z-index: 1;
             animation: wiggle 2s linear infinite alternate;
@@ -110,7 +109,7 @@ cards:
           - light.bed_light
           - light.ceiling_lights
           - light.kitchen_lights
-        style: |
+        card_mod: |
           ha-card {
             animation: blink 5s linear infinite;
           }
@@ -143,7 +142,7 @@ cards:
           entities:
             - entity: light.bed_light
               secondary_info: true
-              style: &brightness
+              card_mod: &brightness
                 hui-generic-entity-row:
                   $: |
                     .secondary::after {
@@ -151,10 +150,10 @@ cards:
                       }
             - entity: light.ceiling_lights
               secondary_info: true
-              style: *brightness
+              card_mod: *brightness
             - entity: light.kitchen_lights
               secondary_info: true
-              style: *brightness
+              card_mod: *brightness
           ```
           {%endraw%}
       - type: entities
@@ -162,7 +161,7 @@ cards:
         entities:
           - entity: light.bed_light
             secondary_info: true
-            style: &brightness
+            card_mod: &brightness
               hui-generic-entity-row:
                 $: |
                   .secondary::after {
@@ -170,10 +169,10 @@ cards:
                     }
           - entity: light.ceiling_lights
             secondary_info: true
-            style: *brightness
+            card_mod: *brightness
           - entity: light.kitchen_lights
             secondary_info: true
-            style: *brightness
+            card_mod: *brightness
 
       - <<: *desc
         content: |
@@ -183,7 +182,7 @@ cards:
           type: markdown
           content: |
             # Hello,
-          style:
+          card_mod:
             ha-markdown:
               $: |
                 h1::after {
@@ -194,7 +193,7 @@ cards:
       - type: markdown
         content: |
           # Hello,
-        style:
+        card_mod:
           ha-markdown:
             $: |
               h1::after {
@@ -206,7 +205,7 @@ cards:
         entities:
           - entity: device_tracker.demo_anne_therese
             secondary_info: true
-            style:
+            card_mod:
               hui-generic-entity-row:
                 $: |
                   .secondary::after {
@@ -219,7 +218,7 @@ cards:
                 }
           - entity: device_tracker.demo_home_boy
             secondary_info: true
-            style:
+            card_mod:
               hui-generic-entity-row:
                 $: |
                   .secondary::after {
@@ -232,7 +231,7 @@ cards:
                 }
           - entity: device_tracker.demo_paulus
             secondary_info: true
-            style:
+            card_mod:
               hui-generic-entity-row:
                 $: |
                   .secondary::after {
@@ -243,4 +242,3 @@ cards:
                   display: block;
                   background: linear-gradient(to right, rgba(0,255,0,0.5), {{state_attr(config.entity, 'battery')}}%, white {{state_attr(config.entity, 'battery')}}%);
                 }
-

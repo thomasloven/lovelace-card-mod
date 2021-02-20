@@ -1,7 +1,7 @@
 x-anchors:
   desc: &desc
     type: markdown
-    style: |
+    card_mod: |
       code {
         font-size: 8pt;
         line-height: normal;
@@ -20,7 +20,7 @@ cards:
           type: entities
           entities:
             - entity: sensor.outside_temperature
-              style: |
+              card_mod: |
                 .text-content {
                   color: red;
                 }
@@ -28,7 +28,7 @@ cards:
       - type: entities
         entities:
           - entity: sensor.outside_temperature
-            style: |
+            card_mod: |
               .text-content {
                 color: red;
               }

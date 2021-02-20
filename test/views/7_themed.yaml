@@ -1,5 +1,5 @@
 title: Home
-theme: airy
+theme: art-nouveau
 badges:
   - entity: binary_sensor.updater
   - entity: binary_sensor.basement_floor_wet
@@ -19,9 +19,9 @@ cards:
   - type: entities
     entities:
       - entity: calendar.calendar_1
-        name: '1'
+        name: "1"
       - entity: calendar.calendar_2
-        name: '2'
+        name: "2"
     title: Calendar
   - type: picture-entity
     entity: camera.demo_camera
@@ -96,4 +96,3 @@ cards:
       - water_heater.demo_water_heater
       - water_heater.demo_water_heater_celsius
     title: Water Heater
-

@@ -20,7 +20,13 @@ customElements.whenDefined("hui-entities-card").then(() => {
     if (config.class) row.classList.add(config.class);
 
     const apply = () =>
-      applyToElement(row, "row", config.style, { config }, config.entity_ids);
+      applyToElement(
+        row,
+        "row",
+        config.card_mod || config.style,
+        { config },
+        config.entity_ids
+      );
 
     apply();
     if (retval.values[0])

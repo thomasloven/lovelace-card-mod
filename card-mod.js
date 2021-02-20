@@ -2992,7 +2992,7 @@ customElements.whenDefined("ha-card").then(() => {
       applyToElement(
         this,
         "card",
-        config.style,
+        config.card_mod || config.style,
         { config },
         config.entity_ids,
         false
@@ -3023,7 +3023,13 @@ customElements.whenDefined("hui-entities-card").then(() => {
     if (config.class) row.classList.add(config.class);
 
     const apply = () =>
-      applyToElement(row, "row", config.style, { config }, config.entity_ids);
+      applyToElement(
+        row,
+        "row",
+        config.card_mod || config.style,
+        { config },
+        config.entity_ids
+      );
 
     apply();
     if (retval.values[0])
@@ -3084,7 +3090,7 @@ customElements.whenDefined("hui-glance-card").then(() => {
         applyToElement(
           e,
           "glance",
-          config.style,
+          config.card_mod || config.style,
           { config },
           config.entity_ids
         );
@@ -3096,28 +3102,34 @@ customElements.whenDefined("hui-glance-card").then(() => {
   fireEvent("ll-rebuild", {});
 });
 
-customElements.whenDefined('hui-state-label-badge').then(() => {
-    const HuiStateLabelBadge = customElements.get('hui-state-label-badge');
-    if(HuiStateLabelBadge.prototype.cardmod_patched) return;
-    HuiStateLabelBadge.prototype.cardmod_patched = true;
+customElements.whenDefined("hui-state-label-badge").then(() => {
+  const HuiStateLabelBadge = customElements.get("hui-state-label-badge");
+  if (HuiStateLabelBadge.prototype.cardmod_patched) return;
+  HuiStateLabelBadge.prototype.cardmod_patched = true;
 
-    const oldFirstUpdated = HuiStateLabelBadge.prototype.firstUpdated;
-    HuiStateLabelBadge.prototype.firstUpdated = function(changedProperties) {
-      if(oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-      const config = this._config;
-      if(!config) return;
+  const oldFirstUpdated = HuiStateLabelBadge.prototype.firstUpdated;
+  HuiStateLabelBadge.prototype.firstUpdated = function (changedProperties) {
+    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
+    const config = this._config;
+    if (!config) return;
 
-      config.entity_ids;
+    config.entity_ids;
 
-      if(config.class)
-        this.classList.add(config.class);
+    if (config.class) this.classList.add(config.class);
 
-      const apply = () => applyToElement(this, "badge", config.style, {config}, config.entity_ids);
+    const apply = () =>
+      applyToElement(
+        this,
+        "badge",
+        config.card_mod || config.style,
+        { config },
+        config.entity_ids
+      );
 
-      apply();
-    };
+    apply();
+  };
 
-  fireEvent('ll-rebuild', {});
+  fireEvent("ll-rebuild", {});
 });
 
 customElements.whenDefined("hui-view").then(() => {
@@ -3331,51 +3343,49 @@ ha-card {
 }`;
 
 class ModCard extends LitElement$1 {
-    static get properties() {
-      return {
-        hass: {},
-      };
-    }
-    setConfig(config) {
-        this._config = JSON.parse(JSON.stringify(config));
-        if(config.style === undefined)
-        {
-          this._config.style = NO_STYLE;
-        } else if (typeof(config.style) === "string") {
-          this._config.style = NO_STYLE + config.style;
-        } else if (config.style["."]) {
-          this._config.style["."] = NO_STYLE + config.style["."];
-        } else {
-          this._config.style["."] = NO_STYLE;
-        }
+  static get properties() {
+    return {
+      hass: {},
+    };
+  }
+  setConfig(config) {
+    this._config = JSON.parse(JSON.stringify(config));
+    let style = this._config.card_mod || this._config.style;
 
-        this.card = createCard(this._config.card);
-        this.card.hass = hass();
+    if (style === undefined) {
+      style = NO_STYLE;
+    } else if (typeof style === "string") {
+      style = NO_STYLE + style;
+    } else if (style["."]) {
+      style["."] = NO_STYLE + style["."];
+    } else {
+      style["."] = NO_STYLE;
     }
 
-    render() {
-        return html$1`
-          <ha-card modcard>
-          ${this.card}
-          </ha-card>
-        `;
-    }
+    this._config.card_mod = style;
 
-    set hass(hass) {
-      if(!this.card) return;
-      this.card.hass = hass;
-    }
+    this.card = createCard(config.card);
+    this.card.hass = hass();
+  }
 
-    getCardSize() {
-      if(this._config.report_size)
-        return this._config.report_size;
-      let ret = this.shadowRoot;
-      if(ret) ret = ret.querySelector("ha-card card-maker");
-      if(ret) ret = ret.getCardSize;
-      if(ret) ret = ret();
-      if(ret) return ret;
-      return 1;
-    }
+  render() {
+    return html$1` <ha-card modcard> ${this.card} </ha-card> `;
+  }
+
+  set hass(hass) {
+    if (!this.card) return;
+    this.card.hass = hass;
+  }
+
+  getCardSize() {
+    if (this._config.report_size) return this._config.report_size;
+    let ret = this.shadowRoot;
+    if (ret) ret = ret.querySelector("ha-card card-maker");
+    if (ret) ret = ret.getCardSize;
+    if (ret) ret = ret();
+    if (ret) return ret;
+    return 1;
+  }
 }
 
 customElements.define("mod-card", ModCard);

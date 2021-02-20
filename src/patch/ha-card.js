@@ -37,7 +37,7 @@ customElements.whenDefined("ha-card").then(() => {
       applyToElement(
         this,
         "card",
-        config.style,
+        config.card_mod || config.style,
         { config },
         config.entity_ids,
         false

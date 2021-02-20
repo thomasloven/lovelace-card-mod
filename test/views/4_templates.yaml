@@ -1,7 +1,7 @@
 x-anchors:
   desc: &desc
     type: markdown
-    style: |
+    card_mod: |
       code {
         font-size: 8pt;
         line-height: normal;
@@ -19,7 +19,7 @@ cards:
           Purple background when Bed Light is off
           {% raw %}
           ```
-          style: |
+          card_mod: |
             ha-card {
               background:
                 {% if is_state('light.bed_light', 'on') %}
@@ -37,7 +37,7 @@ cards:
           - light.bed_light
           - light.ceiling_lights
           - light.kitchen_lights
-        style: |
+        card_mod: |
           ha-card {
             background:
               {% if is_state('light.bed_light', 'on') %}
@@ -56,7 +56,7 @@ cards:
           Card background follows selected value
           {%raw%}
           ```
-          style: |
+          card_mod: |
             ha-card {
               background: url(https://place{{ states('input_select.background') }}.com/g/600/400);
             }
@@ -69,7 +69,7 @@ cards:
           - light.bed_light
           - light.ceiling_lights
           - light.kitchen_lights
-        style: |
+        card_mod: |
           ha-card {
             background: url(https://place{{ states('input_select.background') }}.com/g/600/400);
           }
@@ -85,7 +85,7 @@ cards:
           {%raw%}
           ```
           type: picture-elements
-          style: |
+          card_mod: |
             ha-card {
               --left-pos: {{states('input_number.x_pos')}}%;
               --top-pos: {{states('input_number.y_pos')}}%;
@@ -106,7 +106,7 @@ cards:
             style:
               top: var(--top-pos)
               left: var(--left-pos)
-        style: |
+        card_mod: |
           ha-card {
             --left-pos: {{states('input_number.x_pos')}}%;
             --top-pos: {{states('input_number.y_pos')}}%;

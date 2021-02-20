@@ -1,7 +1,7 @@
 x-anchors:
   desc: &desc
     type: markdown
-    style: |
+    card_mod: |
       code {
         font-size: 8pt;
         line-height: normal;
@@ -21,7 +21,7 @@ cards:
           Action buttons white
           {%raw%}
           ```
-          style:
+          card_mod:
             .: |
               ha-card {
                 --mdc-theme-primary: red;
@@ -51,7 +51,7 @@ cards:
       - type: alarm-panel
         card_icon: mdi:bell
         name: Alarm Panel
-        style:
+        card_mod:
           .: |
             ha-card {
               --mdc-theme-primary: red;
