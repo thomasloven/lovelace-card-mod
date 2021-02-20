@@ -1,4 +1,4 @@
-import { hass } from "card-tools/src/hass"
+import { hass } from "card-tools/src/hass";
 
 interface CachedTemplate {
   template: string;
@@ -13,11 +13,16 @@ interface RenderTemplateResult {
   listeners: any;
 }
 
-(window as any).cardMod_template_cache = (window as any).cardMod_template_cache || {}
+(window as any).cardMod_template_cache =
+  (window as any).cardMod_template_cache || {};
 
-const cachedTemplates: Record<string, CachedTemplate> = (window as any).cardMod_template_cache;
+const cachedTemplates: Record<string, CachedTemplate> = (window as any)
+  .cardMod_template_cache;
 
-function template_updated(key: string, result: RenderTemplateResult): Promise<void> {
+function template_updated(
+  key: string,
+  result: RenderTemplateResult
+): Promise<void> {
   const cache = cachedTemplates[key];
   if (!cache) {
     return;
@@ -27,7 +32,11 @@ function template_updated(key: string, result: RenderTemplateResult): Promise<vo
   cache.callbacks.forEach((f) => f(result.result));
 }
 
-export async function bind_template(callback: (string) => void, template: string, variables: object): Promise<void> {
+export async function bind_template(
+  callback: (string) => void,
+  template: string,
+  variables: object
+): Promise<void> {
   const connection = hass().connection;
 
   const cacheKey = JSON.stringify([template, variables]);
@@ -56,7 +65,9 @@ export async function bind_template(callback: (string) => void, template: string
   cachedTemplates[cacheKey] = cache;
 }
 
-export async function unbind_template(callback: (string) => void): Promise<void> {
+export async function unbind_template(
+  callback: (string) => void
+): Promise<void> {
   let unsubscriber;
   for (const [key, cache] of Object.entries(cachedTemplates)) {
     if (cache.callbacks.has(callback)) {
@@ -70,6 +81,5 @@ export async function unbind_template(callback: (string) => void): Promise<void>
       break;
     }
   }
-  if(unsubscriber)
-    await (await unsubscriber)();
+  if (unsubscriber) await (await unsubscriber)();
 }

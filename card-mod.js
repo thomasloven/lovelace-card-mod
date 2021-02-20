@@ -2566,8 +2566,10 @@ async function load_lovelace() {
   return true;
 }
 
-window.cardMod_template_cache = window.cardMod_template_cache || {};
-const cachedTemplates = window.cardMod_template_cache;
+window.cardMod_template_cache =
+    window.cardMod_template_cache || {};
+const cachedTemplates = window
+    .cardMod_template_cache;
 function template_updated(key, result) {
     const cache = cachedTemplates[key];
     if (!cache) {
@@ -2823,7 +2825,22 @@ class CardMod extends LitElement {
         super();
         this._rendered_template = "";
         this._renderChildren = new Set();
-        document.querySelector("home-assistant").addEventListener("settheme", () => {
+        this._observer = new MutationObserver((mutations) => {
+            if (this._tplinput) {
+                let trigger = false;
+                for (const m of mutations) {
+                    if (m.target.localName !== "card-mod") {
+                        trigger = true;
+                    }
+                }
+                if (trigger) {
+                    this.template = this._tplinput;
+                }
+            }
+        });
+        document
+            .querySelector("home-assistant")
+            .addEventListener("settheme", () => {
             if (this._tplinput) {
                 this.template = this._tplinput;
                 console.log("Rerender");
@@ -2832,7 +2849,7 @@ class CardMod extends LitElement {
     }
     static get properties() {
         return {
-            _rendered_template: {}
+            _rendered_template: {},
         };
     }
     static get applyToElement() {
@@ -2851,7 +2868,9 @@ class CardMod extends LitElement {
     }
     set template(tpl) {
         this._tplinput = tpl;
-        this._unsubscribe().then(() => this._subscribe(this._tplinput));
+        this._unsubscribe().then(() => {
+            this._subscribe(this._tplinput);
+        });
     }
     async _subscribe(template) {
         var _a, _b;
@@ -2889,8 +2908,12 @@ class CardMod extends LitElement {
         else {
             this._template_rendered(((_b = this._template) === null || _b === void 0 ? void 0 : _b.template) || "");
         }
+        let parent = this.parentElement || this.parentNode;
+        parent = parent.host ? parent.host : parent;
+        this._observer.observe(parent, { childList: true });
     }
     async _unsubscribe() {
+        this._observer.disconnect();
         await unbind_template(this._renderer);
         this._rendered_template = "";
         for (const c of this._renderChildren) {

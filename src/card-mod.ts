@@ -1,5 +1,5 @@
-import { LitElement, html } from "lit-element"
-import { bind_template, unbind_template } from "./templates"
+import { LitElement, html } from "lit-element";
+import { bind_template, unbind_template } from "./templates";
 import { hasTemplate } from "card-tools/src/templates";
 import pjson from "../package.json";
 import { selectTree } from "card-tools/src/helpers";
@@ -12,18 +12,18 @@ interface ModdedElement extends HTMLElement {
 }
 
 interface Template {
-  template: string | object,
-  variables: object,
-  entity_ids?: any,
+  template: string | object;
+  variables: object;
+  entity_ids?: any;
 }
 
-export const applyToElement = async(
+export const applyToElement = async (
   el: ModdedElement,
   type: string,
   template: string | object,
   variables: any,
   entity_ids: any,
-  shadow: boolean = true,
+  shadow: boolean = true
 ) => {
   if (el.localName?.includes("-"))
     await customElements.whenDefined(el.localName);
@@ -48,21 +48,33 @@ export const applyToElement = async(
     variables,
     entity_ids,
   };
-}
+};
 
-
-class CardMod extends LitElement{
+class CardMod extends LitElement {
   type: string;
   _template: Template;
   _rendered_template: string = "";
-  _renderer: ((string) => void);
+  _renderer: (string) => void;
   _renderChildren: Set<CardMod> = new Set();
   _tplinput: any;
+  _observer: MutationObserver = new MutationObserver((mutations) => {
+    if (this._tplinput) {
+      let trigger = false;
+      for (const m of mutations) {
+        if ((m.target as Element).localName !== "card-mod") {
+          trigger = true;
+        }
+      }
+      if (trigger) {
+        this.template = this._tplinput;
+      }
+    }
+  });
 
   static get properties() {
     return {
-      _rendered_template: {}
-    }
+      _rendered_template: {},
+    };
   }
 
   static get applyToElement() {
@@ -71,12 +83,14 @@ class CardMod extends LitElement{
 
   constructor() {
     super();
-    document.querySelector("home-assistant").addEventListener("settheme", () => {
-      if (this._tplinput) {
-        this.template = this._tplinput;
-        console.log("Rerender")
-      }
-    });
+    document
+      .querySelector("home-assistant")
+      .addEventListener("settheme", () => {
+        if (this._tplinput) {
+          this.template = this._tplinput;
+          console.log("Rerender");
+        }
+      });
   }
 
   connectedCallback() {
@@ -84,7 +98,7 @@ class CardMod extends LitElement{
     if (this._tplinput) {
       this.template = this._tplinput;
     }
-    this.setAttribute("slot", "none")
+    this.setAttribute("slot", "none");
   }
 
   disconnectedCallback() {
@@ -94,15 +108,16 @@ class CardMod extends LitElement{
 
   set template(tpl: Template) {
     this._tplinput = tpl;
-    this._unsubscribe().then(() => this._subscribe(this._tplinput));
+    this._unsubscribe().then(() => {
+      this._subscribe(this._tplinput);
+    });
   }
 
   async _subscribe(template: Template) {
     const variables = template.variables;
 
     let tpl = JSON.parse(JSON.stringify(template.template || {}));
-    if (typeof tpl === "string")
-      tpl = { ".": tpl };
+    if (typeof tpl === "string") tpl = { ".": tpl };
     const theme_template = await get_theme(this);
     merge_deep(tpl, theme_template);
 
@@ -117,8 +132,8 @@ class CardMod extends LitElement{
         } else {
           selectTree(parent, key, true).then((nodes) => {
             for (const el of nodes) {
-                applyToElement(el, undefined, value, variables, [], false);
-                this._renderChildren.add(el._cardMod);
+              applyToElement(el, undefined, value, variables, [], false);
+              this._renderChildren.add(el._cardMod);
             }
           });
         }
@@ -127,18 +142,26 @@ class CardMod extends LitElement{
 
     if (hasTemplate(this._template?.template)) {
       this._renderer = this._renderer || this._template_rendered.bind(this);
-      await bind_template(this._renderer, (this._template.template as string), this._template.variables);
+      await bind_template(
+        this._renderer,
+        this._template.template as string,
+        this._template.variables
+      );
     } else {
       this._template_rendered((this._template?.template as string) || "");
     }
+
+    let parent = this.parentElement || this.parentNode;
+    parent = (parent as any).host ? (parent as any).host : parent;
+    this._observer.observe(parent, { childList: true });
   }
 
   async _unsubscribe() {
+    this._observer.disconnect();
     await unbind_template(this._renderer);
     this._rendered_template = "";
     for (const c of this._renderChildren) {
-      if(c)
-        c.template = { template: "", variables: {} };
+      if (c) c.template = { template: "", variables: {} };
       this._renderChildren.delete(c);
     }
   }

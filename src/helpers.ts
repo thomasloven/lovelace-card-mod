@@ -25,8 +25,7 @@ export function merge_deep(target, source) {
     for (const key in source) {
       if (isObject(source[key])) {
         if (!target[key]) Object.assign(target, { [key]: {} });
-        if (typeof target[key] === "string")
-          target[key] = { ".": target[key] };
+        if (typeof target[key] === "string") target[key] = { ".": target[key] };
         this._mergeDeep(target[key], source[key]);
       } else {
         if (target[key]) target[key] = source[key] + target[key];
