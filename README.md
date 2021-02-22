@@ -6,15 +6,7 @@
 
 Allows you to add css styles to any lovelace card.
 
-For installation instructions [see this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
-
-Install `card-mod.js` as a `module`.
-
-```yaml
-resources:
-  - url: /local/card-mod.js
-    type: module
-```
+Install it with HACS, or for manual installation instructions [see this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
 
 ## Usage
 
