@@ -11,5 +11,10 @@ export default {
     file: "card-mod.js",
     format: "es",
   },
-  plugins: [nodeResolve(), json(), typescript(), !dev && terser()],
+  plugins: [
+    nodeResolve(),
+    json(),
+    typescript(),
+    !dev && terser({ format: { comments: false } }),
+  ],
 };
