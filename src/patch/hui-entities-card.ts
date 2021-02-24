@@ -1,5 +1,5 @@
 import { fireEvent } from "card-tools/src/event.js";
-import { applyToElement } from "../card-mod";
+import { applyToElement } from "../helpers";
 
 customElements.whenDefined("hui-entities-card").then(() => {
   const EntitiesCard = customElements.get("hui-entities-card");
@@ -20,13 +20,7 @@ customElements.whenDefined("hui-entities-card").then(() => {
     if (config.class) row.classList.add(config.class);
 
     const apply = () =>
-      applyToElement(
-        row,
-        "row",
-        config.card_mod || config.style,
-        { config },
-        config.entity_ids
-      );
+      applyToElement(row, "row", config.card_mod || config.style, { config });
 
     apply();
     if (retval.values[0])

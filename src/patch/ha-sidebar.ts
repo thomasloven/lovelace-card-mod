@@ -1,6 +1,6 @@
 import { fireEvent } from "card-tools/src/event.js";
 import { selectTree } from "card-tools/src/helpers";
-import { applyToElement } from "../card-mod";
+import { applyToElement } from "../helpers";
 
 customElements.whenDefined("ha-sidebar").then(() => {
   const haSidebar = customElements.get("ha-sidebar");
@@ -11,7 +11,7 @@ customElements.whenDefined("ha-sidebar").then(() => {
   haSidebar.prototype.firstUpdated = async function (changedProperties) {
     if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
     const apply = () => {
-      applyToElement(this, "sidebar", "", {}, []);
+      applyToElement(this, "sidebar");
     };
 
     apply();

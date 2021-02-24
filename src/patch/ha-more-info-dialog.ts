@@ -1,5 +1,5 @@
 import { selectTree } from "card-tools/src/helpers";
-import { applyToElement } from "../card-mod";
+import { applyToElement } from "../helpers";
 
 customElements.whenDefined("ha-more-info-dialog").then(() => {
   const HaMoreInfoDialog = customElements.get("ha-more-info-dialog");
@@ -16,7 +16,7 @@ customElements.whenDefined("ha-more-info-dialog").then(() => {
         "more-info",
         "",
         { config: params },
-        [params.entityId],
+        null,
         false
       );
     });

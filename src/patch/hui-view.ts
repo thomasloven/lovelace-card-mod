@@ -1,5 +1,5 @@
 import { fireEvent } from "card-tools/src/event.js";
-import { applyToElement } from "../card-mod";
+import { applyToElement } from "../helpers";
 
 customElements.whenDefined("hui-view").then(() => {
   const huiView = customElements.get("hui-view");
@@ -9,7 +9,7 @@ customElements.whenDefined("hui-view").then(() => {
   const oldFirstUpdated = huiView.prototype.firstUpdated;
   huiView.prototype.firstUpdated = function (changedProperties) {
     if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    applyToElement(this, "view", "", {}, []);
+    applyToElement(this, "view");
   };
 
   fireEvent("ll-rebuild", {});

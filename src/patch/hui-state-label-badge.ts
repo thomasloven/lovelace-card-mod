@@ -1,5 +1,5 @@
 import { fireEvent } from "card-tools/src/event.js";
-import { applyToElement } from "../card-mod";
+import { applyToElement } from "../helpers";
 
 customElements.whenDefined("hui-state-label-badge").then(() => {
   const HuiStateLabelBadge = customElements.get("hui-state-label-badge");
@@ -14,13 +14,7 @@ customElements.whenDefined("hui-state-label-badge").then(() => {
 
     if (config.class) this.classList.add(config.class);
 
-    applyToElement(
-      this,
-      "badge",
-      config.card_mod || config.style,
-      { config },
-      config.entity_ids
-    );
+    applyToElement(this, "badge", config.card_mod || config.style, { config });
   };
 
   fireEvent("ll-rebuild", {});

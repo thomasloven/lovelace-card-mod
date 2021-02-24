@@ -1,6 +1,6 @@
 import { fireEvent } from "card-tools/src/event.js";
 import { selectTree } from "card-tools/src/helpers";
-import { applyToElement } from "../card-mod";
+import { applyToElement } from "../helpers";
 
 customElements.whenDefined("hui-root").then(() => {
   const huiRoot = customElements.get("hui-root");
@@ -10,7 +10,7 @@ customElements.whenDefined("hui-root").then(() => {
   const oldFirstUpdated = huiRoot.prototype.firstUpdated;
   huiRoot.prototype.firstUpdated = async function (changedProperties) {
     if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    applyToElement(this, "root", "", {}, []);
+    applyToElement(this, "root");
   };
 
   fireEvent("ll-rebuild", {});

@@ -1,5 +1,5 @@
 import { fireEvent } from "card-tools/src/event.js";
-import { applyToElement } from "../card-mod";
+import { applyToElement } from "../helpers";
 
 customElements.whenDefined("hui-glance-card").then(() => {
   const GlanceCard = customElements.get("hui-glance-card");
@@ -47,13 +47,7 @@ customElements.whenDefined("hui-glance-card").then(() => {
 
       if (config.class) e.classList.add(config.class);
 
-      applyToElement(
-        e,
-        "glance",
-        config.card_mod || config.style,
-        { config },
-        config.entity_ids
-      );
+      applyToElement(e, "glance", config.card_mod || config.style, { config });
     });
   };
 

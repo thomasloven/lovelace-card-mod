@@ -1,5 +1,5 @@
 import { fireEvent } from "card-tools/src/event.js";
-import { applyToElement } from "../card-mod";
+import { applyToElement } from "../helpers";
 
 interface LovelaceCard extends Node {
   config?: any;
@@ -44,7 +44,7 @@ customElements.whenDefined("ha-card").then(() => {
       "card",
       config.card_mod || config.style,
       { config },
-      config.entity_ids,
+      null,
       false
     ).then((cardMod) => {
       if (this.parentNode?.host?.setConfig) {
@@ -52,7 +52,8 @@ customElements.whenDefined("ha-card").then(() => {
         this.parentNode.host.setConfig = function (config) {
           _setConfig.bind(this)(config);
           if (config.card_mod) {
-            cardMod.template = { template: config.card_mod, variables: config };
+            cardMod.variables = { config };
+            cardMod.styles = config.card_mod;
           }
         };
       }

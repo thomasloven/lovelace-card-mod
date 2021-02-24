@@ -3,63 +3,17 @@ import { bind_template, unbind_template } from "./templates";
 import { hasTemplate } from "card-tools/src/templates";
 import pjson from "../package.json";
 import { selectTree } from "card-tools/src/helpers";
-import { get_theme, merge_deep } from "./helpers";
+import { applyToElement, get_theme, merge_deep, Styles } from "./helpers";
 
-interface ModdedElement extends HTMLElement {
-  updateComplete?: Promise<void>;
-  modElement?: ModdedElement;
-  _cardMod?: CardMod;
-}
-
-interface Template {
-  template: string | object;
-  variables: object;
-  entity_ids?: any;
-}
-
-export const applyToElement = async (
-  el: ModdedElement,
-  type: string,
-  template: string | object,
-  variables: any,
-  entity_ids: any,
-  shadow: boolean = true
-) => {
-  if (el.localName?.includes("-"))
-    await customElements.whenDefined(el.localName);
-  if (el.updateComplete) await el.updateComplete;
-  if (el.modElement)
-    return applyToElement(
-      el.modElement,
-      type,
-      template,
-      variables,
-      entity_ids,
-      shadow
-    );
-
-  el._cardMod = el._cardMod || (document.createElement("card-mod") as CardMod);
-  const target = shadow ? el.shadowRoot || el : el;
-  target.appendChild(el._cardMod as Node);
-  if (el.updateComplete) await el.updateComplete;
-  el._cardMod.type = type;
-  el._cardMod.template = {
-    template,
-    variables,
-    entity_ids,
-  };
-  return el._cardMod;
-};
-
-class CardMod extends LitElement {
+export class CardMod extends LitElement {
   type: string;
 
-  _template: Template;
-  _rendered_template: string = "";
+  _styles: Styles;
+  _rendered_styles: string = "";
   _renderer: (_: string) => void;
   _renderChildren: Set<CardMod> = new Set();
-  _tplinput: any;
-  _ttplinput: any;
+  _input_styles: Styles;
+  variables: any;
 
   _observer: MutationObserver = new MutationObserver((mutations) => {
     if (mutations.some((m) => (m.target as Element).localName !== "card-mod")) {
@@ -69,7 +23,7 @@ class CardMod extends LitElement {
 
   static get properties() {
     return {
-      _rendered_template: {},
+      _rendered_styles: {},
     };
   }
 
@@ -95,75 +49,63 @@ class CardMod extends LitElement {
     this._disconnect();
   }
 
-  set template(tpl: Template) {
-    this._tplinput = tpl;
-    this._disconnect().then(() => {
-      this._connect(this._tplinput);
-    });
+  set styles(stl: Styles) {
+    this._input_styles = stl;
+    this.refresh();
   }
 
-  refresh() {
-    if (this._tplinput) {
-      this.template = this._tplinput;
-    }
+  async refresh() {
+    await this._disconnect();
+    this._connect(this._input_styles);
   }
 
-  private async _connect(template: Template) {
-    const variables = template.variables;
+  private async _connect(stl: Styles) {
+    // Always work with yaml styles
+    let styles = JSON.parse(JSON.stringify(stl || {}));
+    if (typeof styles === "string") styles = { ".": styles };
 
-    let tpl = JSON.parse(JSON.stringify(template.template || {}));
-    if (typeof tpl === "string") tpl = { ".": tpl };
-    const theme_template = await get_theme(this);
-    this._ttplinput = theme_template;
-    merge_deep(tpl, theme_template);
+    // Merge card_mod styles with theme styles
+    const theme_styles = await get_theme(this);
+    merge_deep(styles, theme_styles);
 
-    if (tpl == undefined) return;
-    if (typeof tpl === "string") {
-      this._template = { template: tpl, variables };
-    } else {
-      const parent = this.parentElement || this.parentNode;
-      for (const [key, value] of Object.entries(tpl as object)) {
-        if (key === ".") {
-          this._template = { template: value, variables };
-        } else {
-          selectTree(parent, key, true).then((nodes) => {
-            for (const el of nodes) {
-              applyToElement(el, undefined, value, variables, [], false);
-              this._renderChildren.add(el._cardMod);
-            }
-          });
+    const parent = this.parentElement || this.parentNode;
+    for (const [key, value] of Object.entries(styles as object)) {
+      if (key === ".") {
+        this._styles = value;
+      } else {
+        const nodes = await selectTree(parent, key, true);
+        for (const el of nodes) {
+          applyToElement(el, undefined, value, this.variables, null, false);
+          this._renderChildren.add(el._cardMod);
         }
       }
     }
 
-    if (hasTemplate(this._template?.template)) {
-      this._renderer = this._renderer || this._template_rendered.bind(this);
-      await bind_template(
-        this._renderer,
-        this._template.template as string,
-        this._template.variables
-      );
+    if (this._styles && hasTemplate(this._styles)) {
+      this._renderer = this._renderer || this._style_rendered.bind(this);
+      bind_template(this._renderer, this._styles as string, this.variables);
     } else {
-      this._template_rendered((this._template?.template as string) || "");
+      this._style_rendered((this._styles as string) || "");
     }
 
-    let parent = this.parentElement || this.parentNode;
-    parent = (parent as any).host ? (parent as any).host : parent;
-    this._observer.observe(parent, { childList: true });
+    this._observer.observe(
+      (parent as any).host ? (parent as any).host : parent,
+      { childList: true }
+    );
   }
 
   private async _disconnect() {
     this._observer.disconnect();
     await unbind_template(this._renderer);
-    this._rendered_template = "";
+    this._rendered_styles = "";
     for (const c of this._renderChildren) {
-      if (c) c.template = { template: "", variables: {} };
+      if (c) c.styles = "";
       this._renderChildren.delete(c);
     }
   }
 
-  private _template_rendered(result: string) {
-    this._rendered_template = result;
+  private _style_rendered(result: string) {
+    this._rendered_styles = result;
   }
 
   createRenderRoot() {
@@ -172,7 +114,7 @@ class CardMod extends LitElement {
   render() {
     return html`
       <style>
-        ${this._rendered_template}
+        ${this._rendered_styles}
       </style>
     `;
   }
