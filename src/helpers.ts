@@ -10,6 +10,12 @@ interface ModdedElement extends HTMLElement {
 
 export type Styles = string | Record<string, any>;
 
+interface LovelaceCard extends Node {
+  config?: any;
+  _config?: any;
+  host?: LovelaceCard;
+}
+
 export async function applyToElement(
   el: ModdedElement,
   type: string,
@@ -79,4 +85,37 @@ export function merge_deep(target: any, source: any) {
     }
   }
   return target;
+}
+
+export function findConfig(node: LovelaceCard) {
+  if (node.config) return node.config;
+  if (node._config) return node._config;
+  if (node.host) return findConfig(node.host);
+  if (node.parentElement) return findConfig(node.parentElement);
+  if (node.parentNode) return findConfig(node.parentNode);
+  return null;
+}
+
+function joinSet(dst: Set<any>, src: Set<any>) {
+  for (const s of src) dst.add(s);
+}
+
+export async function findParentCardMod(
+  node: any,
+  step = 0
+): Promise<Set<CardMod>> {
+  let cardMods: Set<CardMod> = new Set();
+  if (step == 10) return cardMods;
+  if (!node) return cardMods;
+
+  if (node._cardMod && node._cardMod.style) cardMods.add(node._cardMod);
+
+  if (node.updateComplete) await node.updateComplete;
+  if (node.parentElement)
+    joinSet(cardMods, await findParentCardMod(node.parentElement, step + 1));
+  if (node.parentNode)
+    joinSet(cardMods, await findParentCardMod(node.parentNode, step + 1));
+  if ((node as any).host)
+    joinSet(cardMods, await findParentCardMod((node as any).host, step + 1));
+  return cardMods;
 }

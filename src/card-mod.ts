@@ -107,11 +107,13 @@ export class CardMod extends LitElement {
 
   private _style_rendered(result: string) {
     this._rendered_styles = result;
+    this.dispatchEvent(new Event("card-mod-update"));
   }
 
   createRenderRoot() {
     return this;
   }
+
   render() {
     return html`
       <style>
