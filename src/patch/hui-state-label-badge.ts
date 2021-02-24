@@ -6,15 +6,17 @@ customElements.whenDefined("hui-state-label-badge").then(() => {
   if (HuiStateLabelBadge.prototype.cardmod_patched) return;
   HuiStateLabelBadge.prototype.cardmod_patched = true;
 
-  const oldFirstUpdated = HuiStateLabelBadge.prototype.firstUpdated;
+  const _firstUpdated = HuiStateLabelBadge.prototype.firstUpdated;
   HuiStateLabelBadge.prototype.firstUpdated = function (changedProperties) {
-    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
+    _firstUpdated?.bind(this)(changedProperties);
+
     const config = this._config;
-    if (!config) return;
 
-    if (config.class) this.classList.add(config.class);
+    if (config?.class) this.classList.add(config.class);
 
-    applyToElement(this, "badge", config.card_mod || config.style, { config });
+    applyToElement(this, "badge", config?.card_mod || config?.style || "", {
+      config,
+    });
   };
 
   fireEvent("ll-rebuild", {});

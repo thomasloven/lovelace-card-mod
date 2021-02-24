@@ -6,11 +6,12 @@ customElements.whenDefined("ha-card").then(() => {
   if (HaCard.prototype.cardmod_patched) return;
   HaCard.prototype.cardmod_patched = true;
 
-  const oldFirstUpdated = HaCard.prototype.firstUpdated;
+  const _firstUpdated = HaCard.prototype.firstUpdated;
   HaCard.prototype.firstUpdated = function (changedProperties) {
-    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
+    _firstUpdated?.bind(this)(changedProperties);
+
     // Move the header inside the slot instead of in the shadowDOM
-    // makes it easier to style it consistently
+    // This makes it easier to style it consistently
     const header = this.shadowRoot.querySelector(".card-header");
     if (header) {
       this.insertBefore(header, this.children[0]);
@@ -31,8 +32,9 @@ customElements.whenDefined("ha-card").then(() => {
       false
     ).then((cardMod) => {
       if (this.parentNode?.host?.setConfig) {
+        // Patch the setConfig function to get live updates in GUI editor
         const _setConfig = this.parentNode.host.setConfig;
-        this.parentNode.host.setConfig = function (config) {
+        this.parentNode.host.setConfig = function (config: any) {
           _setConfig.bind(this)(config);
           if (config.card_mod) {
             cardMod.variables = { config };

@@ -2,10 +2,12 @@ import { findParentCardMod } from "../helpers";
 
 customElements.whenDefined("ha-icon").then(() => {
   const HaIcon = customElements.get("ha-icon");
+  if (HaIcon.prototype.cardmod_patched) return;
+  HaIcon.prototype.cardmod_patched = true;
 
   const _firstUpdated = HaIcon.prototype.firstUpdated;
   HaIcon.prototype.firstUpdated = function () {
-    _firstUpdated.bind(this)();
+    _firstUpdated?.bind(this)();
 
     const updateIcon = () => {
       const icon = window.getComputedStyle(this).getPropertyValue("--icon");

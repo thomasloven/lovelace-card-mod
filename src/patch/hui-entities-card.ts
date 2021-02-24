@@ -6,21 +6,20 @@ customElements.whenDefined("hui-entities-card").then(() => {
   if (EntitiesCard.prototype.cardmod_patched) return;
   EntitiesCard.prototype.cardmod_patched = true;
 
-  const oldRenderEntity = EntitiesCard.prototype.renderEntity;
+  const _renderEntity = EntitiesCard.prototype.renderEntity;
   EntitiesCard.prototype.renderEntity = function (config) {
-    const retval = oldRenderEntity.bind(this)(config);
+    const retval = _renderEntity.bind(this)(config);
 
-    if (!config) return retval;
     if (!retval || !retval.values) return retval;
     const row = retval.values[0];
     if (!row) return retval;
 
-    let entity_ids = config.entity_ids;
-
-    if (config.class) row.classList.add(config.class);
+    if (config?.class) row.classList.add(config?.class);
 
     const apply = () =>
-      applyToElement(row, "row", config.card_mod || config.style, { config });
+      applyToElement(row, "row", config?.card_mod || config?.style || "", {
+        config,
+      });
 
     apply();
     if (retval.values[0])

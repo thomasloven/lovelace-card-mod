@@ -3,18 +3,15 @@ import { selectTree } from "card-tools/src/helpers";
 import { applyToElement } from "../helpers";
 
 customElements.whenDefined("ha-sidebar").then(() => {
-  const haSidebar = customElements.get("ha-sidebar");
-  if (haSidebar.prototype.cardmod_patched) return;
-  haSidebar.prototype.cardmod_patched = true;
+  const HaSidebar = customElements.get("ha-sidebar");
+  if (HaSidebar.prototype.cardmod_patched) return;
+  HaSidebar.prototype.cardmod_patched = true;
 
-  const oldFirstUpdated = haSidebar.prototype.firstUpdated;
-  haSidebar.prototype.firstUpdated = async function (changedProperties) {
-    if (oldFirstUpdated) oldFirstUpdated.bind(this)(changedProperties);
-    const apply = () => {
-      applyToElement(this, "sidebar");
-    };
+  const _firstUpdated = HaSidebar.prototype.firstUpdated;
+  HaSidebar.prototype.firstUpdated = async function (changedProperties) {
+    _firstUpdated?.bind(this)(changedProperties);
 
-    apply();
+    applyToElement(this, "sidebar");
   };
 
   fireEvent("ll-rebuild", {});
