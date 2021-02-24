@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit-element";
+import { LitElement, html, property } from "lit-element";
 import { bind_template, unbind_template } from "./templates";
 import { hasTemplate } from "card-tools/src/templates";
 import pjson from "../package.json";
@@ -7,25 +7,19 @@ import { applyToElement, get_theme, merge_deep, Styles } from "./helpers";
 
 export class CardMod extends LitElement {
   type: string;
+  variables: any;
+  @property() _rendered_styles: string = "";
 
   _styles: Styles;
-  _rendered_styles: string = "";
   _renderer: (_: string) => void;
-  _renderChildren: Set<CardMod> = new Set();
+  _styleChildren: Set<CardMod> = new Set();
   _input_styles: Styles;
-  variables: any;
 
   _observer: MutationObserver = new MutationObserver((mutations) => {
     if (mutations.some((m) => (m.target as Element).localName !== "card-mod")) {
       this.refresh();
     }
   });
-
-  static get properties() {
-    return {
-      _rendered_styles: {},
-    };
-  }
 
   static get applyToElement() {
     return applyToElement;
@@ -73,10 +67,17 @@ export class CardMod extends LitElement {
       if (key === ".") {
         this._styles = value;
       } else {
-        const nodes = await selectTree(parent, key, true);
-        for (const el of nodes) {
-          applyToElement(el, undefined, value, this.variables, null, false);
-          this._renderChildren.add(el._cardMod);
+        for (const el of await selectTree(parent, key, true)) {
+          this._styleChildren.add(
+            await applyToElement(
+              el,
+              undefined,
+              value,
+              this.variables,
+              null,
+              false
+            )
+          );
         }
       }
     }
@@ -98,9 +99,9 @@ export class CardMod extends LitElement {
     this._observer.disconnect();
     await unbind_template(this._renderer);
     this._rendered_styles = "";
-    for (const c of this._renderChildren) {
+    for (const c of this._styleChildren) {
       if (c) c.styles = "";
-      this._renderChildren.delete(c);
+      this._styleChildren.delete(c);
     }
   }
 

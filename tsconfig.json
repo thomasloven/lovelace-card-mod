@@ -3,6 +3,7 @@
     "target": "es2017",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true
   }
 }
