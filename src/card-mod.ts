@@ -92,13 +92,13 @@ class CardMod extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this._unsubscribe();
+    this._disconnect();
   }
 
   set template(tpl: Template) {
     this._tplinput = tpl;
-    this._unsubscribe().then(() => {
-      this._subscribe(this._tplinput);
+    this._disconnect().then(() => {
+      this._connect(this._tplinput);
     });
   }
 
@@ -108,7 +108,7 @@ class CardMod extends LitElement {
     }
   }
 
-  private async _subscribe(template: Template) {
+  private async _connect(template: Template) {
     const variables = template.variables;
 
     let tpl = JSON.parse(JSON.stringify(template.template || {}));
@@ -152,7 +152,7 @@ class CardMod extends LitElement {
     this._observer.observe(parent, { childList: true });
   }
 
-  private async _unsubscribe() {
+  private async _disconnect() {
     this._observer.disconnect();
     await unbind_template(this._renderer);
     this._rendered_template = "";
