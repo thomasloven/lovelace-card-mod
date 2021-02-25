@@ -12,6 +12,38 @@ x-anchors:
 
 title: DOM navigation
 cards:
+  - type: markdown
+    content: |
+      ## A teal markdown card where H3 tags are purple
+      ### Like this
+      ```
+        card_mod:
+        style:
+          .: |
+            ha-card {
+              background: teal;
+            }
+          ha-markdown$: |
+            h3 {
+              color: purple;
+            }
+      ```
+
+    card_mod:
+      style:
+        .: |
+          ha-card {
+            background: teal;
+          }
+        ha-markdown$: |
+          h3 {
+            color: purple;
+          }
+          code {
+            font-size: 8pt !important;
+            line-height: normal;
+            white-space: pre-wrap;
+          }
   - type: vertical-stack
     cards:
       - <<: *desc
@@ -34,8 +66,7 @@ cards:
                     font-size: 16px !important;
                     --mdc-theme-primary: green;
                   }
-              "#armActions":
-                "mwc-button":
+              "#armActions mwc-button":
                   $: |
                     :host {
                       background: teal;
@@ -71,12 +102,11 @@ cards:
                 font-size: 16px !important;
                 --mdc-theme-primary: green;
               }
-            "#armActions":
-              "mwc-button":
-                $: |
-                  :host {
-                    background: teal;
-                  }
+            "#armActions mwc-button":
+              $: |
+                :host {
+                  background: teal;
+                }
             "#keypad mwc-button:not(:nth-of-type(12))":
               $: |
                 :host {

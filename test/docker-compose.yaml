@@ -1,0 +1,16 @@
+version: "3.0"
+
+services:
+  test:
+    image: thomasloven/hass-custom-devcontainer
+    environment:
+      - HASS_USERNAME
+      - HASS_PASSWORD
+      - LOVELACE_LOCAL_FILES
+      - LOVELACE_PLUGINS
+    volumes:
+      - ./configuration.yaml:/config/configuration.yaml:ro
+      - .:/config/test:ro
+      - ..:/config/www/workspace
+    ports:
+      - 8125:8123
