@@ -12,6 +12,10 @@ customElements.whenDefined("ha-icon").then(() => {
     const updateIcon = () => {
       const icon = window.getComputedStyle(this).getPropertyValue("--icon");
       if (icon) this.icon = icon.trim();
+      const iconColor = window
+        .getComputedStyle(this)
+        .getPropertyValue("--icon-color");
+      this.style.color = iconColor;
     };
 
     (async () => {
