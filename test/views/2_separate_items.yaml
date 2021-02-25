@@ -116,3 +116,38 @@ cards:
                 :host {
                   color: blue;
                 }
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## 3: Styling picture-element elements
+          Red state label
+          ```
+          type: picture-elements
+          image: https://placekitten.com/g/600/400
+          elements:
+            - type: state-label
+              entity: light.bed_light
+              style:
+                top: 50%
+                left: 50%
+              card_mod:
+                style: |
+                  :host {
+                    color: Red;
+                  }
+          ```
+      - type: picture-elements
+        image: https://placekitten.com/g/600/400
+        elements:
+          - type: state-label
+            entity: light.bed_light
+            style:
+              top: 50%
+              left: 50%
+            card_mod:
+              style: |
+                :host {
+                  color: Red;
+                }

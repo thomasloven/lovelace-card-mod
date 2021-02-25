@@ -8,5 +8,6 @@ import "./patch/hui-root";
 import "./patch/ha-more-info-dialog";
 import "./patch/ha-sidebar";
 import "./patch/hui-card-element-editor";
+import "./patch/hui-picture-elements-card";
 import "./patch/ha-icon";
 import "./mod-card";
