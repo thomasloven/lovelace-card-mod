@@ -150,11 +150,10 @@ cards:
               secondary_info: true
               card_mod: &brightness
                 style:
-                  hui-generic-entity-row:
-                    $: |
-                      .secondary::after {
-                        content: "{{ (state_attr(config.entity, 'brightness')/255*100) | int }}%"
-                        }
+                  hui-generic-entity-row$: |
+                    .secondary::after {
+                      content: "{{ (state_attr(config.entity, 'brightness')/255*100) | int }}%"
+                      }
             - entity: light.ceiling_lights
               secondary_info: true
               card_mod: *brightness
@@ -170,11 +169,10 @@ cards:
             secondary_info: true
             card_mod: &brightness
               style:
-                hui-generic-entity-row:
-                  $: |
-                    .secondary::after {
-                      content: "{{ (state_attr(config.entity, 'brightness')/255*100) | int }}%"
-                    }
+                hui-generic-entity-row$: |
+                  .secondary::after {
+                    content: "{{ (state_attr(config.entity, 'brightness')/255*100) | int }}%"
+                  }
           - entity: light.ceiling_lights
             secondary_info: true
             card_mod: *brightness
@@ -193,19 +191,18 @@ cards:
             # Hello,
           card_mod:
             style:
-              ha-markdown:
-                $: |
-                  h1::after {
-                    content: " {{user}}!"
-                  }
+              ha-markdown$: |
+                h1::after {
+                  content: " {{user}}!"
+                }
           ```
           {%endraw%}
       - type: markdown
         content: |
           # Hello,
         card_mod:
-          ha-markdown:
-            $: |
+          style:
+            ha-markdown$: |
               h1::after {
                 content: " {{user}}!"
               }

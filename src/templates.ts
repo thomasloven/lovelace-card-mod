@@ -1,4 +1,5 @@
 import { hass } from "card-tools/src/hass";
+import { deviceID } from "card-tools/src/deviceID";
 
 interface CachedTemplate {
   template: string;
@@ -42,6 +43,13 @@ export async function bind_template(
   let cache = cachedTemplates[cacheKey];
   if (!cache) {
     callback("");
+
+    variables = {
+      user: hass().user.name,
+      browser: deviceID,
+      hash: location.hash.substr(1) || "",
+      ...variables,
+    };
 
     cachedTemplates[cacheKey] = cache = {
       template,
