@@ -1,12 +1,14 @@
 x-anchors:
   desc: &desc
     type: markdown
-    card_mod: |
-      code {
-        font-size: 8pt;
-        line-height: normal;
-        white-space: pre-wrap;
-        }
+    card_mod:
+      style:
+        ha-markdown$: |
+          code {
+            font-size: 8pt !important;
+            line-height: normal;
+            white-space: pre-wrap;
+          }
 
 title: Templates
 cards:
@@ -19,15 +21,16 @@ cards:
           Purple background when Bed Light is off
           {% raw %}
           ```
-          card_mod: |
-            ha-card {
-              background:
-                {% if is_state('light.bed_light', 'on') %}
-                  teal
-                {% else %}
-                  purple
-                {% endif %}
-                ;
+          card_mod
+            style: |
+              ha-card {
+                background:
+                  {% if is_state('light.bed_light', 'on') %}
+                    teal
+                  {% else %}
+                    purple
+                  {% endif %}
+                  ;
             }
           ```
           {% endraw %}
@@ -37,16 +40,17 @@ cards:
           - light.bed_light
           - light.ceiling_lights
           - light.kitchen_lights
-        card_mod: |
-          ha-card {
-            background:
-              {% if is_state('light.bed_light', 'on') %}
-                teal
-              {% else %}
-                purple
-              {% endif %}
-              ;
-          }
+        card_mod:
+          style: |
+            ha-card {
+              background:
+                {% if is_state('light.bed_light', 'on') %}
+                  teal
+                {% else %}
+                  purple
+                {% endif %}
+                ;
+            }
 
   - type: vertical-stack
     cards:
@@ -56,10 +60,11 @@ cards:
           Card background follows selected value
           {%raw%}
           ```
-          card_mod: |
-            ha-card {
-              background: url(https://place{{ states('input_select.background') }}.com/g/600/400);
-            }
+          card_mod:
+            style: |
+              ha-card {
+                background: url(https://place{{ states('input_select.background') }}.com/g/600/400);
+              }
           ```
           {%endraw%}
       - type: entities
@@ -69,10 +74,11 @@ cards:
           - light.bed_light
           - light.ceiling_lights
           - light.kitchen_lights
-        card_mod: |
-          ha-card {
-            background: url(https://place{{ states('input_select.background') }}.com/g/600/400);
-          }
+        card_mod:
+          style: |
+            ha-card {
+              background: url(https://place{{ states('input_select.background') }}.com/g/600/400);
+            }
 
   - type: vertical-stack
     cards:
@@ -85,11 +91,12 @@ cards:
           {%raw%}
           ```
           type: picture-elements
-          card_mod: |
-            ha-card {
-              --left-pos: {{states('input_number.x_pos')}}%;
-              --top-pos: {{states('input_number.y_pos')}}%;
-            }
+          card_mod:
+            style: |
+              ha-card {
+                --left-pos: {{states('input_number.x_pos')}}%;
+                --top-pos: {{states('input_number.y_pos')}}%;
+              }
           elements:
             - type: state-icon
               entity: light.bed_light
@@ -106,11 +113,12 @@ cards:
             style:
               top: var(--top-pos)
               left: var(--left-pos)
-        card_mod: |
-          ha-card {
-            --left-pos: {{states('input_number.x_pos')}}%;
-            --top-pos: {{states('input_number.y_pos')}}%;
-          }
+        card_mod:
+          style: |
+            ha-card {
+              --left-pos: {{states('input_number.x_pos')}}%;
+              --top-pos: {{states('input_number.y_pos')}}%;
+            }
       - type: entities
         entities:
           - input_number.x_pos

@@ -19,14 +19,14 @@ customElements.whenDefined("ha-card").then(() => {
 
     const config = findConfig(this);
 
-    if (config?.class) this.classList.add(config.class);
+    if (config?.card_mod?.class) this.classList.add(config.card_mod.class);
     if (config?.type)
       this.classList.add(`type-${config.type.replace(":", "-")}`);
 
     applyToElement(
       this,
       "card",
-      config?.card_mod || config?.style || "",
+      config?.card_mod?.style || config?.style || "",
       { config },
       null,
       false

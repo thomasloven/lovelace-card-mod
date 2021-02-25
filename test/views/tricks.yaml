@@ -1,12 +1,14 @@
 x-anchors:
   desc: &desc
     type: markdown
-    card_mod: |
-      code {
-        font-size: 8pt;
-        line-height: normal;
-        white-space: pre-wrap;
-        }
+    card_mod:
+      style:
+        ha-markdown$: |
+          code {
+            font-size: 8pt !important;
+            line-height: normal;
+            white-space: pre-wrap;
+          }
 
 title: Various tricks
 cards:
@@ -16,120 +18,124 @@ cards:
         content: |
           ## CSS keyframes
           ```
-          card_mod: |
+          card_mod:
+            style: |
+              @keyframes blink {
+                50% {
+                  background: red;
+                }
+              }
+              ha-card {
+                animation: blink 5s linear infinite;
+              }
+          ```
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - light.bed_light
+          - light.ceiling_lights
+          - light.kitchen_lights
+        card_mod:
+          style: |
             @keyframes blink {
               50% {
                 background: red;
               }
             }
             ha-card {
+              animation: blink 3s linear infinite;
+            }
+
+      - <<: *desc
+        content: |
+          ```
+          ha-card {
+            z-index: 1;
+            animation: wiggle 2s linear infinite alternate;
+          }
+          @keyframes wiggle {
+            0% {
+              -webkit-transform: rotate(5deg);
+              transform: rotate(5deg);
+            }
+            100% {
+              -webkit-transform: rotate(-5deg);
+              transform: rotate(-5deg);
+            }
+          }
+          ```
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - light.bed_light
+          - light.ceiling_lights
+          - light.kitchen_lights
+        card_mod:
+          style: |
+            ha-card {
+              z-index: 1;
+              animation: wiggle 2s linear infinite alternate;
+            }
+            @keyframes wiggle {
+              0% {
+                -webkit-transform: rotate(5deg);
+                transform: rotate(5deg);
+              }
+              100% {
+                -webkit-transform: rotate(-5deg);
+                transform: rotate(-5deg);
+              }
+            }
+
+      - <<: *desc
+        content: |
+          ```
+          @keyframes blink {
+            24% {
+              outline: 0px none white;
+              }
+            25% {
+              outline: 0px solid green;
+              }
+            50% {
+              outline: 5px solid green;
+            }
+            75% {
+              outline: 0px solid green;
+              }
+            76% {
+              outline: 0px none white;
+              }
+          }
+          ```
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - light.bed_light
+          - light.ceiling_lights
+          - light.kitchen_lights
+        card_mod:
+          style: |
+            ha-card {
               animation: blink 5s linear infinite;
             }
-          ```
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - light.bed_light
-          - light.ceiling_lights
-          - light.kitchen_lights
-        card_mod: |
-          @keyframes blink {
-            50% {
-              background: red;
+            @keyframes blink {
+              24% {
+                outline: 0px none white;
+                }
+              25% {
+                outline: 0px solid green;
+                }
+              50% {
+                outline: 5px solid green;
+              }
+              75% {
+                outline: 0px solid green;
+                }
+              76% {
+                outline: 0px none white;
+                }
             }
-          }
-          ha-card {
-            animation: blink 3s linear infinite;
-          }
-
-      - <<: *desc
-        content: |
-          ```
-          ha-card {
-            z-index: 1;
-            animation: wiggle 2s linear infinite alternate;
-          }
-          @keyframes wiggle {
-            0% {
-              -webkit-transform: rotate(5deg);
-              transform: rotate(5deg);
-            }
-            100% {
-              -webkit-transform: rotate(-5deg);
-              transform: rotate(-5deg);
-            }
-          }
-          ```
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - light.bed_light
-          - light.ceiling_lights
-          - light.kitchen_lights
-        card_mod: |
-          ha-card {
-            z-index: 1;
-            animation: wiggle 2s linear infinite alternate;
-          }
-          @keyframes wiggle {
-            0% {
-              -webkit-transform: rotate(5deg);
-              transform: rotate(5deg);
-            }
-            100% {
-              -webkit-transform: rotate(-5deg);
-              transform: rotate(-5deg);
-            }
-          }
-
-      - <<: *desc
-        content: |
-          ```
-          @keyframes blink {
-            24% {
-              outline: 0px none white;
-              }
-            25% {
-              outline: 0px solid green;
-              }
-            50% {
-              outline: 5px solid green;
-            }
-            75% {
-              outline: 0px solid green;
-              }
-            76% {
-              outline: 0px none white;
-              }
-          }
-          ```
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - light.bed_light
-          - light.ceiling_lights
-          - light.kitchen_lights
-        card_mod: |
-          ha-card {
-            animation: blink 5s linear infinite;
-          }
-          @keyframes blink {
-            24% {
-              outline: 0px none white;
-              }
-            25% {
-              outline: 0px solid green;
-              }
-            50% {
-              outline: 5px solid green;
-            }
-            75% {
-              outline: 0px solid green;
-              }
-            76% {
-              outline: 0px none white;
-              }
-          }
 
   - type: vertical-stack
     cards:
@@ -143,11 +149,12 @@ cards:
             - entity: light.bed_light
               secondary_info: true
               card_mod: &brightness
-                hui-generic-entity-row:
-                  $: |
-                    .secondary::after {
-                      content: "{{ (state_attr(config.entity, 'brightness')/255*100) | int }}%"
-                      }
+                style:
+                  hui-generic-entity-row:
+                    $: |
+                      .secondary::after {
+                        content: "{{ (state_attr(config.entity, 'brightness')/255*100) | int }}%"
+                        }
             - entity: light.ceiling_lights
               secondary_info: true
               card_mod: *brightness
@@ -162,10 +169,11 @@ cards:
           - entity: light.bed_light
             secondary_info: true
             card_mod: &brightness
-              hui-generic-entity-row:
-                $: |
-                  .secondary::after {
-                    content: "{{ (state_attr(config.entity, 'brightness')/255*100) | int }}%"
+              style:
+                hui-generic-entity-row:
+                  $: |
+                    .secondary::after {
+                      content: "{{ (state_attr(config.entity, 'brightness')/255*100) | int }}%"
                     }
           - entity: light.ceiling_lights
             secondary_info: true
@@ -173,7 +181,8 @@ cards:
           - entity: light.kitchen_lights
             secondary_info: true
             card_mod: *brightness
-
+  - type: vertical-stack
+    cards:
       - <<: *desc
         content: |
           Display currently logged in user name
@@ -183,11 +192,12 @@ cards:
           content: |
             # Hello,
           card_mod:
-            ha-markdown:
-              $: |
-                h1::after {
-                  content: " {{user}}!"
-                }
+            style:
+              ha-markdown:
+                $: |
+                  h1::after {
+                    content: " {{user}}!"
+                  }
           ```
           {%endraw%}
       - type: markdown
@@ -199,46 +209,44 @@ cards:
               h1::after {
                 content: " {{user}}!"
               }
-
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          {%raw%}
+          ```
+          hui-generic-entity-row:
+            $: |
+              .secondary::after {
+                content: "{{state_attr(config.entity, 'battery')}}% battery charge";
+              }
+          .: |
+            :host {
+              display: block;
+              background: linear-gradient(to right, rgba(0,255,0,0.5), {{state_attr(config.entity, 'battery')}}%, white {{state_attr(config.entity, 'battery')}}%);
+            }
+          ```
+          {%endraw%}
       - type: entities
         title: Device trackers
         entities:
           - entity: device_tracker.demo_anne_therese
             secondary_info: true
-            card_mod:
-              hui-generic-entity-row:
-                $: |
-                  .secondary::after {
-                    content: "{{state_attr(config.entity, 'battery')}}% battery charge";
+            card_mod: &battery
+              style:
+                hui-generic-entity-row:
+                  $: |
+                    .secondary::after {
+                      content: "{{state_attr(config.entity, 'battery')}}% battery charge";
+                    }
+                .: |
+                  :host {
+                    display: block;
+                    background: linear-gradient(to right, rgba(0,255,0,0.5), {{state_attr(config.entity, 'battery')}}%, white {{state_attr(config.entity, 'battery')}}%);
                   }
-              .: |
-                :host {
-                  display: block;
-                  background: linear-gradient(to right, rgba(0,255,0,0.5), {{state_attr(config.entity, 'battery')}}%, white {{state_attr(config.entity, 'battery')}}%);
-                }
           - entity: device_tracker.demo_home_boy
             secondary_info: true
-            card_mod:
-              hui-generic-entity-row:
-                $: |
-                  .secondary::after {
-                    content: "{{state_attr(config.entity, 'battery')}}% battery charge";
-                  }
-              .: |
-                :host {
-                  display: block;
-                  background: linear-gradient(to right, rgba(0,255,0,0.5), {{state_attr(config.entity, 'battery')}}%, white {{state_attr(config.entity, 'battery')}}%);
-                }
+            card_mod: *battery
           - entity: device_tracker.demo_paulus
             secondary_info: true
-            card_mod:
-              hui-generic-entity-row:
-                $: |
-                  .secondary::after {
-                    content: "{{state_attr(config.entity, 'battery')}}% battery charge";
-                  }
-              .: |
-                :host {
-                  display: block;
-                  background: linear-gradient(to right, rgba(0,255,0,0.5), {{state_attr(config.entity, 'battery')}}%, white {{state_attr(config.entity, 'battery')}}%);
-                }
+            card_mod: *battery

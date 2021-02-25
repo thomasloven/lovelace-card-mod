@@ -1,12 +1,11 @@
 title: card-mod
 views:
-
   - !include views/1_cards.yaml
   - !include views/2_separate_items.yaml
   - !include views/3_badges.yaml
   - !include views/4_templates.yaml
   - !include views/5_dom_navigation.yaml
   - !include views/6_mod_card.yaml
+  - !include views/7_themed.yaml
   - !include views/tricks.yaml
   - !include views/answers.yaml
-  - !include views/7_themed.yaml

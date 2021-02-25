@@ -1,12 +1,14 @@
 x-anchors:
   desc: &desc
     type: markdown
-    card_mod: |
-      code {
-        font-size: 8pt;
-        line-height: normal;
-        white-space: pre-wrap;
-        }
+    card_mod:
+      style:
+        ha-markdown$: |
+          code {
+            font-size: 8pt !important;
+            line-height: normal;
+            white-space: pre-wrap;
+          }
 
 title: mod-card
 cards:
@@ -27,10 +29,11 @@ cards:
                 content: "# 2"
               - type: markdown
                 content: "# 3"
-          card_mod: |
-            ha-card {
-              border: 1px solid green;
-            }
+          card_mod:
+            style: |
+              ha-card {
+                border: 1px solid green;
+              }
           ```
       - type: custom:mod-card
         card:
@@ -42,10 +45,11 @@ cards:
               content: "# 2"
             - type: markdown
               content: "# 3"
-        card_mod: |
-          ha-card {
-            border: 1px solid green;
-          }
+        card_mod:
+          style: |
+            ha-card {
+              border: 1px solid green;
+            }
   - type: vertical-stack
     cards:
       - <<: *desc
@@ -58,10 +62,11 @@ cards:
           entity: alarm_control_panel.alarm
 
   - type: custom:mod-card
-    card_mod: |
-      ha-card {
-        border: 1px solid green;
-      }
+    card_mod:
+      style: |
+        ha-card {
+          border: 1px solid green;
+        }
     card:
       type: vertical-stack
       cards:

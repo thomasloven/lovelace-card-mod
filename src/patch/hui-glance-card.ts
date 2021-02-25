@@ -41,11 +41,14 @@ customElements.whenDefined("hui-glance-card").then(() => {
       }
 
       const config = e.config || e.entityConf;
-      if (config?.class) e.classList.add(config.class);
+      if (config?.card_mod?.class) e.classList.add(config.card_mod.class);
 
-      applyToElement(e, "glance", config?.card_mod || config?.style || "", {
-        config,
-      });
+      applyToElement(
+        e,
+        "glance",
+        config?.card_mod?.style || config?.style || "",
+        { config }
+      );
     }
   };
 

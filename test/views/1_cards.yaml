@@ -9,12 +9,14 @@ x-anchors:
 
   desc: &desc
     type: markdown
-    card_mod: |
-      code {
-        font-size: 8pt;
-        line-height: normal;
-        white-space: pre-wrap;
-        }
+    card_mod:
+      style:
+        ha-markdown$: |
+          code {
+            font-size: 8pt !important;
+            line-height: normal;
+            white-space: pre-wrap;
+          }
 #
 # Applying basic styles to cards
 #
@@ -50,17 +52,19 @@ cards:
             - light.bed_light
             - light.ceiling_lights
             - light.kitchen_lights
-          card_mod: |
-            ha-card {
-              color: red;
-            }
+          card_mod:
+            style: |
+              ha-card {
+                color: red;
+              }
           ```
       - <<: *card
         title: Red text
-        card_mod: |
-          ha-card {
-            color: red;
-          }
+        card_mod:
+          style: |
+            ha-card {
+              color: red;
+            }
 
   - type: vertical-stack
     cards:
@@ -69,7 +73,20 @@ cards:
           ## 3: Using CSS variables
           Red/Green switches, rounded corners
           ```
-          card_mod: |
+          card_mod:
+            style: |
+              ha-card {
+                --switch-unchecked-button-color: red;
+                --switch-checked-color: green;
+                --switch-checked-button-color: green;
+                --switch-checked-track-color: green;
+                --ha-card-border-radius: 20px;
+              }
+          ```
+      - <<: *card
+        title: Using variables
+        card_mod:
+          style: |
             ha-card {
               --switch-unchecked-button-color: red;
               --switch-checked-color: green;
@@ -77,17 +94,6 @@ cards:
               --switch-checked-track-color: green;
               --ha-card-border-radius: 20px;
             }
-          ```
-      - <<: *card
-        title: Using variables
-        card_mod: |
-          ha-card {
-            --switch-unchecked-button-color: red;
-            --switch-checked-color: green;
-            --switch-checked-button-color: green;
-            --switch-checked-track-color: green;
-            --ha-card-border-radius: 20px;
-          }
 
   - type: vertical-stack
     cards:
@@ -96,7 +102,22 @@ cards:
           ## 4: Using CSS selectors
           Red text, green header, second entity has blue text
           ```
-          card_mod: |
+          card_mod:
+            style: |
+              ha-card {
+                color: red;
+              }
+              .card-header {
+                color: green;
+              }
+              #states div:nth-of-type(2n+0) {
+                color: blue;
+              }
+          ```
+      - <<: *card
+        title: Css selectors
+        card_mod:
+          style: |
             ha-card {
               color: red;
             }
@@ -106,19 +127,6 @@ cards:
             #states div:nth-of-type(2n+0) {
               color: blue;
             }
-          ```
-      - <<: *card
-        title: Css selectors
-        card_mod: |
-          ha-card {
-            color: red;
-          }
-          .card-header {
-            color: green;
-          }
-          #states div:nth-of-type(2n+0) {
-            color: blue;
-          }
 
   - type: vertical-stack
     cards:
@@ -127,19 +135,21 @@ cards:
           ## 5: Borderless
           No background or box shadow
           ```
-          card_mod: |
+          card_mod:
+            style: |
+              ha-card {
+                background: none;
+                box-shadow: none;
+              }
+          ```
+      - <<: *card
+        title: Borderless
+        card_mod:
+          style: |
             ha-card {
               background: none;
               box-shadow: none;
             }
-          ```
-      - <<: *card
-        title: Borderless
-        card_mod: |
-          ha-card {
-            background: none;
-            box-shadow: none;
-          }
 
   - type: vertical-stack
     cards:
@@ -148,10 +158,11 @@ cards:
           ## 6: Different card type - glance card
           Teal background
           ```
-          card_mod: |
-            ha-card {
-              background: teal;
-            }
+          card_mod:
+            style: |
+              ha-card {
+                background: teal;
+              }
           ```
       - type: glance
         title: Glance card
@@ -159,7 +170,8 @@ cards:
           - light.bed_light
           - light.ceiling_lights
           - light.kitchen_lights
-        card_mod: |
-          ha-card {
-            background: teal;
-          }
+        card_mod:
+          style: |
+            ha-card {
+              background: teal;
+            }

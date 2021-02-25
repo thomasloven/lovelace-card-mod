@@ -1,12 +1,14 @@
 x-anchors:
   desc: &desc
     type: markdown
-    card_mod: |
-      code {
-        font-size: 8pt;
-        line-height: normal;
-        white-space: pre-wrap;
-        }
+    card_mod:
+      style:
+        ha-markdown$: |
+          code {
+            font-size: 8pt !important;
+            line-height: normal;
+            white-space: pre-wrap;
+          }
 #
 # Styling badges
 #
@@ -16,22 +18,25 @@ badges:
     name: Default
   - entity: sun.sun
     name: Purple border
-    card_mod: |
-      :host {
-        --label-badge-red: purple;
-      }
+    card_mod:
+      style: |
+        :host {
+          --label-badge-red: purple;
+        }
   - entity: sun.sun
     name: Red text
-    card_mod: |
-      :host {
-        color: red
-      }
+    card_mod:
+      style: |
+        :host {
+          color: red
+        }
   - entity: sun.sun
     name: Teal background
-    card_mod: |
-      :host {
-        --label-badge-background-color: teal;
-      }
+    card_mod:
+      style: |
+        :host {
+          --label-badge-background-color: teal;
+        }
 
 cards:
   - <<: *desc
@@ -49,20 +54,23 @@ cards:
           name: Default
         - entity: sun.sun
           name: Purple
-          card_mod: |
-            :host {
-              --label-badge-red: purple;
-            }
+          card_mod:
+            style: |
+              :host {
+                --label-badge-red: purple;
+              }
         - entity: sun.sun
           name: Teal
-          card_mod: |
-            :host {
-              color: red
-            }
+          card_mod:
+            style: |
+              :host {
+                color: red
+              }
         - entity: sun.sun
           name: No background
-          card_mod: |
-            :host {
-              --label-badge-background-color: teal;
-            }
+          card_mod:
+            style: |
+              :host {
+                --label-badge-background-color: teal;
+              }
       ```

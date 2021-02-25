@@ -1,12 +1,14 @@
 x-anchors:
   desc: &desc
     type: markdown
-    card_mod: |
-      code {
-        font-size: 8pt;
-        line-height: normal;
-        white-space: pre-wrap;
-        }
+    card_mod:
+      style:
+        ha-markdown$: |
+          code {
+            font-size: 8pt !important;
+            line-height: normal;
+            white-space: pre-wrap;
+          }
 #
 # Styling individual items
 #
@@ -25,39 +27,45 @@ cards:
           show_header_toggle: false
           entities:
             - entity: light.bed_light
-              card_mod: |
-                :host {
-                  color: red;
-                }
+              card_mod:
+                style: |
+                  :host {
+                    color: red;
+                  }
             - entity: light.ceiling_lights
-              card_mod: |
-                :host {
-                  color: green;
-                }
+              card_mod:
+                style: |
+                  :host {
+                    color: green;
+                  }
             - entity: light.kitchen_lights
-              card_mod: |
-                :host {
-                  color: blue;
-                }
+              card_mod:
+                style: |
+                  :host {
+                    color: blue;
+                  }
           ```
       - type: entities
         show_header_toggle: false
         entities:
           - entity: light.bed_light
-            card_mod: |
-              :host {
-                color: red;
-              }
+            card_mod:
+              style: |
+                :host {
+                  color: red;
+                }
           - entity: light.ceiling_lights
-            card_mod: |
-              :host {
-                color: green;
-              }
+            card_mod:
+              style: |
+                :host {
+                  color: green;
+                }
           - entity: light.kitchen_lights
-            card_mod: |
-              :host {
-                color: blue;
-              }
+            card_mod:
+              style: |
+                :host {
+                  color: blue;
+                }
   - type: vertical-stack
     cards:
       - <<: *desc
@@ -70,35 +78,41 @@ cards:
           type: glance
           entities:
             - entity: light.bed_light
-              card_mod: |
-                :host {
-                  color: red;
-                }
+              card_mod:
+                style: |
+                  :host {
+                    color: red;
+                  }
             - entity: light.ceiling_lights
-              card_mod: |
-                :host {
-                  color: green;
-                }
+              card_mod:
+                style: |
+                  :host {
+                    color: green;
+                  }
             - entity: light.kitchen_lights
-              card_mod: |
-                :host {
-                  color: blue;
-                }
+              card_mod:
+                style: |
+                  :host {
+                    color: blue;
+                  }
           ```
       - type: glance
         entities:
           - entity: light.bed_light
-            card_mod: |
-              :host {
-                color: red;
-              }
+            card_mod:
+              style: |
+                :host {
+                  color: red;
+                }
           - entity: light.ceiling_lights
-            card_mod: |
-              :host {
-                color: green;
-              }
+            card_mod:
+              style: |
+                :host {
+                  color: green;
+                }
           - entity: light.kitchen_lights
-            card_mod: |
-              :host {
-                color: blue;
-              }
+            card_mod:
+              style: |
+                :host {
+                  color: blue;
+                }

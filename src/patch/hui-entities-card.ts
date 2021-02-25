@@ -14,12 +14,17 @@ customElements.whenDefined("hui-entities-card").then(() => {
     const row = retval.values[0];
     if (!row) return retval;
 
-    if (config?.class) row.classList.add(config?.class);
+    if (config?.card_mod?.class) row.classList.add(config.card_mod.class);
+    if (config?.type)
+      row.classList.add(`type-${config.type.replace(":", "-")}`);
 
     const apply = () =>
-      applyToElement(row, "row", config?.card_mod || config?.style || "", {
-        config,
-      });
+      applyToElement(
+        row,
+        "row",
+        config?.card_mod?.style || config?.style || "",
+        { config }
+      );
 
     apply();
     if (retval.values[0])

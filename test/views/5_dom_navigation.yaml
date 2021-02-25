@@ -1,12 +1,14 @@
 x-anchors:
   desc: &desc
     type: markdown
-    card_mod: |
-      code {
-        font-size: 8pt;
-        line-height: normal;
-        white-space: pre-wrap;
-        }
+    card_mod:
+      style:
+        ha-markdown$: |
+          code {
+            font-size: 8pt !important;
+            line-height: normal;
+            white-space: pre-wrap;
+          }
 
 title: DOM navigation
 cards:
@@ -18,19 +20,63 @@ cards:
           Main color red
           Buttons larger and blue
           12th button green
-          Action buttons white
+          Action buttons teal
           {%raw%}
           ```
           card_mod:
+            style:
+              .: |
+                ha-card {
+                  --mdc-theme-primary: red;
+                }
+              "#keypad mwc-button:nth-of-type(12)$": |
+                  button {
+                    font-size: 16px !important;
+                    --mdc-theme-primary: green;
+                  }
+              "#armActions":
+                "mwc-button":
+                  $: |
+                    :host {
+                      background: teal;
+                    }
+              "#keypad mwc-button:not(:nth-of-type(12))":
+                $: |
+                  :host {
+                    background: blue;
+                  }
+                  button {
+                    font-size: 24px !important;
+                  }
+              "#armActions":
+                "mwc-button":
+                  $: |
+                    :host {
+                      background: white;
+                    }
+
+          ```
+          {%endraw%}
+      - type: alarm-panel
+        card_icon: mdi:bell
+        name: Alarm Panel
+        card_mod:
+          style:
             .: |
               ha-card {
                 --mdc-theme-primary: red;
               }
             "#keypad mwc-button:nth-of-type(12)$": |
-                button {
-                  font-size: 16px !important;
-                  --mdc-theme-primary: green;
-                }
+              button {
+                font-size: 16px !important;
+                --mdc-theme-primary: green;
+              }
+            "#armActions":
+              "mwc-button":
+                $: |
+                  :host {
+                    background: teal;
+                  }
             "#keypad mwc-button:not(:nth-of-type(12))":
               $: |
                 :host {
@@ -39,41 +85,5 @@ cards:
                 button {
                   font-size: 24px !important;
                 }
-            "#armActions":
-              "mwc-button":
-                $: |
-                  :host {
-                    background: white;
-                  }
-
-          ```
-          {%endraw%}
-      - type: alarm-panel
-        card_icon: mdi:bell
-        name: Alarm Panel
-        card_mod:
-          .: |
-            ha-card {
-              --mdc-theme-primary: red;
-            }
-          "#keypad mwc-button:nth-of-type(12)$": |
-            button {
-              font-size: 16px !important;
-              --mdc-theme-primary: green;
-            }
-          "#armActions":
-            "mwc-button":
-              $: |
-                :host {
-                  background: white;
-                }
-          "#keypad mwc-button:not(:nth-of-type(12))":
-            $: |
-              :host {
-                background: blue;
-              }
-              button {
-                font-size: 24px !important;
-              }
 
         entity: alarm_control_panel.alarm

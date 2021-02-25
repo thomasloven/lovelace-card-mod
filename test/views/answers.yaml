@@ -1,12 +1,14 @@
 x-anchors:
   desc: &desc
     type: markdown
-    card_mod: |
-      code {
-        font-size: 8pt;
-        line-height: normal;
-        white-space: pre-wrap;
-        }
+    card_mod:
+      style:
+        ha-markdown$: |
+          code {
+            font-size: 8pt !important;
+            line-height: normal;
+            white-space: pre-wrap;
+          }
 
 title: Answers
 cards:
@@ -20,15 +22,17 @@ cards:
           type: entities
           entities:
             - entity: sensor.outside_temperature
-              card_mod: |
-                .text-content {
-                  color: red;
-                }
+              card_mod:
+                style: |
+                  .text-content {
+                    color: red;
+                  }
           ```
       - type: entities
         entities:
           - entity: sensor.outside_temperature
-            card_mod: |
-              .text-content {
-                color: red;
-              }
+            card_mod:
+              style: |
+                .text-content {
+                  color: red;
+                }

@@ -1,4 +1,4 @@
-title: Home
+title: Theme
 theme: art-nouveau
 badges:
   - entity: binary_sensor.updater
