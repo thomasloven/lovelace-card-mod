@@ -184,6 +184,22 @@ card_mod:
 >   $: |
 > ```
 
+<details><summary>Debugging tips</summary>
+
+The DOM navigation can be tricky to get right the first few times, but you'll eventually get the hang of it.
+
+To help you, you can use your browsers Element inspector to see which steps card-mod takes.
+
+- Open up the element inspector and find the base element (e.g. `<ha-card>`). This should contain a `<card-mod>` element whether you specified a style or not.
+- Make sure the `<card-mod>` element is selected.
+- Open up the browsers console (in chrome you can press Esc to open the console and inspector at the same time).
+- Type in `$0._input_styles` and press enter. \
+  This is the style information that step of the chain was given. If this is a string, you're at the end of the chain. If it's an object, you can move on to the next ste.
+- Type in `$0._styleChildren` and press enter. \
+  This is a set of any `<card-mod>` elements in the next step of any chain. Clicking "card-mod" in the `value:` of the set items will bring you to that `<card-mod>` element in the inspector, and you can keep on inspecting the rest of the chain.
+
+</details>
+
 ### Styling cards without an `<ha-card>` element
 
 Cards that don't have a `<ha-element>` can still be styled by using the supplied `custom:mod-card` card.
