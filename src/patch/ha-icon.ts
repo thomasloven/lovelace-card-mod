@@ -15,7 +15,7 @@ customElements.whenDefined("ha-icon").then(() => {
       const iconColor = window
         .getComputedStyle(this)
         .getPropertyValue("--icon-color");
-      this.style.color = iconColor;
+      if (iconColor) this.style.color = iconColor;
     };
 
     (async () => {
