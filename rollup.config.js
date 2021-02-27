@@ -10,7 +10,7 @@ export default {
   input: "src/main.ts",
   output: {
     file: "card-mod.js",
-    format: "es",
+    format: "iife",
   },
   plugins: [
     nodeResolve(),
