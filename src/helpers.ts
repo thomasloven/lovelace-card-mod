@@ -129,3 +129,9 @@ export async function findParentCardMod(
     joinSet(cardMods, await findParentCardMod((node as any).host, step + 1));
   return cardMods;
 }
+
+export function parentElement(el: Node): Node {
+  if (!el) return undefined;
+  const node = el.parentElement || el.parentNode;
+  return (node as any).host ? (node as any).host : node;
+}

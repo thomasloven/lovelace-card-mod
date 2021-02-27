@@ -122,6 +122,7 @@ cards:
       - <<: *desc
         content: |
           ## Overriding DOM navigation
+          [Forum issue](https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1449)
           First two icons red
           Third icon green
       - type: entities
@@ -153,3 +154,22 @@ cards:
                             ha-svg-icon {
                               color: red;
                             }
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## Slow to load elements
+          [Github issue](https://github.com/thomasloven/lovelace-card-mod/issues/11)
+          Red Map Markers
+      - type: map
+        entities:
+          - device_tracker.demo_paulus
+          - device_tracker.demo_anne_therese
+        card_mod:
+          style:
+            ha-entity-marker:
+              $: |
+                .marker {
+                  background: red;
+                }
+        hours_to_show: 1

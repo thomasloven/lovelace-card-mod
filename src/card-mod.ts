@@ -3,7 +3,13 @@ import { bind_template, unbind_template } from "./templates";
 import { hasTemplate } from "card-tools/src/templates";
 import pjson from "../package.json";
 import { selectTree } from "card-tools/src/helpers";
-import { applyToElement, get_theme, merge_deep, Styles } from "./helpers";
+import {
+  applyToElement,
+  get_theme,
+  merge_deep,
+  parentElement,
+  Styles,
+} from "./helpers";
 
 export class CardMod extends LitElement {
   type: string;
@@ -14,11 +20,25 @@ export class CardMod extends LitElement {
   _renderer: (_: string) => void;
   _styleChildren: Set<CardMod> = new Set();
   _input_styles: Styles;
+  _refreshCooldown = { running: false, repeat: false };
 
   _observer: MutationObserver = new MutationObserver((mutations) => {
-    if (mutations.some((m) => (m.target as Element).localName !== "card-mod")) {
-      this.refresh();
+    for (const m of mutations) {
+      if ((m.target as any).localName === "card-mod") return;
+      let stop = true;
+      if (m.addedNodes.length)
+        m.addedNodes.forEach((n) => {
+          if ((n as any).localName !== "card-mod") stop = false;
+        });
+      if (stop) return;
+      stop = true;
+      if (m.removedNodes.length)
+        m.removedNodes.forEach((n) => {
+          if ((n as any).localName !== "card-mod") stop = false;
+        });
     }
+
+    this.refresh();
   });
 
   static get applyToElement() {
@@ -48,9 +68,17 @@ export class CardMod extends LitElement {
     this.refresh();
   }
 
-  async refresh() {
-    await this._disconnect();
-    this._connect(this._input_styles);
+  refresh() {
+    if (this._refreshCooldown.running) {
+      this._refreshCooldown.repeat = true;
+      return;
+    }
+    window.setTimeout(() => {
+      this._refreshCooldown.running = false;
+      if (this._refreshCooldown.repeat) this.refresh();
+    }, 1);
+    this._refreshCooldown.repeat = false;
+    this._disconnect().then(() => this._connect(this._input_styles));
   }
 
   private async _connect(stl: Styles) {
@@ -89,10 +117,19 @@ export class CardMod extends LitElement {
       this._style_rendered((this._styles as string) || "");
     }
 
-    this._observer.observe(
-      (parent as any).host ? (parent as any).host : parent,
-      { childList: true }
-    );
+    this._observer.observe(parentElement(this), { childList: true });
+
+    const p = parentElement(parentElement(this)) as any;
+    this._observer.observe(p, { childList: true });
+    if (p && p.updated && !p._cm_update_patched) {
+      const _updated = p.updated;
+      const _this = this;
+      p.updated = function (param) {
+        _updated.bind(this)(param);
+        this.updateComplete.then(() => _this.refresh());
+      };
+      p._cm_update_patched = true;
+    }
   }
 
   private async _disconnect() {
