@@ -117,3 +117,39 @@ cards:
                 }
 
         entity: alarm_control_panel.alarm
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## Overriding DOM navigation
+          First two icons red
+          Third icon green
+      - type: entities
+        entities:
+          - entity: sun.sun
+          - entity: sun.sun
+          - entity: sun.sun
+            card_mod:
+              style:
+                hui-generic-entity-row:
+                  $:
+                    state-badge:
+                      $:
+                        ha-icon:
+                          $: |
+                            ha-svg-icon {
+                              color: green !important;
+                            }
+        card_mod:
+          style:
+            hui-text-entity-row:
+              $:
+                hui-generic-entity-row:
+                  $:
+                    state-badge:
+                      $:
+                        ha-icon:
+                          $: |
+                            ha-svg-icon {
+                              color: red;
+                            }

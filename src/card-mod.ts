@@ -71,7 +71,7 @@ export class CardMod extends LitElement {
           this._styleChildren.add(
             await applyToElement(
               el,
-              undefined,
+              `${this.type}-child`,
               value,
               this.variables,
               null,

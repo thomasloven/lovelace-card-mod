@@ -5,7 +5,7 @@ import { CardMod } from "./card-mod";
 interface ModdedElement extends HTMLElement {
   updateComplete?: Promise<void>;
   modElement?: ModdedElement;
-  _cardMod?: CardMod;
+  _cardMod?: CardMod[];
 }
 
 export type Styles = string | Record<string, any>;
@@ -28,8 +28,21 @@ export async function applyToElement(
     await customElements.whenDefined(el.localName);
   if (el.updateComplete) await el.updateComplete;
 
-  const cardMod = (el._cardMod =
-    el._cardMod || (document.createElement("card-mod") as CardMod));
+  if (el._cardMod === undefined) {
+    el._cardMod = [];
+  }
+  let cardMod: CardMod;
+  for (const cm of el._cardMod) {
+    if (cm.type === type) {
+      cardMod = cm;
+      break;
+    }
+  }
+  if (!cardMod) {
+    cardMod = document.createElement("card-mod") as CardMod;
+    cardMod.type = type;
+    el._cardMod.push(cardMod);
+  }
 
   const target = el.modElement
     ? el.modElement
@@ -38,9 +51,6 @@ export async function applyToElement(
     : el;
   target.appendChild(cardMod as Node);
 
-  if (el.updateComplete) await el.updateComplete;
-
-  cardMod.type = type;
   cardMod.variables = variables;
   cardMod.styles = styles;
 
