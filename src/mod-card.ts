@@ -18,7 +18,7 @@ class ModCard extends LitElement {
   }
   setConfig(config: any) {
     this._config = JSON.parse(JSON.stringify(config));
-    let style = this._config.card_mod || this._config.style;
+    let style = this._config.card_mod?.style || this._config.style;
 
     if (style === undefined) {
       style = NO_STYLE;
@@ -30,7 +30,7 @@ class ModCard extends LitElement {
       style["."] = NO_STYLE;
     }
 
-    this._config.card_mod = style;
+    this._config.card_mod = { style };
 
     this.card = createCard(config.card);
     this.card.hass = hass();
