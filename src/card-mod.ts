@@ -38,7 +38,7 @@ export class CardMod extends LitElement {
         });
     }
 
-    this.refresh();
+    this.refresh(true);
   });
 
   static get applyToElement() {
@@ -49,7 +49,7 @@ export class CardMod extends LitElement {
     super();
     document
       .querySelector("home-assistant")
-      .addEventListener("settheme", () => this.refresh());
+      .addEventListener("settheme", () => this.refresh(true));
   }
 
   connectedCallback() {
@@ -60,15 +60,15 @@ export class CardMod extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this._disconnect();
+    this._disconnect(false);
   }
 
   set styles(stl: Styles) {
     this._input_styles = stl;
-    this.refresh();
+    this.refresh(true);
   }
 
-  refresh() {
+  refresh(forced = false) {
     if (this._refreshCooldown.running) {
       this._refreshCooldown.repeat = true;
       return;
@@ -78,7 +78,7 @@ export class CardMod extends LitElement {
       if (this._refreshCooldown.repeat) this.refresh();
     }, 1);
     this._refreshCooldown.repeat = false;
-    this._disconnect().then(() => this._connect(this._input_styles));
+    this._disconnect(forced).then(() => this._connect(this._input_styles));
   }
 
   private async _connect(stl: Styles) {
@@ -119,26 +119,30 @@ export class CardMod extends LitElement {
 
     this._observer.observe(parentElement(this), { childList: true });
 
-    const p = parentElement(parentElement(this)) as any;
-    this._observer.observe(p, { childList: true });
-    if (p && p.updated && !p._cm_update_patched) {
-      const _updated = p.updated;
-      const _this = this;
-      p.updated = function (param) {
-        _updated.bind(this)(param);
-        this.updateComplete.then(() => _this.refresh());
-      };
-      p._cm_update_patched = true;
+    if (this.type === "card") {
+      const p = parentElement(parentElement(this)) as any;
+      if (p) this._observer.observe(p, { childList: true });
+      if (p && p.updated && !p._cm_update_patched) {
+        const _updated = p.updated;
+        const _this = this;
+        p.updated = function (param) {
+          _updated.bind(this)(param);
+          this.updateComplete.then(() => _this.refresh());
+        };
+        p._cm_update_patched = true;
+      }
     }
   }
 
-  private async _disconnect() {
+  private async _disconnect(forced = true) {
     this._observer.disconnect();
     await unbind_template(this._renderer);
-    this._rendered_styles = "";
-    for (const c of this._styleChildren) {
-      if (c) c.styles = "";
-      this._styleChildren.delete(c);
+    if (forced) {
+      this._rendered_styles = "";
+      for (const c of this._styleChildren) {
+        if (c) c.styles = "";
+        this._styleChildren.delete(c);
+      }
     }
   }
 
