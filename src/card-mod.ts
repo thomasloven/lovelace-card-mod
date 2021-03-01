@@ -5,6 +5,7 @@ import pjson from "../package.json";
 import { selectTree } from "card-tools/src/helpers";
 import {
   applyToElement,
+  compare_deep,
   get_theme,
   merge_deep,
   parentElement,
@@ -20,7 +21,6 @@ export class CardMod extends LitElement {
   _renderer: (_: string) => void;
   _styleChildren: Set<CardMod> = new Set();
   _input_styles: Styles;
-  _refreshCooldown = { running: false, repeat: false };
 
   _observer: MutationObserver = new MutationObserver((mutations) => {
     for (const m of mutations) {
@@ -38,7 +38,7 @@ export class CardMod extends LitElement {
         });
     }
 
-    this.refresh(true);
+    this.refresh();
   });
 
   static get applyToElement() {
@@ -49,39 +49,32 @@ export class CardMod extends LitElement {
     super();
     document
       .querySelector("home-assistant")
-      .addEventListener("settheme", () => this.refresh(true));
+      .addEventListener("settheme", () => this.refresh());
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.refresh();
+    this._connect();
     this.setAttribute("slot", "none");
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this._disconnect(false);
+    this._disconnect();
   }
 
   set styles(stl: Styles) {
+    if (compare_deep(stl, this._input_styles)) return;
     this._input_styles = stl;
-    this.refresh(true);
+    this._connect();
   }
 
-  refresh(forced = false) {
-    if (this._refreshCooldown.running) {
-      this._refreshCooldown.repeat = true;
-      return;
-    }
-    window.setTimeout(() => {
-      this._refreshCooldown.running = false;
-      if (this._refreshCooldown.repeat) this.refresh();
-    }, 1);
-    this._refreshCooldown.repeat = false;
-    this._disconnect(forced).then(() => this._connect(this._input_styles));
+  refresh() {
+    this._connect();
   }
 
-  private async _connect(stl: Styles) {
+  private async _connect() {
+    const stl = this._input_styles;
     // Always work with yaml styles
     let styles = JSON.parse(JSON.stringify(stl || {}));
     if (typeof styles === "string") styles = { ".": styles };
@@ -90,25 +83,35 @@ export class CardMod extends LitElement {
     const theme_styles = await get_theme(this);
     merge_deep(styles, theme_styles);
 
+    const styleChildren: Set<CardMod> = new Set();
     const parent = this.parentElement || this.parentNode;
+    if (!styles["."]) this._styles = "";
     for (const [key, value] of Object.entries(styles as object)) {
       if (key === ".") {
         this._styles = value;
       } else {
         for (const el of await selectTree(parent, key, true)) {
-          this._styleChildren.add(
-            await applyToElement(
-              el,
-              `${this.type}-child`,
-              value,
-              this.variables,
-              null,
-              false
-            )
-          );
+          if (el)
+            styleChildren.add(
+              await applyToElement(
+                el,
+                `${this.type}-child`,
+                value,
+                this.variables,
+                null,
+                false
+              )
+            );
         }
       }
     }
+
+    for (const oldCh of this._styleChildren) {
+      if (!styleChildren.has(oldCh)) {
+        if (oldCh) oldCh.styles = "";
+      }
+    }
+    this._styleChildren = styleChildren;
 
     if (this._styles && hasTemplate(this._styles)) {
       this._renderer = this._renderer || this._style_rendered.bind(this);
@@ -118,32 +121,11 @@ export class CardMod extends LitElement {
     }
 
     this._observer.observe(parentElement(this), { childList: true });
-
-    if (this.type === "card") {
-      const p = parentElement(parentElement(this)) as any;
-      if (p) this._observer.observe(p, { childList: true });
-      if (p && p.updated && !p._cm_update_patched) {
-        const _updated = p.updated;
-        const _this = this;
-        p.updated = function (param) {
-          _updated.bind(this)(param);
-          this.updateComplete.then(() => _this.refresh());
-        };
-        p._cm_update_patched = true;
-      }
-    }
   }
 
-  private async _disconnect(forced = true) {
+  private async _disconnect() {
     this._observer.disconnect();
     await unbind_template(this._renderer);
-    if (forced) {
-      this._rendered_styles = "";
-      for (const c of this._styleChildren) {
-        if (c) c.styles = "";
-        this._styleChildren.delete(c);
-      }
-    }
   }
 
   private _style_rendered(result: string) {

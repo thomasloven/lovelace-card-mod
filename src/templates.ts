@@ -42,6 +42,7 @@ export async function bind_template(
   const cacheKey = JSON.stringify([template, variables]);
   let cache = cachedTemplates[cacheKey];
   if (!cache) {
+    unbind_template(callback);
     callback("");
 
     variables = {
@@ -66,6 +67,7 @@ export async function bind_template(
       ),
     };
   } else {
+    if (!cache.callbacks.has(callback)) unbind_template(callback);
     callback(cache.value);
     cache.callbacks.add(callback);
   }

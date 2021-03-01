@@ -31,17 +31,35 @@ customElements.whenDefined("ha-card").then(() => {
       null,
       false
     ).then((cardMod) => {
-      if (this.parentNode?.host?.setConfig) {
+      const pn = this.parentNode?.host;
+      if (!pn) return;
+
+      if (pn.setConfig && !pn.setConfig.cm_patched) {
         // Patch the setConfig function to get live updates in GUI editor
-        const _setConfig = this.parentNode.host.setConfig;
-        this.parentNode.host.setConfig = function (config: any) {
+        const _setConfig = pn.setConfig;
+        pn.setConfig = function (config: any) {
           _setConfig.bind(this)(config);
-          if (config.card_mod) {
-            cardMod.variables = { config };
-            cardMod.styles = config.card_mod;
-          }
+          cardMod.variables = { config };
+          cardMod.styles = config.card_mod || {};
         };
+        pn.setConfig.cm_patched = true;
       }
+
+      if (pn.update && !pn.update.cm_patched) {
+        const _update = pn.update;
+        pn.update = function (changedProperties: any) {
+          _update.bind(this)(changedProperties);
+          this.updateComplete.then(() => {
+            cardMod.refresh();
+          });
+        };
+        pn.update.cm_patched = true;
+      }
+
+      // Try to catch even very slowly loading cards
+      window.setTimeout(() => cardMod.refresh(), 100);
+      window.setTimeout(() => cardMod.refresh(), 500);
+      window.setTimeout(() => cardMod.refresh(), 1000);
     });
   };
 
