@@ -1,4 +1,3 @@
-import { fireEvent } from "card-tools/src/event.js";
 import { applyToElement } from "../helpers";
 
 const ENTITY_STYLES = `
@@ -51,6 +50,4 @@ customElements.whenDefined("hui-glance-card").then(() => {
       );
     }
   };
-
-  fireEvent("ll-rebuild", {});
 });

@@ -1,4 +1,3 @@
-import { fireEvent } from "card-tools/src/event.js";
 import { applyToElement } from "../helpers";
 
 customElements.whenDefined("hui-entities-card").then(() => {
@@ -31,6 +30,4 @@ customElements.whenDefined("hui-entities-card").then(() => {
       retval.values[0].addEventListener("ll-rebuild", apply);
     return retval;
   };
-
-  fireEvent("ll-rebuild", {});
 });

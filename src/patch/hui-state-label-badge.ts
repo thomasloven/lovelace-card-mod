@@ -1,4 +1,3 @@
-import { fireEvent } from "card-tools/src/event.js";
 import { applyToElement } from "../helpers";
 
 customElements.whenDefined("hui-state-label-badge").then(() => {
@@ -23,6 +22,4 @@ customElements.whenDefined("hui-state-label-badge").then(() => {
       }
     );
   };
-
-  fireEvent("ll-rebuild", {});
 });

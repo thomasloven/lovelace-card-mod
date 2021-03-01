@@ -13,7 +13,6 @@ customElements.whenDefined("hui-root").then(() => {
     applyToElement(this, "root");
   };
 
-  fireEvent("ll-rebuild", {});
   selectTree(
     document,
     "home-assistant$home-assistant-main$app-drawer-layout partial-panel-resolver ha-panel-lovelace$hui-root",

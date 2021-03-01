@@ -36,6 +36,7 @@ export class CardMod extends LitElement {
         m.removedNodes.forEach((n) => {
           if ((n as any).localName !== "card-mod") stop = false;
         });
+      if (stop) return;
     }
 
     this.refresh();

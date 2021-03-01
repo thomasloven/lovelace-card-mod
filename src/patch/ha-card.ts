@@ -1,4 +1,3 @@
-import { fireEvent } from "card-tools/src/event.js";
 import { applyToElement, findConfig } from "../helpers";
 
 customElements.whenDefined("ha-card").then(() => {
@@ -62,6 +61,4 @@ customElements.whenDefined("ha-card").then(() => {
       window.setTimeout(() => cardMod.refresh(), 1000);
     });
   };
-
-  fireEvent("ll-rebuild", {});
 });

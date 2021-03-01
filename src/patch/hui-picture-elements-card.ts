@@ -1,4 +1,3 @@
-import { fireEvent } from "card-tools/src/event.js";
 import { applyToElement } from "../helpers";
 
 customElements.whenDefined("hui-picture-elements-card").then(() => {
@@ -20,6 +19,4 @@ customElements.whenDefined("hui-picture-elements-card").then(() => {
       applyToElement(el, "element", config?.card_mod?.style, { config });
     }
   };
-
-  fireEvent("ll-rebuild", {});
 });

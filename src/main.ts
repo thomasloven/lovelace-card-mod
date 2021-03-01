@@ -1,3 +1,4 @@
+import { fireEvent } from "card-tools/src/event.js";
 import "./card-mod";
 import "./patch/ha-card";
 import "./patch/hui-entities-card";
@@ -11,3 +12,4 @@ import "./patch/hui-card-element-editor";
 import "./patch/hui-picture-elements-card";
 import "./patch/ha-icon";
 import "./mod-card";
+fireEvent("ll-rebuild", {});

@@ -1,4 +1,3 @@
-import { fireEvent } from "card-tools/src/event.js";
 import { applyToElement } from "../helpers";
 
 customElements.whenDefined("hui-view").then(() => {
@@ -11,6 +10,4 @@ customElements.whenDefined("hui-view").then(() => {
     _firstUpdated?.bind(this)(changedProperties);
     applyToElement(this, "view");
   };
-
-  fireEvent("ll-rebuild", {});
 });
