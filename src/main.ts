@@ -12,4 +12,5 @@ import "./patch/hui-card-element-editor";
 import "./patch/hui-picture-elements-card";
 import "./patch/ha-icon";
 import "./mod-card";
+import "./theme-watcher";
 fireEvent("ll-rebuild", {});

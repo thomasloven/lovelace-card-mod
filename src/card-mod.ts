@@ -48,9 +48,9 @@ export class CardMod extends LitElement {
 
   constructor() {
     super();
-    document
-      .querySelector("home-assistant")
-      .addEventListener("settheme", () => this.refresh());
+    document.addEventListener("cm_update", () => {
+      this.refresh();
+    });
   }
 
   connectedCallback() {
