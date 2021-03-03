@@ -1,0 +1,11 @@
+test:
+  card-mod-theme: test
+  card-mod-card: |
+
+    ha-card {
+      background: url("https://placebear.com/640/480")
+    }
+    ha-card.top-level-card {
+      border: solid 1px var(--secondary-text-color);
+      background: url("https://placekitten.com/640/480");
+    }

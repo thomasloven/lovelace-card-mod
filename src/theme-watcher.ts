@@ -12,7 +12,7 @@ Promise.race(bases).then(() => {
   window.setTimeout(() => {
     hass().connection.subscribeEvents(() => {
       window.setTimeout(refresh_theme, 500);
-    });
+    }, "themes_updated");
     document
       .querySelector("home-assistant")
       ?.addEventListener("settheme", refresh_theme);

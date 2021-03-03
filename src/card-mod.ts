@@ -85,24 +85,29 @@ export class CardMod extends LitElement {
     merge_deep(styles, theme_styles);
 
     const styleChildren: Set<CardMod> = new Set();
+    let thisStyle: any;
     const parent = this.parentElement || this.parentNode;
-    if (!styles["."]) this._styles = "";
+
+    if (!styles["."]) thisStyle = "";
     for (const [key, value] of Object.entries(styles as object)) {
       if (key === ".") {
-        this._styles = value;
+        thisStyle = value;
       } else {
-        for (const el of await selectTree(parent, key, true)) {
-          if (el)
-            styleChildren.add(
-              await applyToElement(
-                el,
-                `${this.type}-child`,
-                value,
-                this.variables,
-                null,
-                false
-              )
+        const elements = await selectTree(parent, key, true);
+        if (!elements) continue;
+        for (const el of elements) {
+          if (el) {
+            const child = await applyToElement(
+              el,
+              `${this.type}-child`,
+              value,
+              this.variables,
+              null,
+              false
             );
+            child.refresh();
+            styleChildren.add(child);
+          }
         }
       }
     }
@@ -113,6 +118,9 @@ export class CardMod extends LitElement {
       }
     }
     this._styleChildren = styleChildren;
+
+    if (this._styles === thisStyle) return;
+    this._styles = thisStyle;
 
     if (this._styles && hasTemplate(this._styles)) {
       this._renderer = this._renderer || this._style_rendered.bind(this);
@@ -126,6 +134,7 @@ export class CardMod extends LitElement {
 
   private async _disconnect() {
     this._observer.disconnect();
+    this._styles = "";
     await unbind_template(this._renderer);
   }
 

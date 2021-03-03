@@ -48,6 +48,7 @@ customElements.whenDefined("ha-card").then(() => {
         const _update = pn.update;
         pn.update = function (changedProperties: any) {
           _update.bind(this)(changedProperties);
+          cardMod.refresh();
           this.updateComplete.then(() => {
             cardMod.refresh();
           });
