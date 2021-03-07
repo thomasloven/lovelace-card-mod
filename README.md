@@ -4,6 +4,8 @@ Allows you to apply CSS styles to various elements of the Home Assistant fronten
 
 ## Installing
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
+
 Install using HACS or [see this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
 
 ## Quick start

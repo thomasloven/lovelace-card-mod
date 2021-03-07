@@ -44,16 +44,17 @@ export async function applyToElement(
     el._cardMod.push(cardMod);
   }
 
-  const target = el.modElement
-    ? el.modElement
-    : shadow
-    ? el.shadowRoot || el
-    : el;
-  target.appendChild(cardMod as Node);
+  queueMicrotask(async () => {
+    const target = el.modElement
+      ? el.modElement
+      : shadow
+      ? el.shadowRoot || el
+      : el;
+    target.appendChild(cardMod as Node);
 
-  cardMod.variables = variables;
-  cardMod.styles = styles;
-
+    cardMod.variables = variables;
+    cardMod.styles = styles;
+  });
   return cardMod;
 }
 

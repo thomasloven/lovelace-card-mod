@@ -25,7 +25,7 @@ customElements.whenDefined("hui-entities-card").then(() => {
         { config }
       );
 
-    apply();
+    this.updateComplete.then(() => apply());
     if (retval.values[0])
       retval.values[0].addEventListener("ll-rebuild", apply);
     return retval;
