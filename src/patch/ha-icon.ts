@@ -10,11 +10,13 @@ customElements.whenDefined("ha-icon").then(() => {
     _firstUpdated?.bind(this)();
 
     const updateIcon = () => {
-      const icon = window.getComputedStyle(this).getPropertyValue("--icon");
+      const icon = window
+        .getComputedStyle(this)
+        .getPropertyValue("--card-mod-icon");
       if (icon) this.icon = icon.trim();
       const iconColor = window
         .getComputedStyle(this)
-        .getPropertyValue("--icon-color");
+        .getPropertyValue("--card-mod-icon-color");
       if (iconColor) this.style.color = iconColor;
     };
 
