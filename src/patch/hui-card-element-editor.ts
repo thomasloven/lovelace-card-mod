@@ -10,33 +10,35 @@ customElements.whenDefined("hui-card-element-editor").then(() => {
     // Catch and patch the configElement
     if (retval) {
       const _setConfig = retval.setConfig;
-      retval.setConfig = function (config: any) {
+      retval.setConfig = async function (config: any) {
         // Strip card_mod from the data that's sent to the config element
         // and put it back after the config has been checked
         const newConfig = JSON.parse(JSON.stringify(config));
-        const cardMod = {
+        this._cardModData = {
           card: newConfig.card_mod,
           entities: [],
         };
         delete newConfig.card_mod;
-        if (newConfig.entities) {
-          for (const [i, e] of newConfig.entities?.entries()) {
-            cardMod.entities[i] = e.card_mod;
-            delete e.card_mod;
-          }
-        }
 
-        _setConfig.bind(this)(newConfig);
-
-        if (cardMod.card) newConfig.card_mod = cardMod.card;
-        if (newConfig.entities) {
-          for (const [i, e] of newConfig.entities?.entries()) {
-            if (cardMod.entities[i]) e.card_mod = cardMod.entities[i];
-          }
-        }
+        await _setConfig.bind(this)(newConfig);
       };
     }
     return retval;
+  };
+
+  const _handleUIConfigChanged =
+    HuiCardElementEditor.prototype._handleUIConfigChanged;
+  HuiCardElementEditor.prototype._handleUIConfigChanged = function (ev) {
+    if (this._configElement && this._configElement._cardModData) {
+      const cardMod = this._configElement._cardModData;
+      ev.detail.config.card_mod = cardMod.card;
+      if (ev.detail.config.entities) {
+        for (const [i, e] of ev.detail.config.entities.entries()) {
+          if (cardMod.entities[i]) e.card_mod = cardMod.entities[i];
+        }
+      }
+    }
+    _handleUIConfigChanged.bind(this)(ev);
   };
 });
 
