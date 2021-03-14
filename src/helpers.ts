@@ -137,12 +137,16 @@ export async function findParentCardMod(
   if (step == 10) return cardMods;
   if (!node) return cardMods;
 
-  if (node._cardMod && node._cardMod.style) cardMods.add(node._cardMod);
+  if (node._cardMod) {
+    for (const cm of node._cardMod) {
+      if (cm.styles) cardMods.add(cm);
+    }
+  }
 
   if (node.updateComplete) await node.updateComplete;
   if (node.parentElement)
     joinSet(cardMods, await findParentCardMod(node.parentElement, step + 1));
-  if (node.parentNode)
+  else if (node.parentNode)
     joinSet(cardMods, await findParentCardMod(node.parentNode, step + 1));
   if ((node as any).host)
     joinSet(cardMods, await findParentCardMod((node as any).host, step + 1));

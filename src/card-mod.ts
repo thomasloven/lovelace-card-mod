@@ -69,6 +69,9 @@ export class CardMod extends LitElement {
     this._input_styles = stl;
     this._connect();
   }
+  get styles() {
+    return this._styles;
+  }
 
   refresh() {
     this._connect();
