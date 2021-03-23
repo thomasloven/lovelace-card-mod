@@ -39,7 +39,7 @@ customElements.whenDefined("ha-card").then(() => {
         pn.setConfig = function (config: any) {
           _setConfig.bind(this)(config);
           cardMod.variables = { config };
-          cardMod.styles = config.card_mod || {};
+          cardMod.styles = config.card_mod?.style || {};
         };
         pn.setConfig.cm_patched = true;
       }
