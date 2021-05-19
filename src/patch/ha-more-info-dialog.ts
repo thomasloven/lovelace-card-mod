@@ -10,7 +10,8 @@ customElements.whenDefined("ha-more-info-dialog").then(() => {
   HaMoreInfoDialog.prototype.showDialog = function (params) {
     _showDialog?.bind(this)(params);
 
-    this.requestUpdate().then(async () => {
+    this.requestUpdate();
+    this.updateComplete.then(async () => {
       applyToElement(
         this.shadowRoot.querySelector("ha-dialog"),
         "more-info",
