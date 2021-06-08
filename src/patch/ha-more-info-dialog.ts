@@ -12,14 +12,17 @@ customElements.whenDefined("ha-more-info-dialog").then(() => {
 
     this.requestUpdate();
     this.updateComplete.then(async () => {
-      applyToElement(
-        this.shadowRoot.querySelector("ha-dialog"),
-        "more-info",
-        "",
-        { config: params },
-        null,
-        false
-      );
+      const haDialog = this.shadowRoot.querySelector("ha-dialog");
+      if (haDialog) {
+        applyToElement(
+          haDialog,
+          "more-info",
+          "",
+          { config: params },
+          null,
+          false
+        );
+      }
     });
   };
 
