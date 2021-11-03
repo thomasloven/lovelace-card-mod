@@ -44,6 +44,12 @@ cards:
                   :host {
                     color: blue;
                   }
+            - entity: light.kitchen_lights
+              card_mod:
+                style: |
+                  :host {
+                    --card-mod-icon: mdi:star;
+                  }
           ```
       - type: entities
         show_header_toggle: false
@@ -65,6 +71,12 @@ cards:
               style: |
                 :host {
                   color: blue;
+                }
+          - entity: light.kitchen_lights
+            card_mod:
+              style: |
+                :host {
+                  --card-mod-icon: mdi:star;
                 }
   - type: vertical-stack
     cards:
@@ -95,6 +107,12 @@ cards:
                   :host {
                     color: blue;
                   }
+            - entity: light.kitchen_lights
+              card_mod:
+                style: |
+                  :host {
+                    --card-mod-icon: mdi:star;
+                  }
           ```
       - type: glance
         entities:
@@ -115,6 +133,12 @@ cards:
               style: |
                 :host {
                   color: blue;
+                }
+          - entity: light.kitchen_lights
+            card_mod:
+              style: |
+                :host {
+                  --card-mod-icon: mdi:star;
                 }
 
   - type: vertical-stack
