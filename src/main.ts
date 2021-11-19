@@ -13,4 +13,16 @@ import "./patch/hui-picture-elements-card";
 import "./patch/ha-icon";
 import "./mod-card";
 import "./theme-watcher";
-fireEvent("ll-rebuild", {});
+
+import { getResources } from "./helpers";
+(window as any).getResources = getResources;
+
+const resources = getResources();
+if (resources.some((r) => r.endsWith("card-mod.js"))) {
+  console.info("Card-mod is loaded as a module");
+} else {
+  fireEvent("ll-rebuild", {});
+  console.info(
+    "You may not be getting optimal performance out of card-mod.\nSee https://github.com/thomasloven/lovelace-card-mod#performance-improvements"
+  );
+}

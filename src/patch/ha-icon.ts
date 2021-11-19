@@ -1,4 +1,3 @@
-import { customElement } from "lit-element";
 import { findParentCardMod } from "../helpers";
 
 customElements.whenDefined("ha-icon").then(() => {

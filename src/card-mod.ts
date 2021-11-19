@@ -1,4 +1,5 @@
-import { LitElement, html, property } from "lit-element";
+import { LitElement, html } from "lit";
+import { property } from "lit/decorators.js";
 import { bind_template, unbind_template } from "./templates";
 import { hasTemplate } from "card-tools/src/templates";
 import pjson from "../package.json";
@@ -166,7 +167,6 @@ if (!customElements.get("card-mod")) {
   customElements.define("card-mod", CardMod);
   console.info(
     `%cCARD-MOD ${pjson.version} IS INSTALLED`,
-    "color: green; font-weight: bold",
-    ""
+    "color: green; font-weight: bold"
   );
 }

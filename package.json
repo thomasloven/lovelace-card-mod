@@ -1,7 +1,7 @@
 {
   "name": "card-mod",
   "private": true,
-  "version": "3.0.14",
+  "version": "3.0.15",
   "description": "",
   "scripts": {
     "build": "rollup -c",
@@ -23,6 +23,6 @@
   },
   "dependencies": {
     "card-tools": "github:thomasloven/lovelace-card-tools",
-    "lit-element": "^3.0.1"
+    "lit": "^2.0.2"
   }
 }

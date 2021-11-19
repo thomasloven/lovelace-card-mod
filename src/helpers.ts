@@ -24,6 +24,7 @@ export async function applyToElement(
   entity_ids: any = null, // deprecated
   shadow: boolean = true
 ): Promise<CardMod> {
+  if (!el) return;
   if (el.localName?.includes("-"))
     await customElements.whenDefined(el.localName);
   if (el.updateComplete) await el.updateComplete;
@@ -66,7 +67,8 @@ export async function get_theme(root: CardMod): Promise<Styles> {
     .getComputedStyle(el)
     .getPropertyValue("--card-mod-theme");
 
-  const themes = hass().themes.themes;
+  if (!hass()) return {};
+  const themes = hass()?.themes.themes ?? {};
   if (!themes[theme]) return {};
 
   if (themes[theme][`card-mod-${root.type}-yaml`]) {
@@ -158,4 +160,18 @@ export function parentElement(el: Node): Node {
   const node = el.parentElement || el.parentNode;
   if (!node) return undefined;
   return (node as any).host ? (node as any).host : node;
+}
+
+export function getResources() {
+  const scriptElements = document.querySelectorAll("script");
+  const retval = [];
+  for (const script of scriptElements) {
+    if (script?.innerText?.trim()?.startsWith("import(")) {
+      const imports = script.innerText.split("\n")?.map((e) => e.trim());
+      for (const imp of imports) {
+        retval.push(imp.replace(/^import\(\"/, "").replace(/\"\);/, ""));
+      }
+    }
+  }
+  return retval;
 }

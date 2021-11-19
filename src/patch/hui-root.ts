@@ -1,4 +1,3 @@
-import { fireEvent } from "card-tools/src/event.js";
 import { selectTree } from "card-tools/src/helpers";
 import { applyToElement } from "../helpers";
 

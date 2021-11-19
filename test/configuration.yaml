@@ -28,3 +28,5 @@ input_number:
 
 frontend:
   themes: !include_dir_merge_named test/themes/
+  extra_module_url:
+    - /local/workspace/card-mod.js

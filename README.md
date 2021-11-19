@@ -8,6 +8,20 @@ Allows you to apply CSS styles to various elements of the Home Assistant fronten
 
 Install using HACS or [see this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
 
+### Performance improvements
+
+While card-mod can be installed as a [lovelace resource](https://www.home-assistant.io/lovelace/dashboards/#resources), some functionality will benefit greatly from it being installed as a [frontend module](https://www.home-assistant.io/integrations/frontend/#extra_module_url) instead.
+
+To do that, add the following to your `configuration.yaml` file and restart Home Assistant:
+
+```yaml
+frontend:
+  extra_module_url:
+    - /local/card-mod.js
+```
+
+You'll need to adjust that path according to where you have installed `card-mod.js`. If you installed through HACS, this is probably `/hacsfiles/lovelace-card-mod/card-mod.js`.
+
 ## Quick start
 
 - Open your card in the GUI editor
