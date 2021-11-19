@@ -1,6 +1,4 @@
-import { LitElement, html } from "lit-element";
-import { createCard } from "card-tools/src/lovelace-element";
-import { hass } from "card-tools/src/hass";
+import { LitElement, html } from "lit";
 
 const NO_STYLE = `
 ha-card {
@@ -32,8 +30,13 @@ class ModCard extends LitElement {
 
     this._config.card_mod = { style };
 
-    this.card = createCard(config.card);
-    this.card.hass = hass();
+    this.build_card(config.card);
+  }
+
+  async build_card(config) {
+    const helpers = await (window as any).loadCardHelpers();
+    this.card = await helpers.createCardElement(config);
+    this.card.hass = this.hass;
   }
 
   firstUpdated() {
