@@ -9,3 +9,23 @@ views:
   - !include views/7_themed.yaml
   - !include views/tricks.yaml
   - !include views/answers.yaml
+  - !include views/10_performance_test.yaml
+
+card_mod:
+  style:
+    hui-state-badge-element:
+      $ ha-state-label-badge:
+        $ ha-label-badge $: |
+          .badge-container .label-badge .label span {
+            border-style: solid;
+            border-color: green;
+            color: blue;
+            background-color: magenta;
+          }
+        .: |
+          ha-state-label-badge {
+            color: orange;
+            --label-badge-background-color: yellow;
+            --label-badge-text-color: red;
+            --label-badge-red: cyan;
+          }
