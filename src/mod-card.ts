@@ -44,8 +44,7 @@ class ModCard extends LitElement {
       if (this.card?.shadowRoot?.querySelector("ha-card")) {
         console.info(
           "%cYou are doing it wrong!",
-          "color: red; font-weight: bold",
-          ""
+          "color: red; font-weight: bold"
         );
         let cardName = this.card.localName.replace(/hui-(.*)-card/, "$1");
 
