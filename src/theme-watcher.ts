@@ -9,7 +9,10 @@ const bases = [
   customElements.whenDefined("hc-main"),
 ];
 Promise.race(bases).then(() => {
-  window.setTimeout(() => {
+  window.setTimeout(async () => {
+    while (!hass()) {
+      await new Promise((resolve) => window.setTimeout(resolve, 500));
+    }
     hass().connection.subscribeEvents(() => {
       window.setTimeout(refresh_theme, 500);
     }, "themes_updated");

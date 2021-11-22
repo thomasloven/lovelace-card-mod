@@ -1,3 +1,4 @@
+import { property } from "lit/decorators.js";
 import { LitElement, html } from "lit";
 
 const NO_STYLE = `
@@ -8,12 +9,10 @@ ha-card {
 
 class ModCard extends LitElement {
   _config?: any;
-  card: any;
-  static get properties() {
-    return {
-      hass: {},
-    };
-  }
+
+  @property() hass: any;
+  @property() card: any;
+
   setConfig(config: any) {
     this._config = JSON.parse(JSON.stringify(config));
     let style = this._config.card_mod?.style || this._config.style;
@@ -55,13 +54,12 @@ class ModCard extends LitElement {
     }, 3000);
   }
 
-  render() {
-    return html` <ha-card modcard> ${this.card} </ha-card> `;
+  updated(changedProperties) {
+    if (changedProperties.has("hass") && this.card) this.card.hass = this.hass;
   }
 
-  set hass(hass: any) {
-    if (!this.card) return;
-    this.card.hass = hass;
+  render() {
+    return html` <ha-card modcard> ${this.card} </ha-card> `;
   }
 
   getCardSize() {
