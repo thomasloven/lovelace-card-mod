@@ -1,12 +1,20 @@
-# card-mod 3
+# card-mod v3
+
+[![hacs_badge](https://img.shields.io/badge/HACS-Default%20Repository-orange.svg)](https://github.com/custom-components/hacs)
+![release version](https://img.shields.io/github/release/thomasloven/lovelace-card-mod.svg)
+![maintenance-shield](https://img.shields.io/maintenance/yes/2022.svg)
+[![license-shield](https://img.shields.io/github/license/thomasloven/lovelace-card-mod.svg)](https://github.com/thomasloven/lovelace-card-mod/blob/master/LICENSE.txt)
 
 Allows you to apply CSS styles to various elements of the Home Assistant frontend.
 
 ## Installing
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
-
-Install using HACS or [see this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins).
+**card-mod** can be installed a few ways:
+1. Install using [HACS](https://github.com/custom-components/hacs)
+   - Navigate to **HACS** > **Frontend**
+   - Click **+ EXPLORE & DOWNLOAD REPOSITORIES**
+   - Seach for ```lovelace-card-mod```
+3. [See this guide](https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins) for a manual approach.
 
 ### Performance improvements
 
