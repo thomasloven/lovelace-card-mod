@@ -9,8 +9,9 @@ ha-card {
 
 class ModCard extends LitElement {
   _config?: any;
+  _hass?: any;
+  _hassResolve?: any;
 
-  @property() hass: any;
   @property() card: any;
 
   setConfig(config: any) {
@@ -33,9 +34,12 @@ class ModCard extends LitElement {
   }
 
   async build_card(config) {
+    if (this._hass === undefined)
+      await new Promise((resolve) => (this._hassResolve = resolve));
+    this._hassResolve = undefined;
     const helpers = await (window as any).loadCardHelpers();
     this.card = await helpers.createCardElement(config);
-    this.card.hass = this.hass;
+    this.card.hass = this._hass;
   }
 
   firstUpdated() {
@@ -54,8 +58,10 @@ class ModCard extends LitElement {
     }, 3000);
   }
 
-  updated(changedProperties) {
-    if (changedProperties.has("hass") && this.card) this.card.hass = this.hass;
+  set hass(hass) {
+    this._hass = hass;
+    if (this.card) this.card.hass = hass;
+    if (this._hassResolve) this._hassResolve();
   }
 
   render() {
@@ -73,4 +79,6 @@ class ModCard extends LitElement {
   }
 }
 
-customElements.define("mod-card", ModCard);
+if (!customElements.get("mod-card")) {
+  customElements.define("mod-card", ModCard);
+}

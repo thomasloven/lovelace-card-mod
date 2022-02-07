@@ -22,6 +22,8 @@ frontend:
 
 You'll need to adjust that path according to where you have installed `card-mod.js`. If you installed through HACS, this is probably `/hacsfiles/lovelace-card-mod/card-mod.js`.
 
+Any resource definitions automatically added by HACS can be kept as is even after adding `extra_module_url`.
+
 ## Quick start
 
 - Open your card in the GUI editor

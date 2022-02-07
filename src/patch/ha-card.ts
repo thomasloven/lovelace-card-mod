@@ -55,11 +55,6 @@ customElements.whenDefined("ha-card").then(() => {
         };
         pn.update.cm_patched = true;
       }
-
-      // Try to catch even very slowly loading cards
-      window.setTimeout(() => cardMod.refresh(), 100);
-      window.setTimeout(() => cardMod.refresh(), 500);
-      window.setTimeout(() => cardMod.refresh(), 1000);
     });
   };
 });

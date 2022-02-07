@@ -161,15 +161,17 @@ cards:
           ## Slow to load elements
           [Github issue](https://github.com/thomasloven/lovelace-card-mod/issues/11)
           Red Map Markers
+
+          Note: fix has been removed. Seems to work without it now.
       - type: map
         entities:
           - device_tracker.demo_paulus
           - device_tracker.demo_anne_therese
         card_mod:
           style:
-            ha-entity-marker:
+            ha-map$ha-entity-marker:
               $: |
-                .marker {
-                  background: red;
+                div.marker {
+                  background-color: red;
                 }
         hours_to_show: 1

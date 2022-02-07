@@ -12,6 +12,7 @@ customElements.whenDefined("hui-entities-card").then(() => {
     if (!retval || !retval.values) return retval;
     const row = retval.values[0];
     if (!row) return retval;
+    if (config?.type === "custom:mod-card") return retval;
 
     if (config?.card_mod?.class) row.classList.add(config.card_mod.class);
     if (config?.type)

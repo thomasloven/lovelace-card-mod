@@ -74,3 +74,32 @@ cards:
           entity: light.bed_light
         - type: light
           entity: light.bed_light
+
+  - type: entities
+    entities:
+      - light.bed_light
+      - light.kitchen_lights
+      - entity: light.bed_light
+        card_mod:
+          style:
+            hui-generic-entity-row:
+              $: |
+                :host {
+                  color: {% if is_state("light.kitchen_lights", "on") %}red {% else %} green {% endif %};
+                }
+                state-badge {
+                  display: none;
+                }
+      - type: custom:mod-card
+        card:
+          type: custom:hui-toggle-entity-row
+          entity: light.bed_light
+        card_mod:
+          style:
+            hui-toggle-entity-row$hui-generic-entity-row$: |
+              :host {
+                color: {% if is_state("light.kitchen_lights", "on") %}red {% else %} green {% endif %};
+              }
+              state-badge {
+                display: none;
+              }
