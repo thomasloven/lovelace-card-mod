@@ -140,6 +140,8 @@ In order to style elements inside a shadow-root, you will need to make your `sty
 
 For each dictionary entry the key will be used to select one or several elements through a modified [`querySelector()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) function. The value of the entry will then be injected into those elements.
 
+ > NOTE: The modified `querySelector()` function will replace a dollar sign (`$`) with a `#shadow-root` in the selector.
+
 The process is recursive, so the value may also be a dictionary. A key of "`.`" (a period) will select the current element.
 
 <details><summary>Example:</summary>
@@ -185,7 +187,7 @@ card_mod:
 
 > NOTE: The selector chain of the queue will look for one element at a time separated by spaces or "`$`". \
 > For each step, only the first match will be selected. \
-> But for the final selector of the chain **all** matching elements will be selected.
+> But for the final selector of the chain (i.e. in a given dictionary key) **all** matching elements will be selected.
 >
 > E.g. the following will apply styles to the `#shadow-root` of the first action button in an `alarm-panel` card:
 >
@@ -193,10 +195,10 @@ card_mod:
 > "#armActions mwc-button$": |
 > ```
 >
-> But the following will apply styles to the `#shadow-root` of **all** action buttons:
+> But the following will apply styles to the `#shadow-root` of **all** action buttons (because we end the first key on the `mvc-button` selector and start a new search within those results with the subkey of "`$`"):
 >
 > ```yaml
-> "#armActions mwc-button:"
+> "#armActions mwc-button":
 >   $: |
 > ```
 
