@@ -60,9 +60,8 @@ customElements.whenDefined("ha-svg-icon").then(() => {
       if (iconColor) this.style.color = iconColor;
     };
 
-    (async () => {
+    const bindCM = async () => {
       const cardMods = await findParentCardMod(this);
-
       for (const cm of cardMods) {
         cm.addEventListener("card-mod-update", async () => {
           await cm.updateComplete;
@@ -71,6 +70,11 @@ customElements.whenDefined("ha-svg-icon").then(() => {
       }
 
       updateIcon();
+      return cardMods;
+    };
+
+    (async () => {
+      if ((await bindCM()).size == 0) window.setTimeout(() => bindCM(), 1000);
     })();
   };
 });

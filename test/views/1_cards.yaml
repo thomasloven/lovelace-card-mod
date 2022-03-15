@@ -21,6 +21,7 @@ x-anchors:
 # Applying basic styles to cards
 #
 title: Cards
+icon: mdi:home
 cards:
   - type: vertical-stack
     cards:

@@ -196,10 +196,18 @@ export class CardMod extends LitElement {
   }
 }
 
-if (!customElements.get("card-mod")) {
-  customElements.define("card-mod", CardMod);
-  console.info(
-    `%cCARD-MOD ${pjson.version} IS INSTALLED`,
-    "color: green; font-weight: bold"
-  );
-}
+(async () => {
+  // Wait for scoped customElements registry to be set up
+  // otherwise the customElements registry card-mod is defined in
+  // may get overwritten by the polyfill if card-mod is loaded as a module
+  while (customElements.get("home-assistant") === undefined)
+    await new Promise((resolve) => window.setTimeout(resolve, 100));
+
+  if (!customElements.get("card-mod")) {
+    customElements.define("card-mod", CardMod);
+    console.info(
+      `%cCARD-MOD ${pjson.version} IS INSTALLED`,
+      "color: green; font-weight: bold"
+    );
+  }
+})();

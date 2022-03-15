@@ -9,3 +9,7 @@ test:
       border: solid 1px var(--secondary-text-color);
       background: url("https://placekitten.com/640/480");
     }
+  card-mod-root: |
+    paper-tab:nth-of-type(2) {
+      --card-mod-icon: {{ iif(is_state('light.kitchen_lights', 'on'), "mdi:star", "mdi:star-outline")}};
+    }

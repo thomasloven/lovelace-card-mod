@@ -13,6 +13,7 @@ x-anchors:
 # Styling individual items
 #
 title: Individual items
+icon: mdi:home
 cards:
   - type: vertical-stack
     cards:
