@@ -188,9 +188,6 @@ export class CardMod extends LitElement {
     return html`
       <style>
         ${this._rendered_styles}
-        ${new Date().getDate() === 1 && new Date().getMonth() === 3
-          ? html`:host{transform: rotate(${Math.random() * 2 - 1}deg);}`
-          : ""}
       </style>
     `;
   }
