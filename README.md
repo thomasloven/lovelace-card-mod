@@ -154,7 +154,7 @@ If we look at the card in the element inspector of chrome, it looks like this:
 
 ![markdown-card-dom](https://user-images.githubusercontent.com/1299821/109172852-7f97ad80-7783-11eb-928d-21a41854c847.png)
 
-The `<ha-card>` element is the base, and from there we see that we need to go through one `#shadow-root` to reach the `<h3>`. That `#shadow-rot` is inside an `<ha-markdown>` element, so our selector will be:
+The `<ha-card>` element is the base, and from there we see that we need to go through one `#shadow-root` to reach the `<h3>`. That `#shadow-root` is inside an `<ha-markdown>` element, so our selector will be:
 
 ```
 ha-markdown$

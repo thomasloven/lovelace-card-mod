@@ -136,7 +136,7 @@ cards:
                   $:
                     state-badge:
                       $:
-                        ha-icon:
+                        ha-state-icon:
                           $: |
                             ha-svg-icon {
                               color: green !important;
@@ -149,7 +149,7 @@ cards:
                   $:
                     state-badge:
                       $:
-                        ha-icon:
+                        ha-state-icon:
                           $: |
                             ha-svg-icon {
                               color: red;
