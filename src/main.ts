@@ -15,11 +15,10 @@ import "./mod-card";
 import "./theme-watcher";
 
 import { getResources } from "./helpers";
-(window as any).getResources = getResources;
 
 const resources = getResources();
 if (resources.some((r) => r.endsWith("card-mod.js"))) {
-  console.info("Card-mod is loaded as a module");
+  // console.info("Card-mod is loaded as a module");
 } else {
   fireEvent("ll-rebuild", {});
   console.info(

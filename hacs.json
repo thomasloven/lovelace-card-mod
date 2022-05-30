@@ -1,4 +1,4 @@
 {
   "name": "card-mod",
-  "homeassistant": "0.98.0"
+  "render_readme": true
 }
