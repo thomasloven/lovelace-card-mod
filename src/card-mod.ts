@@ -32,15 +32,13 @@ export class CardMod extends LitElement {
         m.addedNodes.forEach((n) => {
           if ((n as any).localName !== "card-mod") stop = false;
         });
-      if (stop) return;
-      stop = true;
       if (m.removedNodes.length)
         m.removedNodes.forEach((n) => {
           if ((n as any).localName !== "card-mod") stop = false;
         });
-      if (stop) return;
     }
 
+    if (stop) return;
     this.refresh();
   });
 
@@ -164,9 +162,10 @@ export class CardMod extends LitElement {
     } else {
       this._style_rendered((this._styles as string) || "");
     }
-
-    if (hasChildren)
+    if (hasChildren) {
+      this._observer.disconnect();
       this._observer.observe(parentElement(this), { childList: true });
+    }
   }
 
   private async _disconnect() {

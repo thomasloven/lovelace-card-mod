@@ -18,7 +18,7 @@ customElements.whenDefined("hui-entities-card").then(() => {
     if (config?.type)
       row.classList.add(`type-${config.type.replace(":", "-")}`);
 
-    const apply = () =>
+    const apply = async () =>
       applyToElement(
         row,
         "row",
@@ -26,6 +26,20 @@ customElements.whenDefined("hui-entities-card").then(() => {
         { config }
       );
 
+    (async () => {
+      const cardMod = await apply();
+      if (row.update && !row.update.cm_patched) {
+        const _update = row.update;
+        row.update = function (...args) {
+          _update.bind(this)(...args);
+          if (this.updateComplete)
+            this.updateComplete.then(() => {
+              cardMod.refresh();
+            });
+          else cardMod.refresh();
+        };
+      }
+    })();
     this.updateComplete.then(() => apply());
     if (retval.values[0])
       retval.values[0].addEventListener("ll-rebuild", apply);

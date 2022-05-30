@@ -136,7 +136,7 @@ cards:
                   $:
                     state-badge:
                       $:
-                        ha-icon:
+                        ha-state-icon:
                           $: |
                             ha-svg-icon {
                               color: green !important;
@@ -149,7 +149,7 @@ cards:
                   $:
                     state-badge:
                       $:
-                        ha-icon:
+                        ha-state-icon:
                           $: |
                             ha-svg-icon {
                               color: red;
@@ -175,3 +175,25 @@ cards:
                   background-color: red;
                 }
         hours_to_show: 1
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## Styling conditional rows
+          [Github issue](https://github.com/thomasloven/lovelace-card-mod/issues/201)
+      - type: entities
+        entities:
+          - light.bed_light
+          - type: conditional
+            conditions:
+              - entity: light.bed_light
+                state: "on"
+            row:
+              entity: light.bed_light
+            card_mod:
+              style:
+                hui-toggle-entity-row $: |
+                  :host {
+                    color: red;
+                  }
