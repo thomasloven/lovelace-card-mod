@@ -13,7 +13,6 @@ x-anchors:
 # Styling individual items
 #
 title: Individual items
-icon: mdi:home
 cards:
   - type: vertical-stack
     cards:
@@ -51,6 +50,12 @@ cards:
                   :host {
                     --card-mod-icon: mdi:star;
                   }
+            - entity: light.kitchen_lights
+              card_mod:
+                style: |
+                  :host {
+                    --card-mod-icon-color: red;
+                  }
           ```
       - type: entities
         show_header_toggle: false
@@ -78,6 +83,17 @@ cards:
               style: |
                 :host {
                   --card-mod-icon: mdi:star;
+                }
+          - entity: light.kitchen_lights
+            icon: mdi:water
+            card_mod:
+              style: |
+                :host {
+                  {% if is_state(config.entity, 'on') %}
+                  --card-mod-icon-color: red;
+                  {% else %}
+                  --card-mod-icon-color: green;
+                  {% endif %}
                 }
   - type: vertical-stack
     cards:

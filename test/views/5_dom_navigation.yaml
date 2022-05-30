@@ -116,7 +116,7 @@ cards:
                   font-size: 24px !important;
                 }
 
-        entity: alarm_control_panel.alarm
+        entity: alarm_control_panel.security
   - type: vertical-stack
     cards:
       - <<: *desc

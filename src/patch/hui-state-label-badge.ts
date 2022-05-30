@@ -6,8 +6,8 @@ customElements.whenDefined("hui-state-label-badge").then(() => {
   HuiStateLabelBadge.prototype.cardmod_patched = true;
 
   const _firstUpdated = HuiStateLabelBadge.prototype.firstUpdated;
-  HuiStateLabelBadge.prototype.firstUpdated = function (changedProperties) {
-    _firstUpdated?.bind(this)(changedProperties);
+  HuiStateLabelBadge.prototype.firstUpdated = function (...args) {
+    _firstUpdated?.bind(this)(...args);
 
     const config = this._config;
 

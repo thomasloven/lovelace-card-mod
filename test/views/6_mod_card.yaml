@@ -59,7 +59,7 @@ cards:
       - type: custom:mod-card
         card:
           type: alarm-panel
-          entity: alarm_control_panel.alarm
+          entity: alarm_control_panel.security
 
   - type: custom:mod-card
     card_mod:

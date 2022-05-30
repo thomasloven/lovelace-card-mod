@@ -7,8 +7,8 @@ customElements.whenDefined("hui-root").then(() => {
   HuiRoot.prototype.cardmod_patched = true;
 
   const _firstUpdated = HuiRoot.prototype.firstUpdated;
-  HuiRoot.prototype.firstUpdated = async function (changedProperties) {
-    _firstUpdated?.bind(this)(changedProperties);
+  HuiRoot.prototype.firstUpdated = async function (...args) {
+    _firstUpdated?.bind(this)(...args);
     applyToElement(this, "root");
   };
 

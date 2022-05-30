@@ -8,8 +8,8 @@ customElements.whenDefined("hui-picture-elements-card").then(() => {
   HuiPictureElementsCard.prototype.cardmod_patched = true;
 
   const _setConfig = HuiPictureElementsCard.prototype.setConfig;
-  HuiPictureElementsCard.prototype.setConfig = function (config: any) {
-    _setConfig?.bind(this)(config);
+  HuiPictureElementsCard.prototype.setConfig = function (...args) {
+    _setConfig?.bind(this)(...args);
 
     for (const [i, el] of this._elements.entries()) {
       const config = this._config.elements[i];

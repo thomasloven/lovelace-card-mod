@@ -6,8 +6,8 @@ customElements.whenDefined("ha-icon").then(() => {
   HaIcon.prototype.cardmod_patched = true;
 
   const _firstUpdated = HaIcon.prototype.firstUpdated;
-  HaIcon.prototype.firstUpdated = function () {
-    _firstUpdated?.bind(this)();
+  HaIcon.prototype.firstUpdated = function (...args) {
+    _firstUpdated?.bind(this)(...args);
 
     const updateIcon = () => {
       const icon = window
@@ -41,8 +41,10 @@ customElements.whenDefined("ha-svg-icon").then(() => {
   HaSvgIcon.prototype.cardmod_patched = true;
 
   const _firstUpdated = HaSvgIcon.prototype.firstUpdated;
-  HaSvgIcon.prototype.firstUpdated = function () {
-    _firstUpdated?.bind(this)();
+  HaSvgIcon.prototype.firstUpdated = function (...args) {
+    _firstUpdated?.bind(this)(...args);
+
+    if (this.parentNode?.host?.localName === "ha-icon") return;
 
     const updateIcon = async () => {
       const icon = window

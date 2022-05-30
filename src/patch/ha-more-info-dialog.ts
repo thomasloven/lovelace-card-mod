@@ -7,8 +7,8 @@ customElements.whenDefined("ha-more-info-dialog").then(() => {
   HaMoreInfoDialog.prototype.cardmod_patched = true;
 
   const _showDialog = HaMoreInfoDialog.prototype.showDialog;
-  HaMoreInfoDialog.prototype.showDialog = function (params) {
-    _showDialog?.bind(this)(params);
+  HaMoreInfoDialog.prototype.showDialog = function (params, ...rest) {
+    _showDialog?.bind(this)(params, ...rest);
 
     this.requestUpdate();
     this.updateComplete.then(async () => {

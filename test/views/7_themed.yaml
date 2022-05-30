@@ -15,7 +15,7 @@ cards:
       - air_quality.demo_air_quality_office
     title: Air Quality
   - type: alarm-panel
-    entity: alarm_control_panel.alarm
+    entity: alarm_control_panel.security
   - type: entities
     entities:
       - entity: calendar.calendar_1

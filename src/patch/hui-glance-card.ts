@@ -22,10 +22,8 @@ customElements.whenDefined("hui-glance-card").then(() => {
   GlanceCard.prototype.cardmod_patched = true;
 
   const _updated = GlanceCard.prototype.updated;
-  GlanceCard.prototype.updated = function (
-    changedProperties: Map<string, any>
-  ) {
-    _updated?.bind(this)(changedProperties);
+  GlanceCard.prototype.updated = function (...args) {
+    _updated?.bind(this)(...args);
     for (const e of this.shadowRoot.querySelectorAll("ha-card div.entity")) {
       if (!e.cardmod_patched) {
         e.cardmod_patched = true;

@@ -51,7 +51,7 @@ export async function applyToElement(
       : shadow
       ? el.shadowRoot || el
       : el;
-    target.appendChild(cardMod as Node);
+    if (!target.contains(cardMod)) target.appendChild(cardMod as Node);
 
     cardMod.variables = variables;
     cardMod.styles = styles;

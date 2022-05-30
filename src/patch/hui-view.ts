@@ -6,8 +6,8 @@ customElements.whenDefined("hui-view").then(() => {
   HuiView.prototype.cardmod_patched = true;
 
   const _firstUpdated = HuiView.prototype.firstUpdated;
-  HuiView.prototype.firstUpdated = function (changedProperties) {
-    _firstUpdated?.bind(this)(changedProperties);
+  HuiView.prototype.firstUpdated = function (...args) {
+    _firstUpdated?.bind(this)(...args);
     applyToElement(this, "view");
   };
 });

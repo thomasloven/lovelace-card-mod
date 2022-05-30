@@ -6,8 +6,8 @@ customElements.whenDefined("hui-entities-card").then(() => {
   EntitiesCard.prototype.cardmod_patched = true;
 
   const _renderEntity = EntitiesCard.prototype.renderEntity;
-  EntitiesCard.prototype.renderEntity = function (config) {
-    const retval = _renderEntity.bind(this)(config);
+  EntitiesCard.prototype.renderEntity = function (config, ...rest) {
+    const retval = _renderEntity.bind(this)(config, ...rest);
 
     if (!retval || !retval.values) return retval;
     const row = retval.values[0];

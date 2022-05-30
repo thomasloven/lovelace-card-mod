@@ -7,8 +7,8 @@ customElements.whenDefined("ha-sidebar").then(() => {
   HaSidebar.prototype.cardmod_patched = true;
 
   const _firstUpdated = HaSidebar.prototype.firstUpdated;
-  HaSidebar.prototype.firstUpdated = async function (changedProperties) {
-    _firstUpdated?.bind(this)(changedProperties);
+  HaSidebar.prototype.firstUpdated = async function (...args) {
+    _firstUpdated?.bind(this)(...args);
 
     applyToElement(this, "sidebar");
   };
