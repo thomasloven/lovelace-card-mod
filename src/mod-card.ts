@@ -5,6 +5,7 @@ const NO_STYLE = `
 ha-card {
   background: none;
   box-shadow: none;
+  border: none;
 }`;
 
 class ModCard extends LitElement {
