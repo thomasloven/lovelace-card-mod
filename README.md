@@ -110,7 +110,7 @@ entities:
 
 With card-mod installed, the `<ha-icon>` element - used e.g. by `entities`, `glance` and many more cards - will set it's icon to the value found in the CSS variable `--card-mod-icon` (if present).
 
-It will also set the icon color to the value found in the CSS variable `--card-mod-icon-color` if present. This ignores entity state, but will still dim.
+It will also set the icon color to the value found in the CSS variable `--card-mod-icon-color` if present. This ignores entity state, but will still dim unless you also set `---card-mod-icon-dim` to `none`.
 
 ```yaml
 - entity: light.bed_light

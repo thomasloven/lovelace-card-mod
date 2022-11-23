@@ -59,41 +59,55 @@ cards:
           ```
       - type: entities
         show_header_toggle: false
+        title: Style rows separately
         entities:
           - entity: light.bed_light
+            name: Red color
             card_mod:
               style: |
                 :host {
                   color: red;
                 }
-          - entity: light.ceiling_lights
+          - entity: light.bed_light
+            name: Green color
             card_mod:
               style: |
                 :host {
                   color: green;
                 }
-          - entity: light.kitchen_lights
+          - entity: light.bed_light
+            name: Blue color
             card_mod:
               style: |
                 :host {
                   color: blue;
                 }
-          - entity: light.kitchen_lights
+          - entity: light.bed_light
+            name: Star icon
             card_mod:
               style: |
                 :host {
                   --card-mod-icon: mdi:star;
                 }
-          - entity: light.kitchen_lights
-            icon: mdi:water
+          - entity: light.bed_light
+            name: Color and icon change by state
             card_mod:
               style: |
                 :host {
                   {% if is_state(config.entity, 'on') %}
                   --card-mod-icon-color: red;
+                  --card-mod-icon: mdi:star-outline;
                   {% else %}
                   --card-mod-icon-color: green;
+                  --card-mod-icon: mdi:star
                   {% endif %}
+                }
+          - entity: light.bed_light
+            name: Ignore brightness
+            card_mod:
+              style: |
+                :host {
+                  --card-mod-icon-dim: none;
                 }
   - type: vertical-stack
     cards:
