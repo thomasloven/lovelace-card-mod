@@ -74,6 +74,33 @@ cards:
           entity: light.bed_light
         - type: light
           entity: light.bed_light
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## No styling
+          ```
+          type: custom:mod-card
+          card:
+            type: horizontal-stack
+            cards:
+              - type: markdown
+                content: "# 1"
+              - type: markdown
+                content: "# 2"
+              - type: markdown
+                content: "# 3"
+          ```
+      - type: custom:mod-card
+        card:
+          type: horizontal-stack
+          cards:
+            - type: markdown
+              content: "# 1"
+            - type: markdown
+              content: "# 2"
+            - type: markdown
+              content: "# 3"
 
   - type: entities
     entities:
