@@ -142,7 +142,7 @@ In order to style elements inside a shadow-root, you will need to make your `sty
 
 For each dictionary entry the key will be used to select one or several elements through a modified [`querySelector()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) function. The value of the entry will then be injected into those elements.
 
- > NOTE: The modified `querySelector()` function will replace a dollar sign (`$`) with a `#shadow-root` in the selector.
+> NOTE: The modified `querySelector()` function will replace a dollar sign (`$`) with a `#shadow-root` in the selector.
 
 The process is recursive, so the value may also be a dictionary. A key of "`.`" (a period) will select the current element.
 
@@ -203,6 +203,11 @@ card_mod:
 > "#armActions mwc-button":
 >   $: |
 > ```
+
+> NOTE 2: Following on the note above; due to the high level of load order optimization used in Home Assistant, it is not guaranteed that the `#shadow-root` or the `mwc-button` actually _exists_ at the point in time when card-mod is looking for it.
+> If you use the second method above, card-mod will be able to retry looking for `#shadow-root` at a later point, which may lead to more stable operation.
+>
+> In short; if things seem to be working intermittently - try splitting up the chain.
 
 <details><summary>Debugging tips</summary>
 
