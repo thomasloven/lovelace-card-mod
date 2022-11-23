@@ -1,7 +1,7 @@
 {
   "name": "card-mod",
   "private": true,
-  "version": "3.1.5",
+  "version": "3.1.6b1",
   "description": "",
   "scripts": {
     "build": "rollup -c",
@@ -12,17 +12,17 @@
   "author": "Thomas Lovén",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.18.2",
-    "@rollup/plugin-babel": "^5.3.1",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "rollup": "^2.75.3",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "typescript": "^4.7.2"
+    "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
+    "@babel/core": "^7.20.2",
+    "@rollup/plugin-babel": "^6.0.2",
+    "@rollup/plugin-json": "^5.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "card-tools": "github:thomasloven/lovelace-card-tools",
-    "lit": "^2.2.5"
+    "lit": "^2.4.1",
+    "rollup": "^3.4.0",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "typescript": "^4.9.3"
   }
 }
