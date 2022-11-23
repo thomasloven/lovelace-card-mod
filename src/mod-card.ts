@@ -6,6 +6,7 @@ ha-card {
   background: none;
   box-shadow: none;
   border: none;
+  transition: none;
 }`;
 
 class ModCard extends LitElement {
