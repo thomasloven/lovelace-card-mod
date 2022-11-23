@@ -9,13 +9,6 @@ customElements.whenDefined("ha-card").then(() => {
   HaCard.prototype.firstUpdated = function (...args) {
     _firstUpdated?.bind(this)(...args);
 
-    // Move the header inside the slot instead of in the shadowDOM
-    // This makes it easier to style it consistently
-    const header = this.shadowRoot.querySelector(".card-header");
-    if (header) {
-      this.insertBefore(header, this.children[0]);
-    }
-
     const config = findConfig(this);
 
     if (config?.card_mod?.class) this.classList.add(config.card_mod.class);
