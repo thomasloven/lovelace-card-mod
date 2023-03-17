@@ -38,7 +38,12 @@ customElements.whenDefined("hui-glance-card").then(() => {
       }
 
       const config = e.config || e.entityConf;
-      if (config?.card_mod?.class) e.classList.add(config.card_mod.class);
+      if (config?.card_mod?.class)
+        e.classList.add(
+          ...(Array.isArray(config.card_mod.class)
+            ? config.card_mod.class
+            : config.card_mod.class.split(" "))
+        );
 
       applyToElement(
         e,

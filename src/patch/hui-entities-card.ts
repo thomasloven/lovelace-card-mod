@@ -14,7 +14,12 @@ customElements.whenDefined("hui-entities-card").then(() => {
     if (!row) return retval;
     if (config?.type === "custom:mod-card") return retval;
 
-    if (config?.card_mod?.class) row.classList.add(config.card_mod.class);
+    if (config?.card_mod?.class)
+      row.classList.add(
+        ...(Array.isArray(config.card_mod.class)
+          ? config.card_mod.class
+          : config.card_mod.class.split(" "))
+      );
     if (config?.type)
       row.classList.add(`type-${config.type.replace(":", "-")}`);
 
