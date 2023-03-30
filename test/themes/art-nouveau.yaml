@@ -61,17 +61,17 @@ art-nouveau:
     }
 
   card-mod-root: |
-    ha-app-layout {
+    ha-app-layout, #view {
       background: var(--background-image);
       background-size: 300px;
       }
-    app-header {
+    app-header, .header {
       background: var(--theme-card-background) !important;
       border-bottom: var(--theme-thick-border);
       padding-bottom: 3px;
       transform: none !important;
     }
-    app-toolbar {
+    app-toolbar, .toolbar {
       background: none !important;
       border-bottom: var(--theme-thin-border)
     }
