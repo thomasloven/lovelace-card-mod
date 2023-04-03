@@ -5,12 +5,11 @@ airy:
   ha-card-box-shadow: none
   background-image: url("https://thumbs.dreamstime.com/b/green-leaf-seamless-texture-detail-close-image-tree-macro-pattern-35841066.jpg")
 
-
   disabled-text-color: gray
 
-  theme-box-shadow:  0px  2px  1px -1px rgba(0, 0, 0, 0.2),
-               0px  1px  1px  0px rgba(0, 0, 0, 0.14),
-               0px  1px  3px  0px rgba(0, 0, 0, 0.12)
+  theme-box-shadow: 0px  2px  1px -1px rgba(0, 0, 0, 0.2),
+    0px  1px  1px  0px rgba(0, 0, 0, 0.14),
+    0px  1px  3px  0px rgba(0, 0, 0, 0.12)
   theme-border-radius: 10px
 
   background-1: rgba(250, 250, 250, 0.5)
@@ -41,16 +40,16 @@ airy:
       }
 
   card-mod-root: |
-    ha-app-layout {
+    ha-app-layout, div#view {
       background: var(--background-image) !important;
       background-size: cover;
     }
-    app-header {
+    app-header, div.header {
       background: var(--background-1) !important;
       backdrop-filter: var(--bg-filter);
       box-shadow:  var(--theme-box-shadow);
     }
-    app-toolbar {
+    app-toolbar, div.toolbar {
       background: none !important;
     }
 

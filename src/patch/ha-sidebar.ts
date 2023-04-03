@@ -15,7 +15,9 @@ customElements.whenDefined("ha-sidebar").then(() => {
 
   selectTree(
     document,
-    "home-assistant$home-assistant-main$mwc-drawer ha-sidebar",
+    "home-assistant$home-assistant-main$ ha-sidebar",
     false
-  ).then((root) => root?.firstUpdated());
+  ).then((root) => {
+    root?.firstUpdated();
+  });
 });

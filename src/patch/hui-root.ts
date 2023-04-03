@@ -14,7 +14,7 @@ customElements.whenDefined("hui-root").then(() => {
 
   selectTree(
     document,
-    "home-assistant$home-assistant-main$mwc-drawer partial-panel-resolver ha-panel-lovelace$hui-root",
+    "home-assistant$home-assistant-main$partial-panel-resolver ha-panel-lovelace$hui-root",
     false
   ).then((root: any) => {
     root?.firstUpdated();
