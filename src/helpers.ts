@@ -1,5 +1,5 @@
-import { hass } from "card-tools/src/hass";
-import { yaml2json } from "card-tools/src/yaml";
+import { hass } from "./helpers/hass";
+import { yaml2json } from "./helpers/yaml2json";
 import { CardMod } from "./card-mod";
 
 interface ModdedElement extends HTMLElement {
@@ -67,8 +67,9 @@ export async function get_theme(root: CardMod): Promise<Styles> {
     .getComputedStyle(el)
     .getPropertyValue("--card-mod-theme");
 
-  if (!hass()) return {};
-  const themes = hass()?.themes.themes ?? {};
+  const hs = await hass();
+  if (!hs) return {};
+  const themes = hs?.themes.themes ?? {};
   if (!themes[theme]) return {};
 
   if (themes[theme][`card-mod-${root.type}-yaml`]) {

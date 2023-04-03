@@ -1,4 +1,4 @@
-import { selectTree } from "card-tools/src/helpers";
+import { selectTree } from "../helpers/selecttree";
 import { applyToElement } from "../helpers";
 
 customElements.whenDefined("ha-more-info-dialog").then(() => {

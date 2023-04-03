@@ -1,4 +1,4 @@
-import { hass } from "card-tools/src/hass";
+import { hass } from "./helpers/hass";
 
 function refresh_theme() {
   document.dispatchEvent(new Event("cm_update"));
@@ -10,10 +10,11 @@ const bases = [
 ];
 Promise.race(bases).then(() => {
   window.setTimeout(async () => {
-    while (!hass()) {
+    const hs = await hass();
+    while (!hs) {
       await new Promise((resolve) => window.setTimeout(resolve, 500));
     }
-    hass().connection.subscribeEvents(() => {
+    hs.connection.subscribeEvents(() => {
       window.setTimeout(refresh_theme, 500);
     }, "themes_updated");
     document

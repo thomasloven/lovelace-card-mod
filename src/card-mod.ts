@@ -1,9 +1,11 @@
 import { LitElement, html } from "lit";
 import { property } from "lit/decorators.js";
-import { bind_template, unbind_template } from "./templates";
-import { hasTemplate } from "card-tools/src/templates";
+import {
+  hasTemplate,
+  bind_template,
+  unbind_template,
+} from "./helpers/templates";
 import pjson from "../package.json";
-import { selectTree } from "card-tools/src/helpers";
 import {
   applyToElement,
   compare_deep,
@@ -12,6 +14,7 @@ import {
   parentElement,
   Styles,
 } from "./helpers";
+import { selectTree } from "./helpers/selecttree";
 
 export class CardMod extends LitElement {
   type: string;
