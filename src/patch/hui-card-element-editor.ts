@@ -73,7 +73,7 @@ customElements.whenDefined("hui-dialog-edit-card").then(() => {
       button.appendChild(this._cardModIcon);
       if (
         this._cardConfig?.card_mod ||
-        (Array.isArray(this._cardConfig.entities) ? this._cardConfig?.entities?.some((e: any) => e.card_mod) : false)
+        (Array.isArray(this._cardConfig.entities) && this._cardConfig?.entities?.some((e: any) => e.card_mod))
       ) {
         this._cardModIcon.style.visibility = "visible";
       } else {
