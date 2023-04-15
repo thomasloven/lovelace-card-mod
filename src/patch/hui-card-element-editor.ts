@@ -68,9 +68,7 @@ customElements.whenDefined("hui-dialog-edit-card").then(() => {
         this._cardModIcon.icon = "mdi:brush";
       }
 
-      const button = this.shadowRoot.querySelector(
-        "mwc-button[slot=secondaryAction]"
-      );
+      const button = this.shadowRoot.querySelector("mwc-button[slot=secondaryAction]");
       if (!button) return;
       button.appendChild(this._cardModIcon);
       if (
