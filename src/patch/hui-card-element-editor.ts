@@ -20,7 +20,7 @@ customElements.whenDefined("hui-card-element-editor").then(() => {
           card: newConfig.card_mod,
           entities: [],
         };
-        if (newConfig.entities) {
+        if (Array.isArray(newConfig.entities)) {
           for (const [i, e] of newConfig.entities?.entries()) {
             this._cardModData.entities[i] = e.card_mod;
             delete e.card_mod;
@@ -29,7 +29,7 @@ customElements.whenDefined("hui-card-element-editor").then(() => {
         delete newConfig.card_mod;
 
         _setConfig.bind(this)(newConfig, ...rest);
-        if (newConfig.entities) {
+        if (Array.isArray(newConfig.entities)) {
           for (const [i, e] of newConfig.entities?.entries()) {
             if (this._cardModData.entities[i])
               e.card_mod = this._cardModData.entities[i];
@@ -75,7 +75,7 @@ customElements.whenDefined("hui-dialog-edit-card").then(() => {
       button.appendChild(this._cardModIcon);
       if (
         this._cardConfig?.card_mod ||
-        this._cardConfig?.entities?.some((e: any) => e.card_mod)
+        (this._cardConfig?.entities?.some((e: any) => e.card_mod) && Array.isArray(this._cardConfig.entities))
       ) {
         this._cardModIcon.style.visibility = "visible";
       } else {
