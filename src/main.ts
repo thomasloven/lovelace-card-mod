@@ -16,7 +16,7 @@ import "./theme-watcher";
 import { getResources } from "./helpers";
 
 const resources = getResources();
-if (resources.some((r) => r.endsWith("card-mod.js"))) {
+if (resources.some((r) => r.includes("/card-mod.js"))) {
   // console.info("Card-mod is loaded as a module");
 } else {
   console.info(
