@@ -1,2 +1,4 @@
 node_modules/
 custom_components/
+.vscode/settings.json
+package-lock.json
