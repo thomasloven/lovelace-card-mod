@@ -23,6 +23,7 @@ const _load_yaml2json = async () => {
 
 export const yaml2json = async (yaml) => {
   await _load_yaml2json();
-  const el: any = document.createElement("developer-tools-event");
-  return el._computeParsedEventData(yaml);
+  const el: any = document.createElement("ha-yaml-editor");
+  el._onChange(new CustomEvent("yaml", { detail: { value: yaml } }));
+  return el.value;
 };
