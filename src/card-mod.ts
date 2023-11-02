@@ -60,6 +60,7 @@ export class CardMod extends LitElement {
     super.connectedCallback();
     this._connect();
     this.setAttribute("slot", "none");
+    this.style.display = "none";
   }
 
   disconnectedCallback() {
