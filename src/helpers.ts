@@ -66,9 +66,13 @@ export async function get_theme(root: CardMod): Promise<Styles> {
   if (!hs) return {};
 
   const el = root.parentElement ? root.parentElement : root;
-  const theme = window
+  let theme = window
     .getComputedStyle(el)
     .getPropertyValue("--card-mod-theme");
+
+  // persist theme information as it sometimes simply gets lost in translation :-/
+  if (theme) window['--card-mod-theme'] = theme;
+  if (!theme) theme = window['--card-mod-theme'];
 
   const themes = hs?.themes.themes ?? {};
   if (!themes[theme]) return {};
@@ -169,9 +173,9 @@ export function getResources() {
   const retval = [];
   for (const script of scriptElements) {
     if (script?.innerText?.trim()?.startsWith("import(")) {
-      const imports = script.innerText.split("\n")?.map((e) => e.trim());
+      const imports = script.innerText.split(/[\n;]/)?.map((e) => e.trim()).filter(e => e);
       for (const imp of imports) {
-        retval.push(imp.replace(/^import\(\"/, "").replace(/\"\);/, ""));
+        retval.push(imp.replace(/^import\(\"/, "").replace(/\"\)/, ""));
       }
     }
   }
