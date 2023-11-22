@@ -12,30 +12,34 @@ customElements.whenDefined("hui-card-element-editor").then(() => {
     // Catch and patch the configElement
     if (retval) {
       const _setConfig = retval.setConfig;
-      retval.setConfig = function (config: any, ...rest) {
-        // Strip card_mod from the data that's sent to the config element
-        // and put it back after the config has been checked
-        const newConfig = JSON.parse(JSON.stringify(config));
-        this._cardModData = {
-          card: newConfig.card_mod,
-          entities: [],
-        };
-        if (newConfig.entities) {
-          for (const [i, e] of newConfig.entities?.entries()) {
-            this._cardModData.entities[i] = e.card_mod;
-            delete e.card_mod;
-          }
-        }
-        delete newConfig.card_mod;
+      try {
+          retval.setConfig = function (config: any, ...rest) {
+            // Strip card_mod from the data that's sent to the config element
+            // and put it back after the config has been checked
+            const newConfig = JSON.parse(JSON.stringify(config));
+            this._cardModData = {
+              card: newConfig.card_mod,
+              entities: [],
+            };
+            if (newConfig.entities) {
+              for (const [i, e] of newConfig.entities?.entries()) {
+                this._cardModData.entities[i] = e.card_mod;
+                delete e.card_mod;
+              }
+            }
+            delete newConfig.card_mod;
 
-        _setConfig.bind(this)(newConfig, ...rest);
-        if (newConfig.entities) {
-          for (const [i, e] of newConfig.entities?.entries()) {
-            if (this._cardModData.entities[i])
-              e.card_mod = this._cardModData.entities[i];
-          }
-        }
-      };
+            _setConfig.bind(this)(newConfig, ...rest);
+            if (newConfig.entities) {
+              for (const [i, e] of newConfig.entities?.entries()) {
+                if (this._cardModData.entities[i])
+                  e.card_mod = this._cardModData.entities[i];
+              }
+            }
+          };
+      } catch (error) {
+        console.warn(error);
+      }
     }
     return retval;
   };

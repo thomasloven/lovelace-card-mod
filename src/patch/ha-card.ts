@@ -29,12 +29,16 @@ customElements.whenDefined("ha-card").then(() => {
       if (pn.setConfig && !pn.setConfig.cm_patched) {
         // Patch the setConfig function to get live updates in GUI editor
         const _setConfig = pn.setConfig;
-        pn.setConfig = function (config: any, ...rest) {
-          _setConfig.bind(this)(config, ...rest);
-          cardMod.variables = { config };
-          cardMod.styles = config.card_mod?.style || {};
-        };
-        pn.setConfig.cm_patched = true;
+        try {
+            pn.setConfig = function (config: any, ...rest) {
+            _setConfig.bind(this)(config, ...rest);
+            cardMod.variables = { config };
+            cardMod.styles = config.card_mod?.style || {};
+            };
+            pn.setConfig.cm_patched = true;
+        } catch (error) {
+          console.warn(error);
+        }
       }
 
       if (pn.update && !pn.update.cm_patched) {
