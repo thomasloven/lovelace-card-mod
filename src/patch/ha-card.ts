@@ -11,7 +11,12 @@ customElements.whenDefined("ha-card").then(() => {
 
     const config = findConfig(this);
 
-    if (config?.card_mod?.class) this.classList.add(config.card_mod.class);
+    if (config?.card_mod?.class)
+      this.classList.add(
+        ...(Array.isArray(config.card_mod.class)
+          ? config.card_mod.class
+          : config.card_mod.class.split(" "))
+      );
     if (config?.type)
       this.classList.add(`type-${config.type.replace(":", "-")}`);
 

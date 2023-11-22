@@ -11,7 +11,12 @@ customElements.whenDefined("hui-state-label-badge").then(() => {
 
     const config = this._config;
 
-    if (config?.card_mod?.class) this.classList.add(config.card_mod.class);
+    if (config?.card_mod?.class)
+      this.classList.add(
+        ...(Array.isArray(config.card_mod.class)
+          ? config.card_mod.class
+          : config.card_mod.class.split(" "))
+      );
 
     applyToElement(
       this,
