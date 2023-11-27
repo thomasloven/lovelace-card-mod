@@ -143,7 +143,7 @@ cards:
                             }
         card_mod:
           style:
-            hui-text-entity-row:
+            hui-simple-entity-row:
               $:
                 hui-generic-entity-row:
                   $:

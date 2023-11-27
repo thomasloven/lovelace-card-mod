@@ -24,12 +24,16 @@ airy:
   ha-label-badge-title-font-size: 1em
 
   card-mod-view-yaml: |
+    .: |
+      hui-view {
+        background: none !important;
+      }
     "*:first-child$": |
       :host {
         background: none !important;
         display: flex !important;
       }
-      #badges {
+      .badges {
         padding: 8px;
         display: flex !important;
         justify-content: start;
@@ -59,6 +63,7 @@ airy:
       border-radius: var(--theme-border-radius);
       background: var(--background-1);
       box-shadow:  var(--theme-box-shadow);
+      border: none;
     }
     ha-card.type-entities,
     ha-card.type-glance {
@@ -84,6 +89,19 @@ airy:
     }
     .card-header hui-entities-toggle {
       display: none;
+    }
+
+    .type-entities #states > div {
+      --theme-border-radius: 0px 0px 0px 0px;
+    }
+    .type-entities #states > :first-child {
+      --theme-border-radius: 10px 10px 0px 0px;
+    }
+    .type-entities #states > :last-child {
+      --theme-border-radius: 0px 0px 10px 10px;
+    }
+    .type-entities #states > :first-child:last-child {
+      --theme-border-radius: 10px;
     }
 
   card-mod-glance: |

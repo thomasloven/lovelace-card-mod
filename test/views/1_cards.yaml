@@ -71,7 +71,7 @@ cards:
       - <<: *desc
         content: |
           ## 3: Using CSS variables
-          Red/Green switches, rounded corners
+          Red/Green switches, square corners
           ```
           card_mod:
             style: |
@@ -80,7 +80,7 @@ cards:
                 --switch-checked-color: green;
                 --switch-checked-button-color: green;
                 --switch-checked-track-color: green;
-                --ha-card-border-radius: 20px;
+                --ha-card-border-radius: 0px;
               }
           ```
       - <<: *card
@@ -92,7 +92,7 @@ cards:
               --switch-checked-color: green;
               --switch-checked-button-color: green;
               --switch-checked-track-color: green;
-              --ha-card-border-radius: 20px;
+              --ha-card-border-radius: 0px;
             }
 
   - type: vertical-stack
@@ -139,7 +139,7 @@ cards:
             style: |
               ha-card {
                 background: none;
-                box-shadow: none;
+                border: none;
               }
           ```
       - <<: *card
@@ -148,7 +148,7 @@ cards:
           style: |
             ha-card {
               background: none;
-              box-shadow: none;
+              border: none;
             }
 
   - type: vertical-stack
@@ -175,3 +175,20 @@ cards:
             ha-card {
               background: teal;
             }
+
+  - type: entities
+    entities:
+      - type: custom:hui-entities-card
+        entities:
+          - light.bed_light
+        card_mod:
+          style: |
+            ha-card {
+              border-color: purple;
+            }
+      - light.bed_light
+    card_mod:
+      style: |
+        ha-card {
+          border-color: green;
+        }

@@ -1,0 +1,156 @@
+title: Icons
+badges:
+  - entity: sun.sun
+    name: Default
+  - entity: sun.sun
+    name: Star
+    card_mod:
+      style: |
+        :host {
+          --card-mod-icon: mdi:star;
+        }
+  - entity: sun.sun
+    name: Purple
+    card_mod:
+      style: |
+        :host {
+          --card-mod-icon-color: purple;
+        }
+  - entity: sun.sun
+    name: Changing
+    card_mod:
+      style: |
+        :host {
+          {% if is_state('light.bed_light', 'on') %}
+          --card-mod-icon-color: red;
+          --card-mod-icon: mdi:star-outline;
+          {% else %}
+          --card-mod-icon-color: green;
+          --card-mod-icon: mdi:star
+          {% endif %}
+        }
+
+cards:
+  - type: entities
+    entities:
+      - entity: sun.sun
+        name: Default
+      - entity: sun.sun
+        name: Star
+        card_mod:
+          style: |
+            :host {
+              --card-mod-icon: mdi:star;
+            }
+      - entity: sun.sun
+        name: Purple
+        card_mod:
+          style: |
+            :host {
+              --card-mod-icon-color: purple;
+            }
+      - entity: sun.sun
+        name: Changing
+        card_mod:
+          style: |
+            :host {
+              {% if is_state('light.bed_light', 'on') %}
+              --card-mod-icon-color: red;
+              --card-mod-icon: mdi:star-outline;
+              {% else %}
+              --card-mod-icon-color: green;
+              --card-mod-icon: mdi:star
+              {% endif %}
+            }
+
+  - type: glance
+    entities:
+      - entity: sun.sun
+        name: Default
+      - entity: sun.sun
+        name: Star
+        card_mod:
+          style: |
+            :host {
+              --card-mod-icon: mdi:star;
+            }
+      - entity: sun.sun
+        name: Purple
+        card_mod:
+          style: |
+            :host {
+              --card-mod-icon-color: purple;
+            }
+      - entity: sun.sun
+        name: Changing
+        card_mod:
+          style: |
+            :host {
+              {% if is_state('light.bed_light', 'on') %}
+              --card-mod-icon-color: red;
+              --card-mod-icon: mdi:star-outline;
+              {% else %}
+              --card-mod-icon-color: green;
+              --card-mod-icon: mdi:star
+              {% endif %}
+            }
+
+  - type: picture-elements
+    image: https://placekitten.com/g/600/400
+    elements:
+      - entity: sun.sun
+        type: state-icon
+        name: Default
+        style:
+          left: 20%
+          top: 30%
+      - entity: sun.sun
+        type: state-icon
+        name: Star
+        style:
+          left: 40%
+          top: 30%
+        card_mod:
+          style: |
+            :host {
+              --card-mod-icon: mdi:star;
+            }
+      - entity: sun.sun
+        type: state-icon
+        name: Purple
+        style:
+          left: 60%
+          top: 30%
+        card_mod:
+          style: |
+            :host {
+              --card-mod-icon-color: purple;
+            }
+      - entity: sun.sun
+        type: state-icon
+        name: Changing
+        style:
+          left: 80%
+          top: 30%
+        card_mod:
+          style: |
+            :host {
+              {% if is_state('light.bed_light', 'on') %}
+              --card-mod-icon-color: red;
+              --card-mod-icon: mdi:star-outline;
+              {% else %}
+              --card-mod-icon-color: green;
+              --card-mod-icon: mdi:star
+              {% endif %}
+            }
+
+  - type: entities
+    entities:
+      - light.bed_light
+      - entity: light.bed_light
+        name: No dim
+        card_mod:
+          style: |
+            :host {
+              --card-mod-icon-dim: none;
+            }
