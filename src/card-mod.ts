@@ -16,14 +16,20 @@ import {
 } from "./helpers";
 import { selectTree } from "./helpers/selecttree";
 
+declare global {
+  interface HTMLElementTagNameMap {
+    "card-mod": CardMod;
+  }
+}
+
 export class CardMod extends LitElement {
   type: string;
   variables: any;
   @property() _rendered_styles: string = "";
+  styleChildren = {};
 
   _styles: Styles;
   _renderer: (_: string) => void;
-  _styleChildren: Set<CardMod> = new Set();
   _input_styles: Styles;
   _fixed_styles: Styles;
 
@@ -129,7 +135,7 @@ export class CardMod extends LitElement {
   private async _connect() {
     const styles = this._fixed_styles ?? {};
 
-    const styleChildren: Set<CardMod> = new Set();
+    const styleChildren = {};
     let thisStyle: any = "";
     let hasChildren = false;
     const parent = this.parentElement || this.parentNode;
@@ -144,18 +150,18 @@ export class CardMod extends LitElement {
         if (!elements) continue;
         for (const el of elements) {
           const ch = await this._styleChildEl(el, value);
-          if (ch) styleChildren.add(ch);
+          styleChildren[key] = ch;
         }
       }
     }
 
     // Prune old child elements
-    for (const oldCh of this._styleChildren) {
-      if (!styleChildren.has(oldCh)) {
-        if (oldCh) oldCh.styles = "";
+    for (const key in this.styleChildren) {
+      if (!styleChildren[key]) {
+        this.styleChildren[key].styles = "";
       }
     }
-    this._styleChildren = styleChildren;
+    this.styleChildren = styleChildren;
 
     if (this._styles === thisStyle) return;
     this._styles = thisStyle;
