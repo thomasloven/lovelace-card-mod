@@ -173,9 +173,9 @@ export function getResources() {
   const retval = [];
   for (const script of scriptElements) {
     if (script?.innerText?.trim()?.startsWith("import(")) {
-      const imports = script.innerText.split(/[\n;]/)?.map((e) => e.trim()).filter(e => e);
+      const imports = script.innerText.split("\n")?.map((e) => e.trim());
       for (const imp of imports) {
-        retval.push(imp.replace(/^import\(\"/, "").replace(/\"\)/, ""));
+        retval.push(imp.replace(/^import\(\"/, "").replace(/\"\);/, ""));
       }
     }
   }
