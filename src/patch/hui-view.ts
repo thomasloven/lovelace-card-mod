@@ -1,13 +1,17 @@
-import { applyToElement } from "../helpers";
+import { ModdedElement, apply_card_mod } from "../helpers/card_mod";
+import { patch_element } from "../helpers/patch_function";
 
-customElements.whenDefined("hui-view").then(() => {
-  const HuiView = customElements.get("hui-view");
-  if (HuiView.prototype.cardmod_patched) return;
-  HuiView.prototype.cardmod_patched = true;
+/*
+Patch hui-view for theme styling
 
-  const _firstUpdated = HuiView.prototype.updated;
-  HuiView.prototype.updated = function (...args) {
-    _firstUpdated?.bind(this)(...args);
-    applyToElement(this, "view", "", {}, null, false);
-  };
-});
+There is no style passed to apply_card_mod here, everything comes only from themes.
+
+*/
+
+@patch_element("hui-view")
+class HuiViewPatch extends ModdedElement {
+  updated(_orig, ...args) {
+    _orig?.(...args);
+    apply_card_mod(this, "view", undefined, {}, false);
+  }
+}

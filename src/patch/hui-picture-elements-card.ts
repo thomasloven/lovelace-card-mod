@@ -1,27 +1,22 @@
-import { applyToElement } from "../helpers";
+import { ModdedElement, apply_card_mod } from "../helpers/card_mod";
+import { patch_element, patch_object } from "../helpers/patch_function";
+import { await_element } from "../helpers/selecttree";
 
-customElements.whenDefined("hui-picture-elements-card").then(() => {
-  const HuiPictureElementsCard = customElements.get(
-    "hui-picture-elements-card"
-  );
-  if (HuiPictureElementsCard.prototype.cardmod_patched) return;
-  HuiPictureElementsCard.prototype.cardmod_patched = true;
+/*
+Patch the hui-epicture-elements-card specifically in order to handle individual styling of each element
+*/
 
-  const _setConfig = HuiPictureElementsCard.prototype.setConfig;
-  HuiPictureElementsCard.prototype.setConfig = function (...args) {
-    _setConfig?.bind(this)(...args);
+@patch_element("hui-picture-elements-card")
+class PictureElementsCardPatch extends ModdedElement {
+  setConfig(_orig, ...args) {
+    _orig?.(...args);
 
-    for (const [i, el] of this._elements.entries()) {
-      const config = this._config.elements[i];
-      if (config?.card_mod?.class)
-        el.classList.add(
-          ...(Array.isArray(config.card_mod.class)
-            ? config.card_mod.class
-            : config.card_mod.class.split(" "))
-        );
-      if (config?.type)
-        el.classList.add(`type-${config.type.replace(":", "-")}`);
-      applyToElement(el, "element", config?.card_mod?.style, { config });
+    for (const [i, el] of (this as any)._elements.entries()) {
+      await_element(el);
+      patch_object(el, ModdedElement);
+      const config = (this as any)._config.elements[i];
+      const cls = `type-${config?.type?.replace?.(":", "-")}`;
+      apply_card_mod(el, "element", config?.card_mod, { config }, true, cls);
     }
-  };
-});
+  }
+}

@@ -1,30 +1,18 @@
-import { applyToElement } from "../helpers";
+import { patch_element } from "../helpers/patch_function";
+import { ModdedElement, apply_card_mod } from "../helpers/card_mod";
 
-customElements.whenDefined("hui-state-label-badge").then(() => {
-  const HuiStateLabelBadge = customElements.get("hui-state-label-badge");
-  if (HuiStateLabelBadge.prototype.cardmod_patched) return;
-  HuiStateLabelBadge.prototype.cardmod_patched = true;
+/*
+Patch the hui-state-label-badge to take styles from the config
+( those are the optional badges at the top of the view )
+*/
 
-  const _firstUpdated = HuiStateLabelBadge.prototype.firstUpdated;
-  HuiStateLabelBadge.prototype.firstUpdated = function (...args) {
-    _firstUpdated?.bind(this)(...args);
+@patch_element("hui-state-label-badge")
+class StateLabelBadgePatch extends ModdedElement {
+  async firstUpdated(_orig, ...args) {
+    await _orig?.(...args);
 
-    const config = this._config;
+    const config = this["_config"];
 
-    if (config?.card_mod?.class)
-      this.classList.add(
-        ...(Array.isArray(config.card_mod.class)
-          ? config.card_mod.class
-          : config.card_mod.class.split(" "))
-      );
-
-    applyToElement(
-      this,
-      "badge",
-      config?.card_mod?.style || config?.style || "",
-      {
-        config,
-      }
-    );
-  };
-});
+    await apply_card_mod(this, "badge", config?.card_mod, { config });
+  }
+}

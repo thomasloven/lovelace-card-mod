@@ -1,22 +1,19 @@
-import { selectTree } from "../helpers/selecttree";
-import { applyToElement } from "../helpers";
+import { patch_element } from "../helpers/patch_function";
+import { ModdedElement, apply_card_mod } from "../helpers/card_mod";
 
-customElements.whenDefined("hui-root").then(() => {
-  const HuiRoot = customElements.get("hui-root");
-  if (HuiRoot.prototype.cardmod_patched) return;
-  HuiRoot.prototype.cardmod_patched = true;
+/*
+Patch hui-root for theme styling
 
-  const _firstUpdated = HuiRoot.prototype.firstUpdated;
-  HuiRoot.prototype.firstUpdated = async function (...args) {
-    _firstUpdated?.bind(this)(...args);
-    applyToElement(this, "root");
-  };
+There is no style passed to apply_card_mod here, everything comes only from themes.
 
-  selectTree(
-    document,
-    "home-assistant$home-assistant-main$partial-panel-resolver ha-panel-lovelace$hui-root",
-    false
-  ).then((root: any) => {
-    root?.firstUpdated();
-  });
-});
+An earlier version of card-mod would also re-run firstUpdated of any existing element after patching.
+This shouldn't be necessary if card-mod is loaded as a module.
+*/
+
+@patch_element("hui-root")
+class HuiRootPatch extends ModdedElement {
+  firstUpdated(_orig, ...args) {
+    _orig?.(...args);
+    apply_card_mod(this, "root");
+  }
+}

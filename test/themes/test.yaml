@@ -1,14 +1,17 @@
 test:
   card-mod-theme: test
-  card-mod-card: |
-
-    ha-card {
-      background: url("https://placebear.com/640/480")
-    }
-    ha-card.top-level-card {
-      border: solid 1px var(--secondary-text-color);
-      background: url("https://placekitten.com/640/480");
-    }
+  card-mod-card-yaml: |
+    .: |
+      ha-card {
+        background: url("https://placebear.com/640/480")
+      }
+      ha-card.top-level-card {
+        border: solid 1px var(--secondary-text-color);
+        background: url("https://placekitten.com/640/480");
+      }
+      ha-card.teal {
+        background: teal;
+      }
   card-mod-root: |
     paper-tab:nth-of-type(2) {
       --card-mod-icon: {{ iif(is_state('light.kitchen_lights', 'on'), "mdi:star", "mdi:star-outline")}};

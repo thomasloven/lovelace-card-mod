@@ -1,53 +1,32 @@
-import { applyToElement } from "../helpers";
+import { patch_object, patch_element } from "../helpers/patch_function";
+import { apply_card_mod } from "../helpers/card_mod";
+import { await_element } from "../helpers/selecttree";
+import { ModdedElement } from "../helpers/card_mod";
 
-customElements.whenDefined("hui-entities-card").then(() => {
-  const EntitiesCard = customElements.get("hui-entities-card");
-  if (EntitiesCard.prototype.cardmod_patched) return;
-  EntitiesCard.prototype.cardmod_patched = true;
+/*
+Patch the hui-entities-card specifically in order to handle individual styling of each row
+*/
 
-  const _renderEntity = EntitiesCard.prototype.renderEntity;
-  EntitiesCard.prototype.renderEntity = function (config, ...rest) {
-    const retval = _renderEntity.bind(this)(config, ...rest);
-
-    if (!retval || !retval.values) return retval;
-    const row = retval.values[0];
-    if (!row) return retval;
+@patch_element("hui-entities-card")
+class HuiEntitiesCardPatch extends ModdedElement {
+  renderEntity(_orig, config, ...rest) {
+    const retval = _orig?.(config, ...rest);
     if (config?.type === "custom:mod-card") return retval;
 
-    if (config?.card_mod?.class)
-      row.classList.add(
-        ...(Array.isArray(config.card_mod.class)
-          ? config.card_mod.class
-          : config.card_mod.class.split(" "))
-      );
-    if (config?.type)
-      row.classList.add(`type-${config.type.replace(":", "-")}`);
+    if (!retval?.values) return retval;
+    const row = retval.values[0];
+    if (!row) return retval;
 
-    const apply = async () =>
-      applyToElement(
-        row,
-        "row",
-        config?.card_mod?.style || config?.style || "",
-        { config }
-      );
+    const cls = `type-${config?.type?.replace?.(":", "-")}`;
+    const apply = async () => {
+      await await_element(row);
+      patch_object(row, ModdedElement);
+      apply_card_mod(row, "row", config?.card_mod, { config }, true, cls);
+      row.addEventListener("ll-rebuild", apply);
+    };
 
-    (async () => {
-      const cardMod = await apply();
-      if (row.update && !row.update.cm_patched) {
-        const _update = row.update;
-        row.update = function (...args) {
-          _update.bind(this)(...args);
-          if (this.updateComplete)
-            this.updateComplete.then(() => {
-              cardMod.refresh();
-            });
-          else cardMod.refresh();
-        };
-      }
-    })();
-    this.updateComplete.then(() => apply());
-    if (retval.values[0])
-      retval.values[0].addEventListener("ll-rebuild", apply);
+    Promise.all([this.updateComplete]).then(() => apply());
+
     return retval;
-  };
-});
+  }
+}

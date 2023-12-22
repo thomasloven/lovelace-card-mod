@@ -15,6 +15,7 @@ import {
   Styles,
 } from "./helpers";
 import { selectTree } from "./helpers/selecttree";
+import { apply_card_mod } from "./helpers/card_mod";
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -26,12 +27,13 @@ export class CardMod extends LitElement {
   type: string;
   variables: any;
   @property() _rendered_styles: string = "";
-  styleChildren = {};
+  styleChildren: Record<string, Array<Promise<CardMod>>> = {};
 
   _styles: Styles;
   _renderer: (_: string) => void;
   _input_styles: Styles;
   _fixed_styles: Styles;
+  _parent_cm?: CardMod = undefined;
 
   _observer: MutationObserver = new MutationObserver((mutations) => {
     for (const m of mutations) {
@@ -52,7 +54,7 @@ export class CardMod extends LitElement {
   });
 
   static get applyToElement() {
-    return applyToElement;
+    return apply_card_mod;
   }
 
   constructor() {
@@ -120,16 +122,43 @@ export class CardMod extends LitElement {
     }
 
     if (!element) return;
-    const child = await applyToElement(
+    const child = await apply_card_mod(
       element,
       `${this.type}-child`,
-      value,
+      { style: value },
       this.variables,
-      null,
       false
     );
     child.refresh;
     return child;
+  }
+
+  private async _style_child(
+    path: string,
+    style,
+    retries = 0
+  ): Promise<Array<Promise<CardMod>>> {
+    const parent = this.parentElement || this.parentNode;
+    const elements = await selectTree(parent, path, true);
+    if (!elements || !elements.length) {
+      console.log(path);
+      if (retries > 5) throw new Error("NoELements");
+      await new Promise((resolve) => setTimeout(resolve, retries * 100));
+      return this._style_child(path, style, retries + 1);
+    }
+
+    // return elements.map((ch) => this._styleChildEl(ch, style) )
+    return [...elements].map(async (ch) => {
+      const cm = await apply_card_mod(
+        ch,
+        `${this.type}-child`,
+        { style },
+        this.variables,
+        false
+      );
+      cm._parent_cm = this;
+      return cm;
+    });
   }
 
   private async _connect() {
@@ -145,20 +174,16 @@ export class CardMod extends LitElement {
         thisStyle = value;
       } else {
         hasChildren = true;
-
-        const elements = await selectTree(parent, key, true);
-        if (!elements) continue;
-        for (const el of elements) {
-          const ch = await this._styleChildEl(el, value);
-          styleChildren[key] = ch;
-        }
+        styleChildren[key] = this._style_child(key, value);
       }
     }
 
     // Prune old child elements
     for (const key in this.styleChildren) {
       if (!styleChildren[key]) {
-        this.styleChildren[key].styles = "";
+        this.styleChildren[key]?.forEach(
+          async (ch) => ((await ch).styles = "")
+        );
       }
     }
     this.styleChildren = styleChildren;
@@ -182,6 +207,7 @@ export class CardMod extends LitElement {
     this._observer.disconnect();
     this._styles = "";
     await unbind_template(this._renderer);
+    this._parent_cm?._connect();
   }
 
   private _style_rendered(result: string) {

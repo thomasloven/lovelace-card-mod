@@ -1,37 +1,37 @@
-import { selectTree } from "../helpers/selecttree";
-import { applyToElement } from "../helpers";
+import { patch_element } from "../helpers/patch_function";
+import { ModdedElement, apply_card_mod } from "../helpers/card_mod";
 
-customElements.whenDefined("ha-more-info-dialog").then(() => {
-  const HaMoreInfoDialog = customElements.get("ha-more-info-dialog");
-  if (HaMoreInfoDialog.prototype.cardmod_patched) return;
-  HaMoreInfoDialog.prototype.cardmod_patched = true;
+/*
+Patch ha-more-info-dialog to style more-info popups.
 
-  const _showDialog = HaMoreInfoDialog.prototype.showDialog;
-  HaMoreInfoDialog.prototype.showDialog = function (params, ...rest) {
-    _showDialog?.bind(this)(params, ...rest);
+There is no style passed to apply_card_mod here, everything comes only from themes.
+
+An earlier version of card-mod would also look for any already opened dialogs
+home-assistant$ha-more-info-dialog
+If that existed it would replace the showDialog method of that with the patched version, and then re-run it.
+This should only be necessary if someone manages to open a dialog before card-mod loads in, which shouldn't happen
+at all if card-mod is loaded as a module.
+*/
+
+@patch_element("ha-more-info-dialog")
+class MoreInfoDIalogPatch extends ModdedElement {
+  showDialog(_orig, params, ...rest) {
+    _orig?.(params, ...rest);
 
     this.requestUpdate();
     this.updateComplete.then(async () => {
       const haDialog = this.shadowRoot.querySelector("ha-dialog");
-      if (haDialog) {
-        applyToElement(
-          haDialog,
-          "more-info",
-          "",
-          { config: params },
-          null,
-          false
-        );
-      }
-    });
-  };
+      if (!haDialog) return;
 
-  selectTree(document, "home-assistant$ha-more-info-dialog", false).then(
-    (root: any) => {
-      if (root) {
-        root.showDialog = HaMoreInfoDialog.prototype.showDialog.bind(root);
-        root.showDialog({ entityId: root.entityId });
-      }
-    }
-  );
-});
+      apply_card_mod(
+        haDialog as ModdedElement,
+        "more-info",
+        undefined,
+        {
+          config: params,
+        },
+        false
+      );
+    });
+  }
+}

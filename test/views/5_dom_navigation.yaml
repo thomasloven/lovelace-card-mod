@@ -169,11 +169,13 @@ cards:
           - device_tracker.demo_anne_therese
         card_mod:
           style:
-            ha-map$ha-entity-marker:
-              $: |
-                div.marker {
-                  background-color: red;
-                }
+            ha-map:
+              $:
+                ha-entity-marker:
+                  $: |
+                    div.marker {
+                      background-color: red;
+                    }
         hours_to_show: 1
 
   - type: vertical-stack

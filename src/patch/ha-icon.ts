@@ -1,71 +1,67 @@
 import { findParentCardMod } from "../helpers";
+import { ModdedElement } from "../helpers/card_mod";
+import { patch_element } from "../helpers/patch_function";
+
+/*
+Patch various icon elements to consider the following variables:
+--card-mod-icon
+--card-mod-icon-color
+--card-mod-icon-dim
+*/
 
 const updateIcon = (el) => {
   const styles = window.getComputedStyle(el);
-
-  const filter = styles.getPropertyValue("--card-mod-icon-dim");
-  if (filter === "none") el.style.filter = "none";
 
   const icon = styles.getPropertyValue("--card-mod-icon");
   if (icon) el.icon = icon.trim();
 
   const color = styles.getPropertyValue("--card-mod-icon-color");
   if (color) el.style.color = color;
+
+  const filter = styles.getPropertyValue("--card-mod-icon-dim");
+  if (filter === "none") el.style.filter = "none";
 };
 
-const bindCardMod = async (el) => {
-  if (el.cardmod_bound) return;
-  el.cardmod_bound = true;
-  const _bind = async () => {
-    const cardMods = await findParentCardMod(el);
-    for (const cm of cardMods) {
-      cm.addEventListener("card-mod-update", async () => {
-        await cm.updateComplete;
-        updateIcon(el);
-      });
-    }
-    updateIcon(el);
-    return cardMods;
-  };
+const bindCardMod = async (el, retry = 0) => {
+  // Find the most relevant card-mods in order to listen to change events so we can react quickly
 
-  if ((await _bind()).size == 0) window.setTimeout(() => _bind(), 1000);
+  updateIcon(el);
+  if (el._boundCardMod?.size) return;
+  el._boundCardMod = await findParentCardMod(el);
+
+  // If no card-mod was found in any parent element, then retry with increased interval
+  if (!el._cardMod?.size && retry < 5)
+    return window.setTimeout(() => bindCardMod(el, retry + 1), 100 * retry);
+
+  for (const cm of el._boundCardMod) {
+    cm.addEventListener("card-mod-update", async () => {
+      await cm.updateComplete;
+      updateIcon(el);
+    });
+  }
 };
 
-customElements.whenDefined("ha-state-icon").then(() => {
-  const HaStateIcon = customElements.get("ha-state-icon");
-  if (HaStateIcon.prototype.cardmod_patched) return;
-  HaStateIcon.prototype.cardmod_patched = true;
-
-  const _updated = HaStateIcon.prototype.updated;
-  HaStateIcon.prototype.updated = function (...args) {
-    _updated.bind(this)(...args);
+@patch_element("ha-state-icon")
+class HaStateIconPatch extends ModdedElement {
+  firstUpdated(_orig, ...args) {
+    _orig?.(...args);
     bindCardMod(this);
-    updateIcon(this);
-  };
-});
+  }
+}
 
-customElements.whenDefined("ha-icon").then(() => {
-  const HaIcon = customElements.get("ha-icon");
-  if (HaIcon.prototype.cardmod_patched) return;
-  HaIcon.prototype.cardmod_patched = true;
-
-  const _updated = HaIcon.prototype.updated;
-  HaIcon.prototype.updated = function (...args) {
-    _updated?.bind(this)(...args);
+@patch_element("ha-icon")
+class HaIconPatch extends ModdedElement {
+  firstUpdated(_orig, ...args) {
+    _orig?.(...args);
     bindCardMod(this);
-  };
-});
+  }
+}
 
-customElements.whenDefined("ha-svg-icon").then(() => {
-  const HaSvgIcon = customElements.get("ha-svg-icon");
-  if (HaSvgIcon.prototype.cardmod_patched) return;
-  HaSvgIcon.prototype.cardmod_patched = true;
-
-  const _updated = HaSvgIcon.prototype.updated;
-  HaSvgIcon.prototype.updated = function (...args) {
-    _updated?.bind(this)(...args);
-
-    if (this.parentNode?.host?.localName === "ha-icon") return;
+@patch_element("ha-svg-icon")
+class HaSvgIconPatch extends ModdedElement {
+  firstUpdated(_orig, ...args) {
+    _orig?.(...args);
+    if ((this.parentNode as any)?.host?.localName === "ha-icon") return;
     bindCardMod(this);
-  };
-});
+  }
+}

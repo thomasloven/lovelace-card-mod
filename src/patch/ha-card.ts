@@ -1,63 +1,36 @@
-import { applyToElement, findConfig } from "../helpers";
+import { findConfig } from "../helpers";
+import { patch_element, patch_object } from "../helpers/patch_function";
+import { apply_card_mod } from "../helpers/card_mod";
+import { ModdedElement } from "../helpers/card_mod";
 
-customElements.whenDefined("ha-card").then(() => {
-  const HaCard = customElements.get("ha-card");
-  if (HaCard.prototype.cardmod_patched) return;
-  HaCard.prototype.cardmod_patched = true;
+/*
+Patch the ha-card element to on first update:
+- try to find the config parameter of it's parent element
+- Apply card_mod styles according to that config
+*/
 
-  const _firstUpdated = HaCard.prototype.firstUpdated;
-  HaCard.prototype.firstUpdated = function (...args) {
-    _firstUpdated?.bind(this)(...args);
+@patch_element("ha-card")
+class HaCardPatch extends ModdedElement {
+  _cardMod = [];
+  async firstUpdated(_orig, ...args) {
+    await _orig?.(...args);
 
     const config = findConfig(this);
 
-    if (config?.card_mod?.class)
-      this.classList.add(
-        ...(Array.isArray(config.card_mod.class)
-          ? config.card_mod.class
-          : config.card_mod.class.split(" "))
-      );
-    if (config?.type)
-      this.classList.add(`type-${config.type.replace(":", "-")}`);
-
-    applyToElement(
+    const cls = `type-${config?.type?.replace?.(":", "-")}`;
+    await apply_card_mod(
       this,
       "card",
-      config?.card_mod?.style || config?.style || "",
+      config?.card_mod,
       { config },
-      null,
-      false
-    ).then((cardMod) => {
-      const pn = this.parentNode?.host;
-      if (!pn) return;
+      false,
+      cls
+    );
 
-      if (pn.setConfig && !pn.setConfig.cm_patched) {
-        // Patch the setConfig function to get live updates in GUI editor
-        const _setConfig = pn.setConfig;
-        try {
-            pn.setConfig = function (config: any, ...rest) {
-            _setConfig.bind(this)(config, ...rest);
-            cardMod.variables = { config };
-            cardMod.styles = config.card_mod?.style || {};
-            };
-            pn.setConfig.cm_patched = true;
-        } catch (error) {
-          console.warn(error);
-        }
-      }
+    const parent = (this.parentNode as any)?.host;
+    if (!parent) return;
 
-      if (pn.update && !pn.update.cm_patched) {
-        const _update = pn.update;
-        pn.update = function (...args) {
-          _update.bind(this)(...args);
-          if (this.updateComplete)
-            this.updateComplete.then(() => {
-              cardMod.refresh();
-            });
-          else cardMod.refresh();
-        };
-        pn.update.cm_patched = true;
-      }
-    });
-  };
-});
+    patch_object(parent, ModdedElement);
+    parent._cardMod = this._cardMod;
+  }
+}
