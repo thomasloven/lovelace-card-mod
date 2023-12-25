@@ -1,7 +1,7 @@
 {
   "name": "card-mod",
   "private": true,
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "",
   "scripts": {
     "build": "rollup -c",
@@ -11,17 +11,18 @@
   "author": "Thomas Lovén",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.23.3",
+    "@babel/core": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
     "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-json": "^6.0.1",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "rollup": "^3.29.4",
+    "rollup": "^2.79.1",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.36.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "lit": "^3.0.2",
+    "lit": "^3.1.0",
     "tslib": "^2.6.2"
   }
 }
