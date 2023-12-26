@@ -33,6 +33,7 @@ function template_updated(
 }
 
 export function hasTemplate(str) {
+  if (!str) return false;
   return String(str).includes("{%") || String(str).includes("{{");
 }
 

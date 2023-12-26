@@ -16,18 +16,28 @@ export async function await_element(el, hard = false) {
 
 async function _selectTree(root, path, all = false) {
   let el = [root];
+
+  // Split and clean path
   if (typeof path === "string") {
     path = path.split(/(\$| )/);
   }
   while (path[path.length - 1] === "") path.pop();
+
+  // For each element in the path
   for (const [i, p] of path.entries()) {
+    if (p === "$") {
+      el = [...el].map((e) => e.shadowRoot);
+      continue;
+    }
+
+    // Only pick the first one for the next step
     const e = el[0];
     if (!e) return null;
 
     if (!p.trim().length) continue;
 
     await_element(e);
-    el = p === "$" ? [e.shadowRoot] : e.querySelectorAll(p);
+    el = e.querySelectorAll(p);
   }
   return all ? el : el[0];
 }

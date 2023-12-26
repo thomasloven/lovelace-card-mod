@@ -1,7 +1,7 @@
 import { patch_object, patch_element } from "../helpers/patch_function";
-import { apply_card_mod } from "../helpers/card_mod";
+import { apply_card_mod } from "../helpers/apply_card_mod";
 import { await_element } from "../helpers/selecttree";
-import { ModdedElement } from "../helpers/card_mod";
+import { ModdedElement } from "../helpers/apply_card_mod";
 
 /*
 Patch the hui-entities-card specifically in order to handle individual styling of each row

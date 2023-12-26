@@ -1,4 +1,4 @@
-import { ModdedElement, apply_card_mod } from "../helpers/card_mod";
+import { ModdedElement, apply_card_mod } from "../helpers/apply_card_mod";
 import { patch_element, patch_object } from "../helpers/patch_function";
 import { await_element } from "../helpers/selecttree";
 

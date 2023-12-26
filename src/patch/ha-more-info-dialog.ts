@@ -1,5 +1,5 @@
 import { patch_element } from "../helpers/patch_function";
-import { ModdedElement, apply_card_mod } from "../helpers/card_mod";
+import { ModdedElement, apply_card_mod } from "../helpers/apply_card_mod";
 
 /*
 Patch ha-more-info-dialog to style more-info popups.

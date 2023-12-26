@@ -21,10 +21,18 @@ export class ModdedElement extends LitElement {
   }
 }
 
+export type CardModStyle = string | { [key: string]: CardModStyle };
+
+interface CardModConfig {
+  style?: CardModStyle;
+  class?: string | string[];
+  debug?: boolean;
+}
+
 export async function apply_card_mod(
   element: ModdedElement,
   type: string,
-  cm_config: any | undefined = undefined,
+  cm_config: CardModConfig = undefined,
   variables = {},
   shadow: boolean = true,
   cls = undefined
@@ -40,7 +48,7 @@ export async function apply_card_mod(
     console.warn(
       "Card-mod: You're using a custom card that relies on card-mod and uses an outdated signature for applyToElement. This will be removed at some point in the future. Hopefully the developer of your card will have updated by then."
     );
-    cm_config = { style: cm_config };
+    cm_config = { style: cm_config as any };
   }
   if (cls === true || cls === false) {
     console.warn(
@@ -49,6 +57,21 @@ export async function apply_card_mod(
     shadow = cls;
     cls = undefined;
   }
+
+  const debug = cm_config?.debug
+    ? (...msg) => console.log("CardMod Debug:", ...msg)
+    : (...msg) => {};
+
+  debug(
+    "Applying card-mod to:",
+    ...((element as any)?.host
+      ? ["#shadow-root of:", (element as any)?.host]
+      : [element]),
+    "type: ",
+    type,
+    "configuration: ",
+    cm_config
+  );
 
   if (!element) return;
 
@@ -63,8 +86,11 @@ export async function apply_card_mod(
     element._cardMod.find((cm) => cm.type === type) ??
     document.createElement("card-mod");
 
+  debug("Applying card-mod in:", cm);
+
   cm.type = type;
-  (cm as any).setAttribute("card-mod-type", type);
+  cm.debug = cm_config?.debug ?? false;
+  // (cm as any).setAttribute("card-mod-type", type);
 
   if (!element._cardMod.includes(cm)) element._cardMod.push(cm);
 
@@ -80,7 +106,10 @@ export async function apply_card_mod(
     cm.styles = cm_config?.style ?? "";
   });
 
-  const classes = cm_config?.class?.split?.(" ") ?? cm_config?.class ?? [];
+  const classes =
+    (typeof cm_config?.class == "string"
+      ? cm_config?.class?.split?.(" ")
+      : cm_config?.class) ?? [];
   element.classList?.add(...classes, cls);
 
   return cm;

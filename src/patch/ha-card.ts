@@ -1,7 +1,6 @@
-import { findConfig } from "../helpers";
 import { patch_element, patch_object } from "../helpers/patch_function";
-import { apply_card_mod } from "../helpers/card_mod";
-import { ModdedElement } from "../helpers/card_mod";
+import { apply_card_mod } from "../helpers/apply_card_mod";
+import { ModdedElement } from "../helpers/apply_card_mod";
 
 /*
 Patch the ha-card element to on first update:
@@ -33,4 +32,19 @@ class HaCardPatch extends ModdedElement {
     patch_object(parent, ModdedElement);
     parent._cardMod = this._cardMod;
   }
+}
+
+interface LovelaceCard extends Node {
+  config?: any;
+  _config?: any;
+  host?: LovelaceCard;
+}
+
+export function findConfig(node: LovelaceCard) {
+  if (node.config) return node.config;
+  if (node._config) return node._config;
+  if (node.host) return findConfig(node.host);
+  if (node.parentElement) return findConfig(node.parentElement);
+  if (node.parentNode) return findConfig(node.parentNode);
+  return null;
 }

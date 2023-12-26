@@ -13,9 +13,17 @@ import "./patch/ha-icon";
 import "./mod-card";
 import "./theme-watcher";
 
-import { getResources } from "./helpers";
+const scriptElements = document.querySelectorAll("script");
+const resources = [];
+for (const script of scriptElements) {
+  if (script?.innerText?.trim()?.startsWith("import(")) {
+    const imports = script.innerText.split("\n")?.map((e) => e.trim());
+    for (const imp of imports) {
+      resources.push(imp.replace(/^import\(\"/, "").replace(/\"\);/, ""));
+    }
+  }
+}
 
-const resources = getResources();
 if (resources.some((r) => r.includes("/card-mod.js"))) {
   // console.info("Card-mod is loaded as a module");
 } else {
