@@ -1,0 +1,15 @@
+{
+  "template": "https://git.thomasloven.com/Home-Assistant/lovelace-template",
+  "commit": "a00818017b415a69e8327da1ce8307d20a03fa16",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "project_name": "Card Mod",
+      "project_slug": "lovelace-card-mod",
+      "project_file": "card-mod",
+      "author": "Thomas Lovén",
+      "_template": "https://git.thomasloven.com/Home-Assistant/lovelace-template"
+    }
+  },
+  "directory": null
+}
