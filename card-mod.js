@@ -1214,17 +1214,52 @@ function hass_base_el() {
   return _hass_base_el.apply(this, arguments);
 }
 function _hass_base_el() {
-  _hass_base_el = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee23() {
+  _hass_base_el = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee22() {
     var element;
-    return _regeneratorRuntime().wrap(function _callee23$(_context25) {
-      while (1) switch (_context25.prev = _context25.next) {
+    return _regeneratorRuntime().wrap(function _callee22$(_context24) {
+      while (1) switch (_context24.prev = _context24.next) {
         case 0:
-          _context25.next = 2;
+          _context24.next = 2;
           return Promise.race([customElements.whenDefined("home-assistant"), customElements.whenDefined("hc-main")]);
         case 2:
           element = customElements.get("home-assistant") ? "home-assistant" : "hc-main";
         case 3:
           if (document.querySelector(element)) {
+            _context24.next = 8;
+            break;
+          }
+          _context24.next = 6;
+          return new Promise(function (r) {
+            return window.setTimeout(r, 100);
+          });
+        case 6:
+          _context24.next = 3;
+          break;
+        case 8:
+          return _context24.abrupt("return", document.querySelector(element));
+        case 9:
+        case "end":
+          return _context24.stop();
+      }
+    }, _callee22);
+  }));
+  return _hass_base_el.apply(this, arguments);
+}
+function hass() {
+  return _hass.apply(this, arguments);
+}
+function _hass() {
+  _hass = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee23() {
+    var base;
+    return _regeneratorRuntime().wrap(function _callee23$(_context25) {
+      while (1) switch (_context25.prev = _context25.next) {
+        case 0:
+          _context25.next = 2;
+          return hass_base_el();
+        case 2:
+          base = _context25.sent;
+        case 3:
+          if (base.hass) {
             _context25.next = 8;
             break;
           }
@@ -1236,47 +1271,12 @@ function _hass_base_el() {
           _context25.next = 3;
           break;
         case 8:
-          return _context25.abrupt("return", document.querySelector(element));
+          return _context25.abrupt("return", base.hass);
         case 9:
         case "end":
           return _context25.stop();
       }
     }, _callee23);
-  }));
-  return _hass_base_el.apply(this, arguments);
-}
-function hass() {
-  return _hass.apply(this, arguments);
-}
-function _hass() {
-  _hass = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee24() {
-    var base;
-    return _regeneratorRuntime().wrap(function _callee24$(_context26) {
-      while (1) switch (_context26.prev = _context26.next) {
-        case 0:
-          _context26.next = 2;
-          return hass_base_el();
-        case 2:
-          base = _context26.sent;
-        case 3:
-          if (base.hass) {
-            _context26.next = 8;
-            break;
-          }
-          _context26.next = 6;
-          return new Promise(function (r) {
-            return window.setTimeout(r, 100);
-          });
-        case 6:
-          _context26.next = 3;
-          break;
-        case 8:
-          return _context26.abrupt("return", base.hass);
-        case 9:
-        case "end":
-          return _context26.stop();
-      }
-    }, _callee24);
   }));
   return _hass.apply(this, arguments);
 }
@@ -1306,15 +1306,15 @@ function bind_template(_x2, _x3, _x4) {
   return _bind_template.apply(this, arguments);
 }
 function _bind_template() {
-  _bind_template = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee25(callback, template, variables) {
+  _bind_template = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee24(callback, template, variables) {
     var hs, connection, cacheKey, cache;
-    return _regeneratorRuntime().wrap(function _callee25$(_context27) {
-      while (1) switch (_context27.prev = _context27.next) {
+    return _regeneratorRuntime().wrap(function _callee24$(_context26) {
+      while (1) switch (_context26.prev = _context26.next) {
         case 0:
-          _context27.next = 2;
+          _context26.next = 2;
           return hass();
         case 2:
-          hs = _context27.sent;
+          hs = _context26.sent;
           connection = hs.connection;
           cacheKey = JSON.stringify([template, variables]);
           cache = cachedTemplates[cacheKey];
@@ -1346,9 +1346,9 @@ function _bind_template() {
           }
         case 7:
         case "end":
-          return _context27.stop();
+          return _context26.stop();
       }
-    }, _callee25);
+    }, _callee24);
   }));
   return _bind_template.apply(this, arguments);
 }
@@ -1356,20 +1356,20 @@ function unbind_template(_x5) {
   return _unbind_template.apply(this, arguments);
 }
 function _unbind_template() {
-  _unbind_template = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee26(callback) {
+  _unbind_template = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee25(callback) {
     var unsubscriber, _i17, _Object$entries2, _Object$entries2$_i, key, cache;
-    return _regeneratorRuntime().wrap(function _callee26$(_context28) {
-      while (1) switch (_context28.prev = _context28.next) {
+    return _regeneratorRuntime().wrap(function _callee25$(_context27) {
+      while (1) switch (_context27.prev = _context27.next) {
         case 0:
           _i17 = 0, _Object$entries2 = Object.entries(cachedTemplates);
         case 1:
           if (!(_i17 < _Object$entries2.length)) {
-            _context28.next = 10;
+            _context27.next = 10;
             break;
           }
           _Object$entries2$_i = _slicedToArray(_Object$entries2[_i17], 2), key = _Object$entries2$_i[0], cache = _Object$entries2$_i[1];
           if (!cache.callbacks.has(callback)) {
-            _context28.next = 7;
+            _context27.next = 7;
             break;
           }
           cache.callbacks["delete"](callback);
@@ -1377,27 +1377,27 @@ function _unbind_template() {
             unsubscriber = cache.unsubscribe;
             delete cachedTemplates[key];
           }
-          return _context28.abrupt("break", 10);
+          return _context27.abrupt("break", 10);
         case 7:
           _i17++;
-          _context28.next = 1;
+          _context27.next = 1;
           break;
         case 10:
           if (!unsubscriber) {
-            _context28.next = 16;
+            _context27.next = 16;
             break;
           }
-          _context28.next = 13;
+          _context27.next = 13;
           return unsubscriber;
         case 13:
-          _context28.t0 = _context28.sent;
-          _context28.next = 16;
-          return (0, _context28.t0)();
+          _context27.t0 = _context27.sent;
+          _context27.next = 16;
+          return (0, _context27.t0)();
         case 16:
         case "end":
-          return _context28.stop();
+          return _context27.stop();
       }
-    }, _callee26);
+    }, _callee25);
   }));
   return _unbind_template.apply(this, arguments);
 }
@@ -1510,56 +1510,56 @@ function get_theme(_x7) {
   return _get_theme.apply(this, arguments);
 }
 function _get_theme() {
-  _get_theme = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee27(root) {
+  _get_theme = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee26(root) {
     var _a, el, theme, hs, themes;
-    return _regeneratorRuntime().wrap(function _callee27$(_context29) {
-      while (1) switch (_context29.prev = _context29.next) {
+    return _regeneratorRuntime().wrap(function _callee26$(_context28) {
+      while (1) switch (_context28.prev = _context28.next) {
         case 0:
           if (root.type) {
-            _context29.next = 2;
+            _context28.next = 2;
             break;
           }
-          return _context29.abrupt("return", null);
+          return _context28.abrupt("return", null);
         case 2:
           el = root.parentElement ? root.parentElement : root;
           theme = window.getComputedStyle(el).getPropertyValue("--card-mod-theme");
-          _context29.next = 6;
+          _context28.next = 6;
           return hass();
         case 6:
-          hs = _context29.sent;
+          hs = _context28.sent;
           if (hs) {
-            _context29.next = 9;
+            _context28.next = 9;
             break;
           }
-          return _context29.abrupt("return", {});
+          return _context28.abrupt("return", {});
         case 9:
           themes = (_a = hs === null || hs === void 0 ? void 0 : hs.themes.themes) !== null && _a !== void 0 ? _a : {};
           if (themes[theme]) {
-            _context29.next = 12;
+            _context28.next = 12;
             break;
           }
-          return _context29.abrupt("return", {});
+          return _context28.abrupt("return", {});
         case 12:
           if (!themes[theme]["card-mod-".concat(root.type, "-yaml")]) {
-            _context29.next = 16;
+            _context28.next = 16;
             break;
           }
-          return _context29.abrupt("return", yaml2json(themes[theme]["card-mod-".concat(root.type, "-yaml")]));
+          return _context28.abrupt("return", yaml2json(themes[theme]["card-mod-".concat(root.type, "-yaml")]));
         case 16:
           if (!themes[theme]["card-mod-".concat(root.type)]) {
-            _context29.next = 20;
+            _context28.next = 20;
             break;
           }
-          return _context29.abrupt("return", {
+          return _context28.abrupt("return", {
             ".": themes[theme]["card-mod-".concat(root.type)]
           });
         case 20:
-          return _context29.abrupt("return", {});
+          return _context28.abrupt("return", {});
         case 21:
         case "end":
-          return _context29.stop();
+          return _context28.stop();
       }
-    }, _callee27);
+    }, _callee26);
   }));
   return _get_theme.apply(this, arguments);
 }
@@ -1568,62 +1568,62 @@ function await_element(_x8) {
   return _await_element.apply(this, arguments);
 }
 function _await_element() {
-  _await_element = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee28(el) {
+  _await_element = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee27(el) {
     var hard,
       _a,
       rounds,
-      _args30 = arguments;
-    return _regeneratorRuntime().wrap(function _callee28$(_context30) {
-      while (1) switch (_context30.prev = _context30.next) {
+      _args29 = arguments;
+    return _regeneratorRuntime().wrap(function _callee27$(_context29) {
+      while (1) switch (_context29.prev = _context29.next) {
         case 0:
-          hard = _args30.length > 1 && _args30[1] !== undefined ? _args30[1] : false;
+          hard = _args29.length > 1 && _args29[1] !== undefined ? _args29[1] : false;
           if (!((_a = el.localName) === null || _a === void 0 ? void 0 : _a.includes("-"))) {
-            _context30.next = 4;
+            _context29.next = 4;
             break;
           }
-          _context30.next = 4;
+          _context29.next = 4;
           return customElements.whenDefined(el.localName);
         case 4:
           if (!el.updateComplete) {
-            _context30.next = 7;
+            _context29.next = 7;
             break;
           }
-          _context30.next = 7;
+          _context29.next = 7;
           return el.updateComplete;
         case 7:
           if (!hard) {
-            _context30.next = 18;
+            _context29.next = 18;
             break;
           }
           if (!el.pageRendered) {
-            _context30.next = 11;
+            _context29.next = 11;
             break;
           }
-          _context30.next = 11;
+          _context29.next = 11;
           return el.pageRendered;
         case 11:
           if (!el._panelState) {
-            _context30.next = 18;
+            _context29.next = 18;
             break;
           }
           rounds = 0;
         case 13:
           if (!(el._panelState !== "loaded" && rounds++ < 5)) {
-            _context30.next = 18;
+            _context29.next = 18;
             break;
           }
-          _context30.next = 16;
+          _context29.next = 16;
           return new Promise(function (r) {
             return setTimeout(r, 100);
           });
         case 16:
-          _context30.next = 13;
+          _context29.next = 13;
           break;
         case 18:
         case "end":
-          return _context30.stop();
+          return _context29.stop();
       }
-    }, _callee28);
+    }, _callee27);
   }));
   return _await_element.apply(this, arguments);
 }
@@ -1631,7 +1631,7 @@ function _selectTree(_x9, _x10) {
   return _selectTree2.apply(this, arguments);
 }
 function _selectTree2() {
-  _selectTree2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee29(root, path) {
+  _selectTree2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee28(root, path) {
     var all,
       el,
       _iterator21,
@@ -1640,11 +1640,11 @@ function _selectTree2() {
       _i18,
       _p,
       _e9,
-      _args31 = arguments;
-    return _regeneratorRuntime().wrap(function _callee29$(_context31) {
-      while (1) switch (_context31.prev = _context31.next) {
+      _args30 = arguments;
+    return _regeneratorRuntime().wrap(function _callee28$(_context30) {
+      while (1) switch (_context30.prev = _context30.next) {
         case 0:
-          all = _args31.length > 2 && _args31[2] !== undefined ? _args31[2] : false;
+          all = _args30.length > 2 && _args30[2] !== undefined ? _args30[2] : false;
           el = [root]; // Split and clean path
           if (typeof path === "string") {
             path = path.split(/(\$| )/);
@@ -1652,60 +1652,60 @@ function _selectTree2() {
           while (path[path.length - 1] === "") path.pop();
           // For each element in the path
           _iterator21 = _createForOfIteratorHelper(path.entries());
-          _context31.prev = 5;
+          _context30.prev = 5;
           _iterator21.s();
         case 7:
           if ((_step21 = _iterator21.n()).done) {
-            _context31.next = 21;
+            _context30.next = 21;
             break;
           }
           _step21$value = _slicedToArray(_step21.value, 2), _i18 = _step21$value[0], _p = _step21$value[1];
           if (!(_p === "$")) {
-            _context31.next = 12;
+            _context30.next = 12;
             break;
           }
           el = _toConsumableArray(el).map(function (e) {
             return e.shadowRoot;
           });
-          return _context31.abrupt("continue", 19);
+          return _context30.abrupt("continue", 19);
         case 12:
           // Only pick the first one for the next step
           _e9 = el[0];
           if (_e9) {
-            _context31.next = 15;
+            _context30.next = 15;
             break;
           }
-          return _context31.abrupt("return", null);
+          return _context30.abrupt("return", null);
         case 15:
           if (_p.trim().length) {
-            _context31.next = 17;
+            _context30.next = 17;
             break;
           }
-          return _context31.abrupt("continue", 19);
+          return _context30.abrupt("continue", 19);
         case 17:
           await_element(_e9);
           el = _e9.querySelectorAll(_p);
         case 19:
-          _context31.next = 7;
+          _context30.next = 7;
           break;
         case 21:
-          _context31.next = 26;
+          _context30.next = 26;
           break;
         case 23:
-          _context31.prev = 23;
-          _context31.t0 = _context31["catch"](5);
-          _iterator21.e(_context31.t0);
+          _context30.prev = 23;
+          _context30.t0 = _context30["catch"](5);
+          _iterator21.e(_context30.t0);
         case 26:
-          _context31.prev = 26;
+          _context30.prev = 26;
           _iterator21.f();
-          return _context31.finish(26);
+          return _context30.finish(26);
         case 29:
-          return _context31.abrupt("return", all ? el : el[0]);
+          return _context30.abrupt("return", all ? el : el[0]);
         case 30:
         case "end":
-          return _context31.stop();
+          return _context30.stop();
       }
-    }, _callee29, null, [[5, 23, 26, 29]]);
+    }, _callee28, null, [[5, 23, 26, 29]]);
   }));
   return _selectTree2.apply(this, arguments);
 }
@@ -1713,16 +1713,16 @@ function selectTree(_x11, _x12) {
   return _selectTree3.apply(this, arguments);
 }
 function _selectTree3() {
-  _selectTree3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee30(root, path) {
+  _selectTree3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee29(root, path) {
     var all,
       timeout,
-      _args32 = arguments;
-    return _regeneratorRuntime().wrap(function _callee30$(_context32) {
-      while (1) switch (_context32.prev = _context32.next) {
+      _args31 = arguments;
+    return _regeneratorRuntime().wrap(function _callee29$(_context31) {
+      while (1) switch (_context31.prev = _context31.next) {
         case 0:
-          all = _args32.length > 2 && _args32[2] !== undefined ? _args32[2] : false;
-          timeout = _args32.length > 3 && _args32[3] !== undefined ? _args32[3] : 10000;
-          return _context32.abrupt("return", Promise.race([_selectTree(root, path, all), new Promise(function (_, reject) {
+          all = _args31.length > 2 && _args31[2] !== undefined ? _args31[2] : false;
+          timeout = _args31.length > 3 && _args31[3] !== undefined ? _args31[3] : 10000;
+          return _context31.abrupt("return", Promise.race([_selectTree(root, path, all), new Promise(function (_, reject) {
             return setTimeout(function () {
               return reject(new Error(TIMEOUT_ERROR));
             }, timeout);
@@ -1732,9 +1732,9 @@ function _selectTree3() {
           }));
         case 3:
         case "end":
-          return _context32.stop();
+          return _context31.stop();
       }
-    }, _callee30);
+    }, _callee29);
   }));
   return _selectTree3.apply(this, arguments);
 }
@@ -1785,7 +1785,7 @@ function apply_card_mod(_x13, _x14) {
   return _apply_card_mod.apply(this, arguments);
 }
 function _apply_card_mod() {
-  _apply_card_mod = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee32(element, type) {
+  _apply_card_mod = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee31(element, type) {
     var _g2;
     var cm_config,
       variables,
@@ -1801,14 +1801,14 @@ function _apply_card_mod() {
       debug,
       cm,
       classes,
-      _args34 = arguments;
-    return _regeneratorRuntime().wrap(function _callee32$(_context34) {
-      while (1) switch (_context34.prev = _context34.next) {
+      _args33 = arguments;
+    return _regeneratorRuntime().wrap(function _callee31$(_context33) {
+      while (1) switch (_context33.prev = _context33.next) {
         case 0:
-          cm_config = _args34.length > 2 && _args34[2] !== undefined ? _args34[2] : undefined;
-          variables = _args34.length > 3 && _args34[3] !== undefined ? _args34[3] : {};
-          shadow = _args34.length > 4 && _args34[4] !== undefined ? _args34[4] : true;
-          cls = _args34.length > 5 && _args34[5] !== undefined ? _args34[5] : undefined;
+          cm_config = _args33.length > 2 && _args33[2] !== undefined ? _args33[2] : undefined;
+          variables = _args33.length > 3 && _args33[3] !== undefined ? _args33[3] : {};
+          shadow = _args33.length > 4 && _args33[4] !== undefined ? _args33[4] : true;
+          cls = _args33.length > 5 && _args33[5] !== undefined ? _args33[5] : undefined;
           // TODO: This is for backwards compatibility
           // Remove in a future version
           if (typeof cm_config === "string" || cm_config !== undefined && cm_config.style === undefined && cm_config["class"] === undefined) {
@@ -1824,23 +1824,23 @@ function _apply_card_mod() {
           }
           debug = (cm_config === null || cm_config === void 0 ? void 0 : cm_config.debug) ? function () {
             var _console2;
-            for (var _len20 = arguments.length, msg = new Array(_len20), _key20 = 0; _key20 < _len20; _key20++) {
-              msg[_key20] = arguments[_key20];
+            for (var _len22 = arguments.length, msg = new Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
+              msg[_key22] = arguments[_key22];
             }
             return (_console2 = console).log.apply(_console2, ["CardMod Debug:"].concat(msg));
           } : function () {};
           debug.apply(void 0, ["Applying card-mod to:"].concat(_toConsumableArray((element === null || element === void 0 ? void 0 : element.host) ? ["#shadow-root of:", element === null || element === void 0 ? void 0 : element.host] : [element]), ["type: ", type, "configuration: ", cm_config]));
           if (element) {
-            _context34.next = 10;
+            _context33.next = 10;
             break;
           }
-          return _context34.abrupt("return");
+          return _context33.abrupt("return");
         case 10:
           if (!((_a = element.localName) === null || _a === void 0 ? void 0 : _a.includes("-"))) {
-            _context34.next = 13;
+            _context33.next = 13;
             break;
           }
-          _context34.next = 13;
+          _context33.next = 13;
           return customElements.whenDefined(element.localName);
         case 13:
           element._cardMod = element._cardMod || [];
@@ -1853,12 +1853,12 @@ function _apply_card_mod() {
           cm.debug = (_c = cm_config === null || cm_config === void 0 ? void 0 : cm_config.debug) !== null && _c !== void 0 ? _c : false;
           // (cm as any).setAttribute("card-mod-type", type);
           if (!element._cardMod.includes(cm)) element._cardMod.push(cm);
-          queueMicrotask( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee31() {
+          queueMicrotask( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee30() {
             var _a, _b, _c, target;
-            return _regeneratorRuntime().wrap(function _callee31$(_context33) {
-              while (1) switch (_context33.prev = _context33.next) {
+            return _regeneratorRuntime().wrap(function _callee30$(_context32) {
+              while (1) switch (_context32.prev = _context32.next) {
                 case 0:
-                  _context33.next = 2;
+                  _context32.next = 2;
                   return Promise.all([element.updateComplete]);
                 case 2:
                   target = ((_a = element.modElement) !== null && _a !== void 0 ? _a : shadow) ? (_b = element.shadowRoot) !== null && _b !== void 0 ? _b : element : element;
@@ -1867,18 +1867,18 @@ function _apply_card_mod() {
                   cm.styles = (_c = cm_config === null || cm_config === void 0 ? void 0 : cm_config.style) !== null && _c !== void 0 ? _c : "";
                 case 6:
                 case "end":
-                  return _context33.stop();
+                  return _context32.stop();
               }
-            }, _callee31);
+            }, _callee30);
           })));
           classes = (_f = typeof (cm_config === null || cm_config === void 0 ? void 0 : cm_config["class"]) == "string" ? (_e = (_d = cm_config === null || cm_config === void 0 ? void 0 : cm_config["class"]) === null || _d === void 0 ? void 0 : _d.split) === null || _e === void 0 ? void 0 : _e.call(_d, " ") : cm_config === null || cm_config === void 0 ? void 0 : cm_config["class"]) !== null && _f !== void 0 ? _f : [];
           (_g = element.classList) === null || _g === void 0 ? void 0 : (_g2 = _g).add.apply(_g2, _toConsumableArray(classes).concat([cls]));
-          return _context34.abrupt("return", cm);
+          return _context33.abrupt("return", cm);
         case 23:
         case "end":
-          return _context34.stop();
+          return _context33.stop();
       }
-    }, _callee32);
+    }, _callee31);
   }));
   return _apply_card_mod.apply(this, arguments);
 }
@@ -2014,7 +2014,7 @@ var CardMod = /*#__PURE__*/function (_s14) {
             case 0:
               styles = typeof stl === "string" ? {
                 ".": stl
-              } : merge_deep({}, stl); // Merge card_mod styles with theme styles
+              } : JSON.parse(JSON.stringify(stl)); // Merge card_mod styles with theme styles
               _context4.next = 3;
               return get_theme(this);
             case 3:
@@ -2278,23 +2278,29 @@ _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() 
   return _regeneratorRuntime().wrap(function _callee10$(_context11) {
     while (1) switch (_context11.prev = _context11.next) {
       case 0:
+        customElements.define("card-mod", CardMod);
+        // Wait for scoped customElements registry to be set up
+        // and then redefine card-mod if necessary
+        // otherwise the customElements registry card-mod is defined in
+        // may get overwritten by the polyfill if card-mod is loaded as a module
+      case 1:
         if (!(customElements.get("home-assistant") === undefined)) {
-          _context11.next = 5;
+          _context11.next = 6;
           break;
         }
-        _context11.next = 3;
+        _context11.next = 4;
         return new Promise(function (resolve) {
           return window.setTimeout(resolve, 100);
         });
-      case 3:
-        _context11.next = 0;
+      case 4:
+        _context11.next = 1;
         break;
-      case 5:
+      case 6:
         if (!customElements.get("card-mod")) {
           customElements.define("card-mod", CardMod);
           console.info("%cCARD-MOD ".concat(pjson.version, " IS INSTALLED"), "color: green; font-weight: bold");
         }
-      case 6:
+      case 7:
       case "end":
         return _context11.stop();
     }
@@ -2743,152 +2749,174 @@ var SidebarPatch = /*#__PURE__*/function (_ModdedElement8) {
   return SidebarPatch;
 }(ModdedElement);
 SidebarPatch = __decorate([patch_element("ha-sidebar")], SidebarPatch);
-customElements.whenDefined("hui-card-element-editor").then(function () {
-  var HuiCardElementEditor = customElements.get("hui-card-element-editor");
-  if (HuiCardElementEditor.prototype.cardmod_patched) return;
-  HuiCardElementEditor.prototype.cardmod_patched = true;
-  var _getConfigElement = HuiCardElementEditor.prototype.getConfigElement;
-  HuiCardElementEditor.prototype.getConfigElement = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16() {
-    var retval, _setConfig;
-    return _regeneratorRuntime().wrap(function _callee16$(_context17) {
-      while (1) switch (_context17.prev = _context17.next) {
-        case 0:
-          _context17.next = 2;
-          return _getConfigElement.bind(this)();
-        case 2:
-          retval = _context17.sent;
-          // Catch and patch the configElement
-          if (retval) {
-            _setConfig = retval.setConfig;
-            try {
-              retval.setConfig = function (config) {
-                var _a, _b;
-                // Strip card_mod from the data that's sent to the config element
-                // and put it back after the config has been checked
-                var newConfig = JSON.parse(JSON.stringify(config));
-                this._cardModData = {
-                  card: newConfig.card_mod,
-                  entities: []
-                };
-                if (Array.isArray(newConfig.entities)) {
-                  var _iterator15 = _createForOfIteratorHelper((_a = newConfig.entities) === null || _a === void 0 ? void 0 : _a.entries()),
-                    _step15;
-                  try {
-                    for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
-                      var _step15$value = _slicedToArray(_step15.value, 2),
-                        _i14 = _step15$value[0],
-                        _e7 = _step15$value[1];
-                      this._cardModData.entities[_i14] = _e7.card_mod;
-                      delete _e7.card_mod;
-                    }
-                  } catch (err) {
-                    _iterator15.e(err);
-                  } finally {
-                    _iterator15.f();
-                  }
-                }
-                delete newConfig.card_mod;
-                for (var _len14 = arguments.length, rest = new Array(_len14 > 1 ? _len14 - 1 : 0), _key14 = 1; _key14 < _len14; _key14++) {
-                  rest[_key14 - 1] = arguments[_key14];
-                }
-                _setConfig.bind(this).apply(void 0, [newConfig].concat(rest));
-                if (Array.isArray(newConfig.entities)) {
-                  var _iterator16 = _createForOfIteratorHelper((_b = newConfig.entities) === null || _b === void 0 ? void 0 : _b.entries()),
-                    _step16;
-                  try {
-                    for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
-                      var _step16$value = _slicedToArray(_step16.value, 2),
-                        _i15 = _step16$value[0],
-                        _e8 = _step16$value[1];
-                      if (this._cardModData.entities[_i15]) _e8.card_mod = this._cardModData.entities[_i15];
-                    }
-                  } catch (err) {
-                    _iterator16.e(err);
-                  } finally {
-                    _iterator16.f();
-                  }
-                }
-              };
-            } catch (error) {
-              console.warn(error);
-            }
+var ConfigElementPatch = /*#__PURE__*/function (_s15) {
+  _inherits(ConfigElementPatch, _s15);
+  var _super16 = _createSuper(ConfigElementPatch);
+  function ConfigElementPatch() {
+    _classCallCheck(this, ConfigElementPatch);
+    return _super16.apply(this, arguments);
+  }
+  _createClass(ConfigElementPatch, [{
+    key: "setConfig",
+    value: function setConfig(_orig, config) {
+      var _a, _b, _c, _d, _e;
+      var newConfig = JSON.parse(JSON.stringify(config));
+      // Save card_mod config
+      this._cardModData = {
+        card: newConfig.card_mod,
+        entities: []
+      };
+      delete newConfig.card_mod;
+      // Save card_mod config for individual entities
+      if (Array.isArray(newConfig.entities)) {
+        var _iterator15 = _createForOfIteratorHelper((_b = (_a = newConfig.entities) === null || _a === void 0 ? void 0 : _a.entries) === null || _b === void 0 ? void 0 : _b.call(_a)),
+          _step15;
+        try {
+          for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
+            var _step15$value = _slicedToArray(_step15.value, 2),
+              _i14 = _step15$value[0],
+              _e7 = _step15$value[1];
+            this._cardModData.entities[_i14] = _e7.card_mod;
+            delete _e7.card_mod;
           }
-          return _context17.abrupt("return", retval);
-        case 5:
-        case "end":
-          return _context17.stop();
-      }
-    }, _callee16, this);
-  }));
-  var _handleUIConfigChanged = HuiCardElementEditor.prototype._handleUIConfigChanged;
-  HuiCardElementEditor.prototype._handleUIConfigChanged = function (ev) {
-    if (this._configElement && this._configElement._cardModData) {
-      var cardMod = this._configElement._cardModData;
-      if (cardMod.card) ev.detail.config.card_mod = cardMod.card;
-    }
-    for (var _len15 = arguments.length, rest = new Array(_len15 > 1 ? _len15 - 1 : 0), _key15 = 1; _key15 < _len15; _key15++) {
-      rest[_key15 - 1] = arguments[_key15];
-    }
-    _handleUIConfigChanged.bind(this).apply(void 0, [ev].concat(rest));
-  };
-});
-customElements.whenDefined("hui-dialog-edit-card").then(function () {
-  var HuiDialogEditCard = customElements.get("hui-dialog-edit-card");
-  if (HuiDialogEditCard.prototype.cardmod_patched) return;
-  HuiDialogEditCard.prototype.cardmod_patched = true;
-  var _updated = HuiDialogEditCard.prototype.updated;
-  HuiDialogEditCard.prototype.updated = function () {
-    var _this15 = this;
-    _updated === null || _updated === void 0 ? void 0 : _updated.bind(this).apply(void 0, arguments);
-    this.updateComplete.then( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
-      var _a, _b, _c, _d, button;
-      return _regeneratorRuntime().wrap(function _callee17$(_context18) {
-        while (1) switch (_context18.prev = _context18.next) {
-          case 0:
-            if (!_this15._cardModIcon) {
-              _this15._cardModIcon = document.createElement("ha-icon");
-              _this15._cardModIcon.icon = "mdi:brush";
-            }
-            button = _this15.shadowRoot.querySelector("mwc-button[slot=secondaryAction]");
-            if (button) {
-              _context18.next = 4;
-              break;
-            }
-            return _context18.abrupt("return");
-          case 4:
-            button.appendChild(_this15._cardModIcon);
-            if (((_a = _this15._cardConfig) === null || _a === void 0 ? void 0 : _a.card_mod) || ((_b = Array.isArray(_this15._cardConfig.entities)) !== null && _b !== void 0 ? _b : (_d = (_c = _this15._cardConfig) === null || _c === void 0 ? void 0 : _c.entities) === null || _d === void 0 ? void 0 : _d.some(function (e) {
-              return e.card_mod;
-            }))) {
-              _this15._cardModIcon.style.visibility = "visible";
-            } else {
-              _this15._cardModIcon.style.visibility = "hidden";
-            }
-          case 6:
-          case "end":
-            return _context18.stop();
+        } catch (err) {
+          _iterator15.e(err);
+        } finally {
+          _iterator15.f();
         }
-      }, _callee17);
-    })));
-  };
-});
+      }
+      for (var _len14 = arguments.length, rest = new Array(_len14 > 2 ? _len14 - 2 : 0), _key14 = 2; _key14 < _len14; _key14++) {
+        rest[_key14 - 2] = arguments[_key14];
+      }
+      _orig.apply(void 0, [newConfig].concat(rest));
+      // Restore card_mod config for entities
+      if (Array.isArray(newConfig.entities)) {
+        var _iterator16 = _createForOfIteratorHelper((_d = (_c = newConfig.entities) === null || _c === void 0 ? void 0 : _c.entries) === null || _d === void 0 ? void 0 : _d.call(_c)),
+          _step16;
+        try {
+          for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
+            var _step16$value = _slicedToArray(_step16.value, 2),
+              _i15 = _step16$value[0],
+              _e8 = _step16$value[1];
+            if ((_e = this._cardModData) === null || _e === void 0 ? void 0 : _e.entities[_i15]) _e8.card_mod = this._cardModData.entities[_i15];
+          }
+        } catch (err) {
+          _iterator16.e(err);
+        } finally {
+          _iterator16.f();
+        }
+      }
+    }
+  }]);
+  return ConfigElementPatch;
+}(s);
+var HuiCardElementEditorPatch = /*#__PURE__*/function (_s16) {
+  _inherits(HuiCardElementEditorPatch, _s16);
+  var _super17 = _createSuper(HuiCardElementEditorPatch);
+  function HuiCardElementEditorPatch() {
+    _classCallCheck(this, HuiCardElementEditorPatch);
+    return _super17.apply(this, arguments);
+  }
+  _createClass(HuiCardElementEditorPatch, [{
+    key: "getConfigElement",
+    value: function () {
+      var _getConfigElement = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(_orig) {
+        var _len15,
+          args,
+          _key15,
+          retval,
+          _args17 = arguments;
+        return _regeneratorRuntime().wrap(function _callee16$(_context17) {
+          while (1) switch (_context17.prev = _context17.next) {
+            case 0:
+              for (_len15 = _args17.length, args = new Array(_len15 > 1 ? _len15 - 1 : 0), _key15 = 1; _key15 < _len15; _key15++) {
+                args[_key15 - 1] = _args17[_key15];
+              }
+              _context17.next = 3;
+              return _orig.apply(void 0, args);
+            case 3:
+              retval = _context17.sent;
+              patch_object(retval, ConfigElementPatch);
+              return _context17.abrupt("return", retval);
+            case 6:
+            case "end":
+              return _context17.stop();
+          }
+        }, _callee16);
+      }));
+      function getConfigElement(_x26) {
+        return _getConfigElement.apply(this, arguments);
+      }
+      return getConfigElement;
+    }()
+  }, {
+    key: "_handleUIConfigChanged",
+    value: function _handleUIConfigChanged(_orig, ev) {
+      var _a;
+      var cmData = (_a = this._configElement) === null || _a === void 0 ? void 0 : _a._cardModData;
+      if (cmData) {
+        ev.detail.config.card_mod = cmData.card;
+      }
+      for (var _len16 = arguments.length, rest = new Array(_len16 > 2 ? _len16 - 2 : 0), _key16 = 2; _key16 < _len16; _key16++) {
+        rest[_key16 - 2] = arguments[_key16];
+      }
+      _orig.apply(void 0, [ev].concat(rest));
+    }
+  }]);
+  return HuiCardElementEditorPatch;
+}(s);
+HuiCardElementEditorPatch = __decorate([patch_element("hui-card-element-editor")], HuiCardElementEditorPatch);
+var HuiDialogEditCardPatch = /*#__PURE__*/function (_s17) {
+  _inherits(HuiDialogEditCardPatch, _s17);
+  var _super18 = _createSuper(HuiDialogEditCardPatch);
+  function HuiDialogEditCardPatch() {
+    _classCallCheck(this, HuiDialogEditCardPatch);
+    return _super18.apply(this, arguments);
+  }
+  _createClass(HuiDialogEditCardPatch, [{
+    key: "updated",
+    value: function updated(_orig) {
+      var _a, _b, _c, _d, _e;
+      for (var _len17 = arguments.length, args = new Array(_len17 > 1 ? _len17 - 1 : 0), _key17 = 1; _key17 < _len17; _key17++) {
+        args[_key17 - 1] = arguments[_key17];
+      }
+      _orig === null || _orig === void 0 ? void 0 : _orig.apply(void 0, args);
+      if (!this._cardModIcon) {
+        this._cardModIcon = document.createElement("ha-icon");
+        this._cardModIcon.icon = "mdi:brush";
+      }
+      var button = this.shadowRoot.querySelector("mwc-button[slot=secondaryAction]");
+      if (!button) return;
+      button.appendChild(this._cardModIcon);
+      if (((_a = this._cardConfig) === null || _a === void 0 ? void 0 : _a.card_mod) || Array.isArray((_b = this._cardConfig) === null || _b === void 0 ? void 0 : _b.entities) && ((_e = (_d = (_c = this._cardConfig) === null || _c === void 0 ? void 0 : _c.entities) === null || _d === void 0 ? void 0 : _d.some) === null || _e === void 0 ? void 0 : _e.call(_d, function (e) {
+        return e.card_mod;
+      }))) {
+        this._cardModIcon.style.visibility = "visible";
+      } else {
+        this._cardModIcon.style.visibility = "hidden";
+      }
+    }
+  }]);
+  return HuiDialogEditCardPatch;
+}(s);
+HuiDialogEditCardPatch = __decorate([patch_element("hui-dialog-edit-card")], HuiDialogEditCardPatch);
 
 /*
 Patch the hui-epicture-elements-card specifically in order to handle individual styling of each element
 */
 var PictureElementsCardPatch = /*#__PURE__*/function (_ModdedElement9) {
   _inherits(PictureElementsCardPatch, _ModdedElement9);
-  var _super16 = _createSuper(PictureElementsCardPatch);
+  var _super19 = _createSuper(PictureElementsCardPatch);
   function PictureElementsCardPatch() {
     _classCallCheck(this, PictureElementsCardPatch);
-    return _super16.apply(this, arguments);
+    return _super19.apply(this, arguments);
   }
   _createClass(PictureElementsCardPatch, [{
     key: "setConfig",
     value: function setConfig(_orig) {
       var _a, _b;
-      for (var _len16 = arguments.length, args = new Array(_len16 > 1 ? _len16 - 1 : 0), _key16 = 1; _key16 < _len16; _key16++) {
-        args[_key16 - 1] = arguments[_key16];
+      for (var _len18 = arguments.length, args = new Array(_len18 > 1 ? _len18 - 1 : 0), _key18 = 1; _key18 < _len18; _key18++) {
+        args[_key18 - 1] = arguments[_key18];
       }
       _orig === null || _orig === void 0 ? void 0 : _orig.apply(void 0, args);
       var _iterator17 = _createForOfIteratorHelper(this._elements.entries()),
@@ -2933,108 +2961,108 @@ var updateIcon = function updateIcon(el) {
   if (filter === "none") el.style.filter = "none";
 };
 var bindCardMod = /*#__PURE__*/function () {
-  var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19(el) {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(el) {
     var retry,
       _a,
       _b,
       _iterator18,
       _step18,
       _loop2,
-      _args21 = arguments;
-    return _regeneratorRuntime().wrap(function _callee19$(_context21) {
-      while (1) switch (_context21.prev = _context21.next) {
+      _args20 = arguments;
+    return _regeneratorRuntime().wrap(function _callee18$(_context20) {
+      while (1) switch (_context20.prev = _context20.next) {
         case 0:
-          retry = _args21.length > 1 && _args21[1] !== undefined ? _args21[1] : 0; // Find the most relevant card-mods in order to listen to change events so we can react quickly
+          retry = _args20.length > 1 && _args20[1] !== undefined ? _args20[1] : 0; // Find the most relevant card-mods in order to listen to change events so we can react quickly
           updateIcon(el);
           if (!((_a = el._boundCardMod) === null || _a === void 0 ? void 0 : _a.size)) {
-            _context21.next = 4;
+            _context20.next = 4;
             break;
           }
-          return _context21.abrupt("return");
+          return _context20.abrupt("return");
         case 4:
-          _context21.next = 6;
+          _context20.next = 6;
           return findParentCardMod(el);
         case 6:
-          el._boundCardMod = _context21.sent;
+          el._boundCardMod = _context20.sent;
           if (!(!((_b = el._cardMod) === null || _b === void 0 ? void 0 : _b.size) && retry < 5)) {
-            _context21.next = 9;
+            _context20.next = 9;
             break;
           }
-          return _context21.abrupt("return", window.setTimeout(function () {
+          return _context20.abrupt("return", window.setTimeout(function () {
             return bindCardMod(el, retry + 1);
           }, 100 * retry));
         case 9:
           _iterator18 = _createForOfIteratorHelper(el._boundCardMod);
-          _context21.prev = 10;
+          _context20.prev = 10;
           _loop2 = /*#__PURE__*/_regeneratorRuntime().mark(function _loop2() {
             var cm;
-            return _regeneratorRuntime().wrap(function _loop2$(_context20) {
-              while (1) switch (_context20.prev = _context20.next) {
+            return _regeneratorRuntime().wrap(function _loop2$(_context19) {
+              while (1) switch (_context19.prev = _context19.next) {
                 case 0:
                   cm = _step18.value;
-                  cm.addEventListener("card-mod-update", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18() {
-                    return _regeneratorRuntime().wrap(function _callee18$(_context19) {
-                      while (1) switch (_context19.prev = _context19.next) {
+                  cm.addEventListener("card-mod-update", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
+                    return _regeneratorRuntime().wrap(function _callee17$(_context18) {
+                      while (1) switch (_context18.prev = _context18.next) {
                         case 0:
-                          _context19.next = 2;
+                          _context18.next = 2;
                           return cm.updateComplete;
                         case 2:
                           updateIcon(el);
                         case 3:
                         case "end":
-                          return _context19.stop();
+                          return _context18.stop();
                       }
-                    }, _callee18);
+                    }, _callee17);
                   })));
                 case 2:
                 case "end":
-                  return _context20.stop();
+                  return _context19.stop();
               }
             }, _loop2);
           });
           _iterator18.s();
         case 13:
           if ((_step18 = _iterator18.n()).done) {
-            _context21.next = 17;
+            _context20.next = 17;
             break;
           }
-          return _context21.delegateYield(_loop2(), "t0", 15);
+          return _context20.delegateYield(_loop2(), "t0", 15);
         case 15:
-          _context21.next = 13;
+          _context20.next = 13;
           break;
         case 17:
-          _context21.next = 22;
+          _context20.next = 22;
           break;
         case 19:
-          _context21.prev = 19;
-          _context21.t1 = _context21["catch"](10);
-          _iterator18.e(_context21.t1);
+          _context20.prev = 19;
+          _context20.t1 = _context20["catch"](10);
+          _iterator18.e(_context20.t1);
         case 22:
-          _context21.prev = 22;
+          _context20.prev = 22;
           _iterator18.f();
-          return _context21.finish(22);
+          return _context20.finish(22);
         case 25:
         case "end":
-          return _context21.stop();
+          return _context20.stop();
       }
-    }, _callee19, null, [[10, 19, 22, 25]]);
+    }, _callee18, null, [[10, 19, 22, 25]]);
   }));
-  return function bindCardMod(_x26) {
-    return _ref13.apply(this, arguments);
+  return function bindCardMod(_x27) {
+    return _ref11.apply(this, arguments);
   };
 }();
 var HaStateIconPatch = /*#__PURE__*/function (_ModdedElement10) {
   _inherits(HaStateIconPatch, _ModdedElement10);
-  var _super17 = _createSuper(HaStateIconPatch);
+  var _super20 = _createSuper(HaStateIconPatch);
   function HaStateIconPatch() {
     _classCallCheck(this, HaStateIconPatch);
-    return _super17.apply(this, arguments);
+    return _super20.apply(this, arguments);
   }
   _createClass(HaStateIconPatch, [{
     key: "firstUpdated",
     value: function firstUpdated(_orig) {
-      for (var _len17 = arguments.length, args = new Array(_len17 > 1 ? _len17 - 1 : 0), _key17 = 1; _key17 < _len17; _key17++) {
-        args[_key17 - 1] = arguments[_key17];
+      for (var _len19 = arguments.length, args = new Array(_len19 > 1 ? _len19 - 1 : 0), _key19 = 1; _key19 < _len19; _key19++) {
+        args[_key19 - 1] = arguments[_key19];
       }
       _orig === null || _orig === void 0 ? void 0 : _orig.apply(void 0, args);
       bindCardMod(this);
@@ -3045,16 +3073,16 @@ var HaStateIconPatch = /*#__PURE__*/function (_ModdedElement10) {
 HaStateIconPatch = __decorate([patch_element("ha-state-icon")], HaStateIconPatch);
 var HaIconPatch = /*#__PURE__*/function (_ModdedElement11) {
   _inherits(HaIconPatch, _ModdedElement11);
-  var _super18 = _createSuper(HaIconPatch);
+  var _super21 = _createSuper(HaIconPatch);
   function HaIconPatch() {
     _classCallCheck(this, HaIconPatch);
-    return _super18.apply(this, arguments);
+    return _super21.apply(this, arguments);
   }
   _createClass(HaIconPatch, [{
     key: "firstUpdated",
     value: function firstUpdated(_orig) {
-      for (var _len18 = arguments.length, args = new Array(_len18 > 1 ? _len18 - 1 : 0), _key18 = 1; _key18 < _len18; _key18++) {
-        args[_key18 - 1] = arguments[_key18];
+      for (var _len20 = arguments.length, args = new Array(_len20 > 1 ? _len20 - 1 : 0), _key20 = 1; _key20 < _len20; _key20++) {
+        args[_key20 - 1] = arguments[_key20];
       }
       _orig === null || _orig === void 0 ? void 0 : _orig.apply(void 0, args);
       bindCardMod(this);
@@ -3065,17 +3093,17 @@ var HaIconPatch = /*#__PURE__*/function (_ModdedElement11) {
 HaIconPatch = __decorate([patch_element("ha-icon")], HaIconPatch);
 var HaSvgIconPatch = /*#__PURE__*/function (_ModdedElement12) {
   _inherits(HaSvgIconPatch, _ModdedElement12);
-  var _super19 = _createSuper(HaSvgIconPatch);
+  var _super22 = _createSuper(HaSvgIconPatch);
   function HaSvgIconPatch() {
     _classCallCheck(this, HaSvgIconPatch);
-    return _super19.apply(this, arguments);
+    return _super22.apply(this, arguments);
   }
   _createClass(HaSvgIconPatch, [{
     key: "firstUpdated",
     value: function firstUpdated(_orig) {
       var _a, _b;
-      for (var _len19 = arguments.length, args = new Array(_len19 > 1 ? _len19 - 1 : 0), _key19 = 1; _key19 < _len19; _key19++) {
-        args[_key19 - 1] = arguments[_key19];
+      for (var _len21 = arguments.length, args = new Array(_len21 > 1 ? _len21 - 1 : 0), _key21 = 1; _key21 < _len21; _key21++) {
+        args[_key21 - 1] = arguments[_key21];
       }
       _orig === null || _orig === void 0 ? void 0 : _orig.apply(void 0, args);
       if (((_b = (_a = this.parentNode) === null || _a === void 0 ? void 0 : _a.host) === null || _b === void 0 ? void 0 : _b.localName) === "ha-icon") return;
@@ -3090,8 +3118,8 @@ function joinSet(dst, src) {
     _step19;
   try {
     for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
-      var _s15 = _step19.value;
-      dst.add(_s15);
+      var _s18 = _step19.value;
+      dst.add(_s18);
     }
   } catch (err) {
     _iterator19.e(err);
@@ -3099,33 +3127,33 @@ function joinSet(dst, src) {
     _iterator19.f();
   }
 }
-function findParentCardMod(_x27) {
+function findParentCardMod(_x28) {
   return _findParentCardMod.apply(this, arguments);
 }
 function _findParentCardMod() {
-  _findParentCardMod = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee33(node) {
+  _findParentCardMod = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee32(node) {
     var step,
       cardMods,
       _iterator22,
       _step22,
       cm,
-      _args35 = arguments;
-    return _regeneratorRuntime().wrap(function _callee33$(_context35) {
-      while (1) switch (_context35.prev = _context35.next) {
+      _args34 = arguments;
+    return _regeneratorRuntime().wrap(function _callee32$(_context34) {
+      while (1) switch (_context34.prev = _context34.next) {
         case 0:
-          step = _args35.length > 1 && _args35[1] !== undefined ? _args35[1] : 0;
+          step = _args34.length > 1 && _args34[1] !== undefined ? _args34[1] : 0;
           cardMods = new Set();
           if (!(step == 10)) {
-            _context35.next = 4;
+            _context34.next = 4;
             break;
           }
-          return _context35.abrupt("return", cardMods);
+          return _context34.abrupt("return", cardMods);
         case 4:
           if (node) {
-            _context35.next = 6;
+            _context34.next = 6;
             break;
           }
-          return _context35.abrupt("return", cardMods);
+          return _context34.abrupt("return", cardMods);
         case 6:
           if (node._cardMod) {
             _iterator22 = _createForOfIteratorHelper(node._cardMod);
@@ -3141,66 +3169,66 @@ function _findParentCardMod() {
             }
           }
           if (!node.updateComplete) {
-            _context35.next = 10;
+            _context34.next = 10;
             break;
           }
-          _context35.next = 10;
+          _context34.next = 10;
           return node.updateComplete;
         case 10:
           if (!node.parentElement) {
-            _context35.next = 19;
+            _context34.next = 19;
             break;
           }
-          _context35.t0 = joinSet;
-          _context35.t1 = cardMods;
-          _context35.next = 15;
+          _context34.t0 = joinSet;
+          _context34.t1 = cardMods;
+          _context34.next = 15;
           return findParentCardMod(node.parentElement, step + 1);
         case 15:
-          _context35.t2 = _context35.sent;
-          (0, _context35.t0)(_context35.t1, _context35.t2);
-          _context35.next = 26;
+          _context34.t2 = _context34.sent;
+          (0, _context34.t0)(_context34.t1, _context34.t2);
+          _context34.next = 26;
           break;
         case 19:
           if (!node.parentNode) {
-            _context35.next = 26;
+            _context34.next = 26;
             break;
           }
-          _context35.t3 = joinSet;
-          _context35.t4 = cardMods;
-          _context35.next = 24;
+          _context34.t3 = joinSet;
+          _context34.t4 = cardMods;
+          _context34.next = 24;
           return findParentCardMod(node.parentNode, step + 1);
         case 24:
-          _context35.t5 = _context35.sent;
-          (0, _context35.t3)(_context35.t4, _context35.t5);
+          _context34.t5 = _context34.sent;
+          (0, _context34.t3)(_context34.t4, _context34.t5);
         case 26:
           if (!node.host) {
-            _context35.next = 33;
+            _context34.next = 33;
             break;
           }
-          _context35.t6 = joinSet;
-          _context35.t7 = cardMods;
-          _context35.next = 31;
+          _context34.t6 = joinSet;
+          _context34.t7 = cardMods;
+          _context34.next = 31;
           return findParentCardMod(node.host, step + 1);
         case 31:
-          _context35.t8 = _context35.sent;
-          (0, _context35.t6)(_context35.t7, _context35.t8);
+          _context34.t8 = _context34.sent;
+          (0, _context34.t6)(_context34.t7, _context34.t8);
         case 33:
-          return _context35.abrupt("return", cardMods);
+          return _context34.abrupt("return", cardMods);
         case 34:
         case "end":
-          return _context35.stop();
+          return _context34.stop();
       }
-    }, _callee33);
+    }, _callee32);
   }));
   return _findParentCardMod.apply(this, arguments);
 }
 var NO_STYLE = "\nha-card {\n  background: none;\n  box-shadow: none;\n  border: none;\n  transition: none;\n}";
-var ModCard = /*#__PURE__*/function (_s16) {
-  _inherits(ModCard, _s16);
-  var _super20 = _createSuper(ModCard);
+var ModCard = /*#__PURE__*/function (_s19) {
+  _inherits(ModCard, _s19);
+  var _super23 = _createSuper(ModCard);
   function ModCard() {
     _classCallCheck(this, ModCard);
-    return _super20.apply(this, arguments);
+    return _super23.apply(this, arguments);
   }
   _createClass(ModCard, [{
     key: "setConfig",
@@ -3225,38 +3253,38 @@ var ModCard = /*#__PURE__*/function (_s16) {
   }, {
     key: "build_card",
     value: function () {
-      var _build_card = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20(config) {
-        var _this16 = this;
+      var _build_card = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19(config) {
+        var _this15 = this;
         var helpers;
-        return _regeneratorRuntime().wrap(function _callee20$(_context22) {
-          while (1) switch (_context22.prev = _context22.next) {
+        return _regeneratorRuntime().wrap(function _callee19$(_context21) {
+          while (1) switch (_context21.prev = _context21.next) {
             case 0:
               if (!(this._hass === undefined)) {
-                _context22.next = 3;
+                _context21.next = 3;
                 break;
               }
-              _context22.next = 3;
+              _context21.next = 3;
               return new Promise(function (resolve) {
-                return _this16._hassResolve = resolve;
+                return _this15._hassResolve = resolve;
               });
             case 3:
               this._hassResolve = undefined;
-              _context22.next = 6;
+              _context21.next = 6;
               return window.loadCardHelpers();
             case 6:
-              helpers = _context22.sent;
-              _context22.next = 9;
+              helpers = _context21.sent;
+              _context21.next = 9;
               return helpers.createCardElement(config);
             case 9:
-              this.card = _context22.sent;
+              this.card = _context21.sent;
               this.card.hass = this._hass;
             case 11:
             case "end":
-              return _context22.stop();
+              return _context21.stop();
           }
-        }, _callee20, this);
+        }, _callee19, this);
       }));
-      function build_card(_x28) {
+      function build_card(_x29) {
         return _build_card.apply(this, arguments);
       }
       return build_card;
@@ -3264,12 +3292,12 @@ var ModCard = /*#__PURE__*/function (_s16) {
   }, {
     key: "firstUpdated",
     value: function firstUpdated() {
-      var _this17 = this;
+      var _this16 = this;
       window.setTimeout(function () {
         var _a, _b;
-        if ((_b = (_a = _this17.card) === null || _a === void 0 ? void 0 : _a.shadowRoot) === null || _b === void 0 ? void 0 : _b.querySelector("ha-card")) {
+        if ((_b = (_a = _this16.card) === null || _a === void 0 ? void 0 : _a.shadowRoot) === null || _b === void 0 ? void 0 : _b.querySelector("ha-card")) {
           console.info("%cYou are doing it wrong!", "color: red; font-weight: bold");
-          var cardName = _this17.card.localName.replace(/hui-(.*)-card/, "$1");
+          var cardName = _this16.card.localName.replace(/hui-(.*)-card/, "$1");
           console.info("mod-card should NEVER be used with a card that already has a ha-card element, such as ".concat(cardName));
         }
       }, 3000);
@@ -3301,20 +3329,20 @@ var ModCard = /*#__PURE__*/function (_s16) {
   return ModCard;
 }(s);
 __decorate([n()], ModCard.prototype, "card", void 0);
-_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21() {
-  return _regeneratorRuntime().wrap(function _callee21$(_context23) {
-    while (1) switch (_context23.prev = _context23.next) {
+_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20() {
+  return _regeneratorRuntime().wrap(function _callee20$(_context22) {
+    while (1) switch (_context22.prev = _context22.next) {
       case 0:
         if (!(customElements.get("home-assistant") === undefined)) {
-          _context23.next = 5;
+          _context22.next = 5;
           break;
         }
-        _context23.next = 3;
+        _context22.next = 3;
         return new Promise(function (resolve) {
           return window.setTimeout(resolve, 100);
         });
       case 3:
-        _context23.next = 0;
+        _context22.next = 0;
         break;
       case 5:
         if (!customElements.get("mod-card")) {
@@ -3322,35 +3350,35 @@ _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21() 
         }
       case 6:
       case "end":
-        return _context23.stop();
+        return _context22.stop();
     }
-  }, _callee21);
+  }, _callee20);
 }))();
 function refresh_theme() {
   document.dispatchEvent(new Event("cm_update"));
 }
 var bases = [customElements.whenDefined("home-assistant"), customElements.whenDefined("hc-main")];
 Promise.race(bases).then(function () {
-  window.setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee22() {
+  window.setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21() {
     var _a, _b, hs;
-    return _regeneratorRuntime().wrap(function _callee22$(_context24) {
-      while (1) switch (_context24.prev = _context24.next) {
+    return _regeneratorRuntime().wrap(function _callee21$(_context23) {
+      while (1) switch (_context23.prev = _context23.next) {
         case 0:
-          _context24.next = 2;
+          _context23.next = 2;
           return hass();
         case 2:
-          hs = _context24.sent;
+          hs = _context23.sent;
         case 3:
           if (hs) {
-            _context24.next = 8;
+            _context23.next = 8;
             break;
           }
-          _context24.next = 6;
+          _context23.next = 6;
           return new Promise(function (resolve) {
             return window.setTimeout(resolve, 500);
           });
         case 6:
-          _context24.next = 3;
+          _context23.next = 3;
           break;
         case 8:
           hs.connection.subscribeEvents(function () {
@@ -3360,9 +3388,9 @@ Promise.race(bases).then(function () {
           (_b = document.querySelector("hc-main")) === null || _b === void 0 ? void 0 : _b.addEventListener("settheme", refresh_theme);
         case 11:
         case "end":
-          return _context24.stop();
+          return _context23.stop();
       }
-    }, _callee22);
+    }, _callee21);
   })), 1000);
 });
 var _a, _b, _c;

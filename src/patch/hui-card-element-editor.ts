@@ -1,91 +1,86 @@
-import { CardMod } from "../card-mod";
+import { LitElement } from "lit";
+import { patch_element, patch_object } from "../helpers/patch_function";
 
-customElements.whenDefined("hui-card-element-editor").then(() => {
-  const HuiCardElementEditor = customElements.get("hui-card-element-editor");
-  if (HuiCardElementEditor.prototype.cardmod_patched) return;
-  HuiCardElementEditor.prototype.cardmod_patched = true;
+class ConfigElementPatch extends LitElement {
+  _cardModData?;
 
-  const _getConfigElement = HuiCardElementEditor.prototype.getConfigElement;
-  HuiCardElementEditor.prototype.getConfigElement = async function () {
-    const retval = await _getConfigElement.bind(this)();
+  setConfig(_orig, config, ...rest) {
+    const newConfig = JSON.parse(JSON.stringify(config));
 
-    // Catch and patch the configElement
-    if (retval) {
-      const _setConfig = retval.setConfig;
-      try {
-        retval.setConfig = function (config: any, ...rest) {
-          // Strip card_mod from the data that's sent to the config element
-          // and put it back after the config has been checked
-          const newConfig = JSON.parse(JSON.stringify(config));
-          this._cardModData = {
-            card: newConfig.card_mod,
-            entities: [],
-          };
-          if (Array.isArray(newConfig.entities)) {
-            for (const [i, e] of newConfig.entities?.entries()) {
-              this._cardModData.entities[i] = e.card_mod;
-              delete e.card_mod;
-            }
-          }
-          delete newConfig.card_mod;
+    // Save card_mod config
+    this._cardModData = {
+      card: newConfig.card_mod,
+      entities: [],
+    };
+    delete newConfig.card_mod;
 
-          _setConfig.bind(this)(newConfig, ...rest);
-          if (Array.isArray(newConfig.entities)) {
-            for (const [i, e] of newConfig.entities?.entries()) {
-              if (this._cardModData.entities[i])
-                e.card_mod = this._cardModData.entities[i];
-            }
-          }
-        };
-      } catch (error) {
-        console.warn(error);
+    // Save card_mod config for individual entities
+    if (Array.isArray(newConfig.entities)) {
+      for (const [i, e] of newConfig.entities?.entries?.()) {
+        this._cardModData.entities[i] = e.card_mod;
+        delete e.card_mod;
       }
     }
+
+    _orig(newConfig, ...rest);
+
+    // Restore card_mod config for entities
+    if (Array.isArray(newConfig.entities)) {
+      for (const [i, e] of newConfig.entities?.entries?.()) {
+        if (this._cardModData?.entities[i])
+          e.card_mod = this._cardModData.entities[i];
+      }
+    }
+  }
+}
+
+@patch_element("hui-card-element-editor")
+class HuiCardElementEditorPatch extends LitElement {
+  _configElement?: ConfigElementPatch;
+
+  async getConfigElement(_orig, ...args) {
+    const retval = await _orig(...args);
+
+    patch_object(retval, ConfigElementPatch);
+
     return retval;
-  };
+  }
 
-  const _handleUIConfigChanged =
-    HuiCardElementEditor.prototype._handleUIConfigChanged;
-  HuiCardElementEditor.prototype._handleUIConfigChanged = function (
-    ev,
-    ...rest
-  ) {
-    if (this._configElement && this._configElement._cardModData) {
-      const cardMod = this._configElement._cardModData;
-      if (cardMod.card) ev.detail.config.card_mod = cardMod.card;
+  _handleUIConfigChanged(_orig, ev, ...rest) {
+    const cmData = this._configElement?._cardModData;
+    if (cmData) {
+      ev.detail.config.card_mod = cmData.card;
     }
-    _handleUIConfigChanged.bind(this)(ev, ...rest);
-  };
-});
 
-customElements.whenDefined("hui-dialog-edit-card").then(() => {
-  const HuiDialogEditCard = customElements.get("hui-dialog-edit-card");
-  if (HuiDialogEditCard.prototype.cardmod_patched) return;
-  HuiDialogEditCard.prototype.cardmod_patched = true;
+    _orig(ev, ...rest);
+  }
+}
 
-  const _updated = HuiDialogEditCard.prototype.updated;
-  HuiDialogEditCard.prototype.updated = function (...args) {
-    _updated?.bind(this)(...args);
-    this.updateComplete.then(async () => {
-      if (!this._cardModIcon) {
-        this._cardModIcon = document.createElement("ha-icon");
-        this._cardModIcon.icon = "mdi:brush";
-      }
+@patch_element("hui-dialog-edit-card")
+class HuiDialogEditCardPatch extends LitElement {
+  _cardModIcon?;
+  _cardConfig?;
 
-      const button = this.shadowRoot.querySelector(
-        "mwc-button[slot=secondaryAction]"
-      );
-      if (!button) return;
-      button.appendChild(this._cardModIcon);
-      if (
-        this._cardConfig?.card_mod ||
-        (Array.isArray(this._cardConfig.entities) ??
-          this._cardConfig?.entities?.some((e: any) => e.card_mod))
-      ) {
-        this._cardModIcon.style.visibility = "visible";
-      } else {
-        this._cardModIcon.style.visibility = "hidden";
-      }
-    });
-  };
-});
+  updated(_orig, ...args) {
+    _orig?.(...args);
+    if (!this._cardModIcon) {
+      this._cardModIcon = document.createElement("ha-icon");
+      this._cardModIcon.icon = "mdi:brush";
+    }
+
+    const button = this.shadowRoot.querySelector(
+      "mwc-button[slot=secondaryAction]"
+    );
+    if (!button) return;
+    button.appendChild(this._cardModIcon);
+    if (
+      this._cardConfig?.card_mod ||
+      (Array.isArray(this._cardConfig?.entities) &&
+        this._cardConfig?.entities?.some?.((e: any) => e.card_mod))
+    ) {
+      this._cardModIcon.style.visibility = "visible";
+    } else {
+      this._cardModIcon.style.visibility = "hidden";
+    }
+  }
+}
