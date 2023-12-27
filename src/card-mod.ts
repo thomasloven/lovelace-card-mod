@@ -29,7 +29,7 @@ export class CardMod extends LitElement {
 
   debug: boolean = false;
 
-  _input_styles: CardModStyle;
+  card_mod_input: CardModStyle;
   _fixed_styles: Record<string, CardModStyle> = {};
   _styles: string = "";
   @property() _rendered_styles: string = "";
@@ -69,7 +69,7 @@ export class CardMod extends LitElement {
 
     // cm_update is issued when themes are reloaded
     document.addEventListener("cm_update", () => {
-      this._process_styles(this._input_styles);
+      this._process_styles(this.card_mod_input);
     });
   }
 
@@ -89,9 +89,9 @@ export class CardMod extends LitElement {
 
   set styles(stl: CardModStyle) {
     // Parsing styles is expensive, so only do it if things have actually changed
-    if (compare_deep(stl, this._input_styles)) return;
+    if (compare_deep(stl, this.card_mod_input)) return;
 
-    this._input_styles = stl;
+    this.card_mod_input = stl;
     this._process_styles(stl);
   }
 

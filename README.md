@@ -47,9 +47,14 @@ You should also see a little brush icon popping up near the "SHOW VISUAL EDITOR"
 
 ### Styling cards
 
-Cards are styled by adding a `card_mod` parameter to the card configuration.
+Cards are styled by adding the following to the card configuration:
 
-In basic form, this parameter contains a string of [CSS](https://www.w3schools.com/css/) which will be injected into the `<ha-card>` element of the card.
+```yaml
+card_mod:
+  style: <STYLES>
+```
+
+If the simplest form, `<STYLES>` is a string of [CSS](https://www.w3schools.com/css/) which will be injected into the `<ha-card>` element of the card.
 
 > NOTE: card-mod only works on cards that contain a ha-card element. This includes almost every card which can be _seen_, but not e.g. `conditional`, `entity_filter`, `vertical-stack`, `horizontal-stack`, `grid`.
 >
@@ -129,8 +134,8 @@ card-mod also makes the following variables available for templates:
 
 - `config` - The entire configuration of the card, entity or badge - (`config.entity` may be of special interest)
 - `user` - The name of the currently logged in user
-- `browser` - The [browser_mod deviceID](https://github.com/thomasloven/hass-browser_mod) of the device
-- `hash` - Whatever comes after `#` in the current URL
+- `browser` - The `browser_id` of your browser, if you have [browser_mod](https://github.com/thomasloven/hass-browser_mod) installed
+- `hash` - Whatever comes after `#` in the current URL (This is only considered on first load. It's not dynamically updated)
 
 ### DOM navigation
 
@@ -190,24 +195,25 @@ card_mod:
 > NOTE: The selector chain of the queue will look for one element at a time separated by spaces or "`$`". \
 > For each step, only the first match will be selected. \
 > But for the final selector of the chain (i.e. in a given dictionary key) **all** matching elements will be selected.
+> Chains ending with `$` is a special case for convenience, selecting the shadowroots of all elements.
 >
-> E.g. the following will apply styles to the `#shadow-root` of the first action button in an `alarm-panel` card:
+> E.g. the following will apply styles to the `button` element in the first action button in an `alarm-panel` card:
 >
 > ```yaml
-> "#armActions mwc-button$": |
+> "#armActions mwc-button$ button": |
 > ```
 >
-> But the following will apply styles to the `#shadow-root` of **all** action buttons (because we end the first key on the `mvc-button` selector and start a new search within those results with the subkey of "`$`"):
+> But the following will apply styles to the `button` elements in **all** action buttons (because we end the first key on the `mvc-button$` selector and start a new search within those results with the subkey of "`button`"):
 >
 > ```yaml
-> "#armActions mwc-button":
->   $: |
+> "#armActions mwc-button$":
+>   "button": |
 > ```
 
-> NOTE 2: Following on the note above; due to the high level of load order optimization used in Home Assistant, it is not guaranteed that the `#shadow-root` or the `mwc-button` actually _exists_ at the point in time when card-mod is looking for it.
-> If you use the second method above, card-mod will be able to retry looking for `#shadow-root` at a later point, which may lead to more stable operation.
+> NOTE 2: Following on the note above; due to the high level of load order optimization used in Home Assistant, it is not guaranteed that the `button` or the `mwc-button` actually _exists_ at the point in time when card-mod is looking for it.
+> If you use the second method above, card-mod will be able to retry looking for `button` at a later point, which may lead to more stable operation.
 >
-> In short; if things seem to be working intermittently - try splitting up the chain.
+> In short; if things seem to be working intermittently - try splitting up the chain into several steps.
 
 <details><summary>Debugging tips</summary>
 
@@ -218,10 +224,18 @@ To help you, you can use your browsers Element inspector to see which steps card
 - Open up the element inspector and find the base element (e.g. `<ha-card>`). This should contain a `<card-mod>` element whether you specified a style or not.
 - Make sure the `<card-mod>` element is selected.
 - Open up the browsers console (in chrome you can press Esc to open the console and inspector at the same time).
-- Type in `$0._input_styles` and press enter. \
+- Type in `$0.card_mod_input` and press enter. \
   This is the style information that step of the chain was given. If this is a string, you're at the end of the chain. If it's an object, you can move on to the next ste.
-- Type in `$0._styleChildren` and press enter. \
+- Type in `$0.card_mod_children` and press enter. \
   This is a set of any `<card-mod>` elements in the next step of any chain. Clicking "card-mod" in the `value:` of the set items will bring you to that `<card-mod>` element in the inspector, and you can keep on inspecting the rest of the chain.
+- You can also use `$0.card_mod_parent` to find the parent of any `<card-mod>` element in a chain.
+
+For a bit more information, you can use the following in the configuration of the card you're having problems with. It may or may not help you.
+
+```yaml
+card_mod:
+  debug: true
+```
 
 </details>
 

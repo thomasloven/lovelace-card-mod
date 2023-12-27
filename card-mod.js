@@ -2029,7 +2029,7 @@ var CardMod = /*#__PURE__*/function (_s14) {
     });
     // cm_update is issued when themes are reloaded
     document.addEventListener("cm_update", function () {
-      _this10._process_styles(_this10._input_styles);
+      _this10._process_styles(_this10.card_mod_input);
     });
     return _this10;
   }
@@ -2056,8 +2056,8 @@ var CardMod = /*#__PURE__*/function (_s14) {
     },
     set: function set(stl) {
       // Parsing styles is expensive, so only do it if things have actually changed
-      if (compare_deep(stl, this._input_styles)) return;
-      this._input_styles = stl;
+      if (compare_deep(stl, this.card_mod_input)) return;
+      this.card_mod_input = stl;
       this._process_styles(stl);
     }
   }, {
