@@ -197,21 +197,29 @@ card_mod:
 > But for the final selector of the chain (i.e. in a given dictionary key) **all** matching elements will be selected.
 > Chains ending with `$` is a special case for convenience, selecting the shadowroots of all elements.
 >
-> E.g. the following will apply styles to the `button` element in the first action button in an `alarm-panel` card:
+> E.g. the following will select the `div` elements in the first marker on a map card:
 >
 > ```yaml
-> "#armActions mwc-button$ button": |
+> "ha-map $ ha-entity-marker $ div": |
 > ```
 >
-> But the following will apply styles to the `button` elements in **all** action buttons (because we end the first key on the `mvc-button$` selector and start a new search within those results with the subkey of "`button`"):
+> But the following will select the div elements in all map markers on a map card (because we end the first key on the `ha-entity-marker $` selector and start a new search within each result for `div`):
 >
 > ```yaml
-> "#armActions mwc-button$":
->   "button": |
+> "ha-map $ ha-entity-marker $":
+>   "div": |
 > ```
 
-> NOTE 2: Following on the note above; due to the high level of load order optimization used in Home Assistant, it is not guaranteed that the `button` or the `mwc-button` actually _exists_ at the point in time when card-mod is looking for it.
-> If you use the second method above, card-mod will be able to retry looking for `button` at a later point, which may lead to more stable operation.
+> NOTE 2: Following on the note above; due to the high level of load order optimization used in Home Assistant, it is not guaranteed that the `ha-entity-marker` elements exist at the time when card-mod is looking for them.
+> If you break the chain once more:
+>
+> ```yaml
+> "ha-map $":
+>   "ha-entity-marker $":
+>     "div": |
+> ```
+>
+> then card-mod will be able to retry looking from the `ha-map $` point at a later time, which may lead to more stable results.
 >
 > In short; if things seem to be working intermittently - try splitting up the chain into several steps.
 
