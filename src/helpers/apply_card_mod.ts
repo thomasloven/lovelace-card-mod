@@ -29,6 +29,80 @@ interface CardModConfig {
   debug?: boolean;
 }
 
+export async function apply_card_mod_compatible(
+  element: ModdedElement,
+  type: string,
+  cm_config: CardModStyle | CardModConfig = undefined, // or styles
+  variables = {},
+  shadow = true, // or deprecated
+  cls = undefined // or shadow
+) {
+  // TODO: Remove in June 2024
+  // This is for backwards compatibility with Card mod version 3.3 and earlier.
+  // Do not remove this before June 2024 unless Card-mod 4.0 is released.
+
+  // Wrapper for backwards compatibility (with deprecation warning)
+  // Old signature:
+  //   el: Node
+  //   type: string
+  //   styles: CardModStyle = ""
+  //   variables: object = {}
+  //   _: any = null
+  //   shadow: boolean = true
+  //
+  // New signature
+  //   el: Node
+  //   type: string
+  //   cm_config: CardModConfig
+  //   variables: object = {}
+  //   shadow: boolean = true
+  //   cls: str = undefined
+
+  let oldStyle = false;
+  if (cls !== undefined) {
+    if (typeof cls !== "string") {
+      // Old style call
+      oldStyle = true;
+      shadow = cls;
+      cls = undefined;
+    }
+  }
+  if (typeof shadow !== "boolean") {
+    // Old style call
+    shadow = true;
+    oldStyle = true;
+  }
+  if (typeof cm_config === "string") {
+    // Old style call with string styles
+    cm_config = { style: cm_config };
+    oldStyle = true;
+  }
+  if (
+    cm_config &&
+    Object.keys(cm_config).length !== 0 &&
+    (cm_config?.style ?? cm_config?.class ?? cm_config?.debug) === undefined
+  ) {
+    // Old style call with object styles
+    cm_config = { style: cm_config as CardModStyle };
+    oldStyle = true;
+  }
+
+  if (oldStyle && !(window as any).cm_compatibility_warning) {
+    (window as any).cm_compatibility_warning = true;
+    console.groupCollapsed("Card-mod warning");
+    console.info(
+      "You are using a custom card which reiles on card-mod, and uses an outdated signature for <code>applyElement</code>."
+    );
+    console.info(
+      "The outdated signature will be removed at some point in the future. Hopefully the developer of your card will have updated their card by then."
+    );
+    console.info("The card used card-mod to apply styles here:", element);
+    console.groupEnd();
+  }
+
+  return apply_card_mod(element, type, cm_config, variables, shadow, cls);
+}
+
 export async function apply_card_mod(
   element: ModdedElement,
   type: string,
@@ -37,27 +111,6 @@ export async function apply_card_mod(
   shadow: boolean = true,
   cls = undefined
 ) {
-  // TODO: This is for backwards compatibility
-  // Remove in a future version
-  if (
-    typeof cm_config === "string" ||
-    (cm_config !== undefined &&
-      cm_config.style === undefined &&
-      cm_config.class === undefined)
-  ) {
-    console.warn(
-      "Card-mod: You're using a custom card that relies on card-mod and uses an outdated signature for applyToElement. This will be removed at some point in the future. Hopefully the developer of your card will have updated by then."
-    );
-    cm_config = { style: cm_config as any };
-  }
-  if (cls === true || cls === false) {
-    console.warn(
-      "Card-mod: You're using a custom card that relies on card-mod and uses an outdated signature for applyToElement. This will be removed at some point in the future. Hopefully the developer of your card will have updated by then."
-    );
-    shadow = cls;
-    cls = undefined;
-  }
-
   const debug = cm_config?.debug
     ? (...msg) => console.log("CardMod Debug:", ...msg)
     : (...msg) => {};

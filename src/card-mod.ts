@@ -8,7 +8,11 @@ import {
 import pjson from "../package.json";
 import { get_theme } from "./helpers/themes";
 import { selectTree } from "./helpers/selecttree";
-import { apply_card_mod, CardModStyle } from "./helpers/apply_card_mod";
+import {
+  apply_card_mod,
+  apply_card_mod_compatible,
+  CardModStyle,
+} from "./helpers/apply_card_mod";
 import { compare_deep, merge_deep } from "./helpers/dict_functions";
 
 declare global {
@@ -55,7 +59,9 @@ export class CardMod extends LitElement {
   });
 
   static get applyToElement() {
-    return apply_card_mod;
+    // This gets the compatibility wrapper for backwards compatibility with card-mod 3.3.
+    // The wrapper should be removed at earliest June 2024, or if card-mod 4.0 is released
+    return apply_card_mod_compatible;
   }
 
   constructor() {

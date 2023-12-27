@@ -1781,11 +1781,94 @@ var ModdedElement = /*#__PURE__*/function (_s13) {
   }]);
   return ModdedElement;
 }(s);
-function apply_card_mod(_x13, _x14) {
+function apply_card_mod_compatible(_x13, _x14) {
+  return _apply_card_mod_compatible.apply(this, arguments);
+}
+function _apply_card_mod_compatible() {
+  _apply_card_mod_compatible = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee30(element, type) {
+    var cm_config,
+      variables,
+      shadow,
+      cls,
+      _a,
+      _b,
+      oldStyle,
+      _args32 = arguments;
+    return _regeneratorRuntime().wrap(function _callee30$(_context32) {
+      while (1) switch (_context32.prev = _context32.next) {
+        case 0:
+          cm_config = _args32.length > 2 && _args32[2] !== undefined ? _args32[2] : undefined;
+          variables = _args32.length > 3 && _args32[3] !== undefined ? _args32[3] : {};
+          shadow = _args32.length > 4 && _args32[4] !== undefined ? _args32[4] : true;
+          cls = _args32.length > 5 && _args32[5] !== undefined ? _args32[5] : undefined; // TODO: Remove in June 2024
+          // This is for backwards compatibility with Card mod version 3.3 and earlier.
+          // Do not remove this before June 2024 unless Card-mod 4.0 is released.
+          // Wrapper for backwards compatibility (with deprecation warning)
+          // Old signature:
+          //   el: Node
+          //   type: string
+          //   styles: CardModStyle = ""
+          //   variables: object = {}
+          //   _: any = null
+          //   shadow: boolean = true
+          //
+          // New signature
+          //   el: Node
+          //   type: string
+          //   cm_config: CardModConfig
+          //   variables: object = {}
+          //   shadow: boolean = true
+          //   cls: str = undefined
+          oldStyle = false;
+          if (cls !== undefined) {
+            if (typeof cls !== "string") {
+              // Old style call
+              oldStyle = true;
+              shadow = cls;
+              cls = undefined;
+            }
+          }
+          if (typeof shadow !== "boolean") {
+            // Old style call
+            shadow = true;
+            oldStyle = true;
+          }
+          if (typeof cm_config === "string") {
+            // Old style call with string styles
+            cm_config = {
+              style: cm_config
+            };
+            oldStyle = true;
+          }
+          if (cm_config && Object.keys(cm_config).length !== 0 && ((_b = (_a = cm_config === null || cm_config === void 0 ? void 0 : cm_config.style) !== null && _a !== void 0 ? _a : cm_config === null || cm_config === void 0 ? void 0 : cm_config["class"]) !== null && _b !== void 0 ? _b : cm_config === null || cm_config === void 0 ? void 0 : cm_config.debug) === undefined) {
+            // Old style call with object styles
+            cm_config = {
+              style: cm_config
+            };
+            oldStyle = true;
+          }
+          if (oldStyle && !window.cm_compatibility_warning) {
+            window.cm_compatibility_warning = true;
+            console.groupCollapsed("Card-mod warning");
+            console.info("You are using a custom card which reiles on card-mod, and uses an outdated signature for <code>applyElement</code>.");
+            console.info("The outdated signature will be removed at some point in the future. Hopefully the developer of your card will have updated their card by then.");
+            console.info("The card used card-mod to apply styles here:", element);
+            console.groupEnd();
+          }
+          return _context32.abrupt("return", apply_card_mod(element, type, cm_config, variables, shadow, cls));
+        case 11:
+        case "end":
+          return _context32.stop();
+      }
+    }, _callee30);
+  }));
+  return _apply_card_mod_compatible.apply(this, arguments);
+}
+function apply_card_mod(_x15, _x16) {
   return _apply_card_mod.apply(this, arguments);
 }
 function _apply_card_mod() {
-  _apply_card_mod = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee31(element, type) {
+  _apply_card_mod = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee32(element, type) {
     var _g2;
     var cm_config,
       variables,
@@ -1801,27 +1884,14 @@ function _apply_card_mod() {
       debug,
       cm,
       classes,
-      _args33 = arguments;
-    return _regeneratorRuntime().wrap(function _callee31$(_context33) {
-      while (1) switch (_context33.prev = _context33.next) {
+      _args34 = arguments;
+    return _regeneratorRuntime().wrap(function _callee32$(_context34) {
+      while (1) switch (_context34.prev = _context34.next) {
         case 0:
-          cm_config = _args33.length > 2 && _args33[2] !== undefined ? _args33[2] : undefined;
-          variables = _args33.length > 3 && _args33[3] !== undefined ? _args33[3] : {};
-          shadow = _args33.length > 4 && _args33[4] !== undefined ? _args33[4] : true;
-          cls = _args33.length > 5 && _args33[5] !== undefined ? _args33[5] : undefined;
-          // TODO: This is for backwards compatibility
-          // Remove in a future version
-          if (typeof cm_config === "string" || cm_config !== undefined && cm_config.style === undefined && cm_config["class"] === undefined) {
-            console.warn("Card-mod: You're using a custom card that relies on card-mod and uses an outdated signature for applyToElement. This will be removed at some point in the future. Hopefully the developer of your card will have updated by then.");
-            cm_config = {
-              style: cm_config
-            };
-          }
-          if (cls === true || cls === false) {
-            console.warn("Card-mod: You're using a custom card that relies on card-mod and uses an outdated signature for applyToElement. This will be removed at some point in the future. Hopefully the developer of your card will have updated by then.");
-            shadow = cls;
-            cls = undefined;
-          }
+          cm_config = _args34.length > 2 && _args34[2] !== undefined ? _args34[2] : undefined;
+          variables = _args34.length > 3 && _args34[3] !== undefined ? _args34[3] : {};
+          shadow = _args34.length > 4 && _args34[4] !== undefined ? _args34[4] : true;
+          cls = _args34.length > 5 && _args34[5] !== undefined ? _args34[5] : undefined;
           debug = (cm_config === null || cm_config === void 0 ? void 0 : cm_config.debug) ? function () {
             var _console2;
             for (var _len22 = arguments.length, msg = new Array(_len22), _key22 = 0; _key22 < _len22; _key22++) {
@@ -1831,18 +1901,18 @@ function _apply_card_mod() {
           } : function () {};
           debug.apply(void 0, ["Applying card-mod to:"].concat(_toConsumableArray((element === null || element === void 0 ? void 0 : element.host) ? ["#shadow-root of:", element === null || element === void 0 ? void 0 : element.host] : [element]), ["type: ", type, "configuration: ", cm_config]));
           if (element) {
-            _context33.next = 10;
+            _context34.next = 8;
             break;
           }
-          return _context33.abrupt("return");
-        case 10:
+          return _context34.abrupt("return");
+        case 8:
           if (!((_a = element.localName) === null || _a === void 0 ? void 0 : _a.includes("-"))) {
-            _context33.next = 13;
+            _context34.next = 11;
             break;
           }
-          _context33.next = 13;
+          _context34.next = 11;
           return customElements.whenDefined(element.localName);
-        case 13:
+        case 11:
           element._cardMod = element._cardMod || [];
           // Find any existing card-mod elements of the right type
           cm = (_b = element._cardMod.find(function (cm) {
@@ -1853,12 +1923,12 @@ function _apply_card_mod() {
           cm.debug = (_c = cm_config === null || cm_config === void 0 ? void 0 : cm_config.debug) !== null && _c !== void 0 ? _c : false;
           // (cm as any).setAttribute("card-mod-type", type);
           if (!element._cardMod.includes(cm)) element._cardMod.push(cm);
-          queueMicrotask( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee30() {
+          queueMicrotask( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee31() {
             var _a, _b, _c, target;
-            return _regeneratorRuntime().wrap(function _callee30$(_context32) {
-              while (1) switch (_context32.prev = _context32.next) {
+            return _regeneratorRuntime().wrap(function _callee31$(_context33) {
+              while (1) switch (_context33.prev = _context33.next) {
                 case 0:
-                  _context32.next = 2;
+                  _context33.next = 2;
                   return Promise.all([element.updateComplete]);
                 case 2:
                   target = ((_a = element.modElement) !== null && _a !== void 0 ? _a : shadow) ? (_b = element.shadowRoot) !== null && _b !== void 0 ? _b : element : element;
@@ -1867,18 +1937,18 @@ function _apply_card_mod() {
                   cm.styles = (_c = cm_config === null || cm_config === void 0 ? void 0 : cm_config.style) !== null && _c !== void 0 ? _c : "";
                 case 6:
                 case "end":
-                  return _context32.stop();
+                  return _context33.stop();
               }
-            }, _callee30);
+            }, _callee31);
           })));
           classes = (_f = typeof (cm_config === null || cm_config === void 0 ? void 0 : cm_config["class"]) == "string" ? (_e = (_d = cm_config === null || cm_config === void 0 ? void 0 : cm_config["class"]) === null || _d === void 0 ? void 0 : _d.split) === null || _e === void 0 ? void 0 : _e.call(_d, " ") : cm_config === null || cm_config === void 0 ? void 0 : cm_config["class"]) !== null && _f !== void 0 ? _f : [];
           (_g = element.classList) === null || _g === void 0 ? void 0 : (_g2 = _g).add.apply(_g2, _toConsumableArray(classes).concat([cls]));
-          return _context33.abrupt("return", cm);
-        case 23:
+          return _context34.abrupt("return", cm);
+        case 21:
         case "end":
-          return _context33.stop();
+          return _context34.stop();
       }
-    }, _callee31);
+    }, _callee32);
   }));
   return _apply_card_mod.apply(this, arguments);
 }
@@ -1905,16 +1975,16 @@ function compare_deep(a, b) {
   if (a === b) return true;
   if (_typeof(a) !== _typeof(b)) return false;
   if (!(a instanceof Object && b instanceof Object)) return false;
-  for (var _x15 in a) {
-    if (!a.hasOwnProperty(_x15)) continue;
-    if (!b.hasOwnProperty(_x15)) return false;
-    if (a[_x15] === b[_x15]) continue;
-    if (_typeof(a[_x15]) !== "object") return false;
-    if (!compare_deep(a[_x15], b[_x15])) return false;
+  for (var _x17 in a) {
+    if (!a.hasOwnProperty(_x17)) continue;
+    if (!b.hasOwnProperty(_x17)) return false;
+    if (a[_x17] === b[_x17]) continue;
+    if (_typeof(a[_x17]) !== "object") return false;
+    if (!compare_deep(a[_x17], b[_x17])) return false;
   }
-  for (var _x16 in b) {
-    if (!b.hasOwnProperty(_x16)) continue;
-    if (!a.hasOwnProperty(_x16)) return false;
+  for (var _x18 in b) {
+    if (!b.hasOwnProperty(_x18)) continue;
+    if (!a.hasOwnProperty(_x18)) return false;
   }
   return true;
 }
@@ -2029,7 +2099,7 @@ var CardMod = /*#__PURE__*/function (_s14) {
           }
         }, _callee4, this);
       }));
-      function _process_styles(_x17) {
+      function _process_styles(_x19) {
         return _process_styles2.apply(this, arguments);
       }
       return _process_styles;
@@ -2090,7 +2160,7 @@ var CardMod = /*#__PURE__*/function (_s14) {
                     }
                   }, _callee5);
                 }));
-                return function (_x20) {
+                return function (_x22) {
                   return _ref5.apply(this, arguments);
                 };
               }()));
@@ -2100,7 +2170,7 @@ var CardMod = /*#__PURE__*/function (_s14) {
           }
         }, _callee6, this);
       }));
-      function _style_child(_x18, _x19) {
+      function _style_child(_x20, _x21) {
         return _style_child2.apply(this, arguments);
       }
       return _style_child;
@@ -2180,7 +2250,7 @@ var CardMod = /*#__PURE__*/function (_s14) {
                         }
                       }, _callee7);
                     }));
-                    return function (_x21) {
+                    return function (_x23) {
                       return _ref6.apply(this, arguments);
                     };
                   }());
@@ -2264,7 +2334,9 @@ var CardMod = /*#__PURE__*/function (_s14) {
   }], [{
     key: "applyToElement",
     get: function get() {
-      return apply_card_mod;
+      // This gets the compatibility wrapper for backwards compatibility with card-mod 3.3.
+      // The wrapper should be removed at earliest June 2024, or if card-mod 4.0 is released
+      return apply_card_mod_compatible;
     }
   }]);
   return CardMod;
@@ -2351,7 +2423,7 @@ var patch_prototype = /*#__PURE__*/function () {
       }
     }, _callee11);
   }));
-  return function patch_prototype(_x22, _x23) {
+  return function patch_prototype(_x24, _x25) {
     return _ref8.apply(this, arguments);
   };
 }();
@@ -2422,7 +2494,7 @@ var HaCardPatch = /*#__PURE__*/function (_ModdedElement) {
           }
         }, _callee12, this);
       }));
-      function firstUpdated(_x24) {
+      function firstUpdated(_x26) {
         return _firstUpdated.apply(this, arguments);
       }
       return firstUpdated;
@@ -2599,7 +2671,7 @@ var StateLabelBadgePatch = /*#__PURE__*/function (_ModdedElement4) {
           }
         }, _callee14, this);
       }));
-      function firstUpdated(_x25) {
+      function firstUpdated(_x27) {
         return _firstUpdated2.apply(this, arguments);
       }
       return firstUpdated;
@@ -2844,7 +2916,7 @@ var HuiCardElementEditorPatch = /*#__PURE__*/function (_s16) {
           }
         }, _callee16);
       }));
-      function getConfigElement(_x26) {
+      function getConfigElement(_x28) {
         return _getConfigElement.apply(this, arguments);
       }
       return getConfigElement;
@@ -3047,7 +3119,7 @@ var bindCardMod = /*#__PURE__*/function () {
       }
     }, _callee18, null, [[10, 19, 22, 25]]);
   }));
-  return function bindCardMod(_x27) {
+  return function bindCardMod(_x29) {
     return _ref11.apply(this, arguments);
   };
 }();
@@ -3127,33 +3199,33 @@ function joinSet(dst, src) {
     _iterator19.f();
   }
 }
-function findParentCardMod(_x28) {
+function findParentCardMod(_x30) {
   return _findParentCardMod.apply(this, arguments);
 }
 function _findParentCardMod() {
-  _findParentCardMod = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee32(node) {
+  _findParentCardMod = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee33(node) {
     var step,
       cardMods,
       _iterator22,
       _step22,
       cm,
-      _args34 = arguments;
-    return _regeneratorRuntime().wrap(function _callee32$(_context34) {
-      while (1) switch (_context34.prev = _context34.next) {
+      _args35 = arguments;
+    return _regeneratorRuntime().wrap(function _callee33$(_context35) {
+      while (1) switch (_context35.prev = _context35.next) {
         case 0:
-          step = _args34.length > 1 && _args34[1] !== undefined ? _args34[1] : 0;
+          step = _args35.length > 1 && _args35[1] !== undefined ? _args35[1] : 0;
           cardMods = new Set();
           if (!(step == 10)) {
-            _context34.next = 4;
+            _context35.next = 4;
             break;
           }
-          return _context34.abrupt("return", cardMods);
+          return _context35.abrupt("return", cardMods);
         case 4:
           if (node) {
-            _context34.next = 6;
+            _context35.next = 6;
             break;
           }
-          return _context34.abrupt("return", cardMods);
+          return _context35.abrupt("return", cardMods);
         case 6:
           if (node._cardMod) {
             _iterator22 = _createForOfIteratorHelper(node._cardMod);
@@ -3169,56 +3241,56 @@ function _findParentCardMod() {
             }
           }
           if (!node.updateComplete) {
-            _context34.next = 10;
+            _context35.next = 10;
             break;
           }
-          _context34.next = 10;
+          _context35.next = 10;
           return node.updateComplete;
         case 10:
           if (!node.parentElement) {
-            _context34.next = 19;
+            _context35.next = 19;
             break;
           }
-          _context34.t0 = joinSet;
-          _context34.t1 = cardMods;
-          _context34.next = 15;
+          _context35.t0 = joinSet;
+          _context35.t1 = cardMods;
+          _context35.next = 15;
           return findParentCardMod(node.parentElement, step + 1);
         case 15:
-          _context34.t2 = _context34.sent;
-          (0, _context34.t0)(_context34.t1, _context34.t2);
-          _context34.next = 26;
+          _context35.t2 = _context35.sent;
+          (0, _context35.t0)(_context35.t1, _context35.t2);
+          _context35.next = 26;
           break;
         case 19:
           if (!node.parentNode) {
-            _context34.next = 26;
+            _context35.next = 26;
             break;
           }
-          _context34.t3 = joinSet;
-          _context34.t4 = cardMods;
-          _context34.next = 24;
+          _context35.t3 = joinSet;
+          _context35.t4 = cardMods;
+          _context35.next = 24;
           return findParentCardMod(node.parentNode, step + 1);
         case 24:
-          _context34.t5 = _context34.sent;
-          (0, _context34.t3)(_context34.t4, _context34.t5);
+          _context35.t5 = _context35.sent;
+          (0, _context35.t3)(_context35.t4, _context35.t5);
         case 26:
           if (!node.host) {
-            _context34.next = 33;
+            _context35.next = 33;
             break;
           }
-          _context34.t6 = joinSet;
-          _context34.t7 = cardMods;
-          _context34.next = 31;
+          _context35.t6 = joinSet;
+          _context35.t7 = cardMods;
+          _context35.next = 31;
           return findParentCardMod(node.host, step + 1);
         case 31:
-          _context34.t8 = _context34.sent;
-          (0, _context34.t6)(_context34.t7, _context34.t8);
+          _context35.t8 = _context35.sent;
+          (0, _context35.t6)(_context35.t7, _context35.t8);
         case 33:
-          return _context34.abrupt("return", cardMods);
+          return _context35.abrupt("return", cardMods);
         case 34:
         case "end":
-          return _context34.stop();
+          return _context35.stop();
       }
-    }, _callee32);
+    }, _callee33);
   }));
   return _findParentCardMod.apply(this, arguments);
 }
@@ -3284,7 +3356,7 @@ var ModCard = /*#__PURE__*/function (_s19) {
           }
         }, _callee19, this);
       }));
-      function build_card(_x29) {
+      function build_card(_x31) {
         return _build_card.apply(this, arguments);
       }
       return build_card;
