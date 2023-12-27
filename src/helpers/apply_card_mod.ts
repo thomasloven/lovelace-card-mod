@@ -147,7 +147,7 @@ export async function apply_card_mod(
 
   if (!element._cardMod.includes(cm)) element._cardMod.push(cm);
 
-  queueMicrotask(async () => {
+  window.setTimeout(async () => {
     await Promise.all([element.updateComplete]);
 
     const target =
@@ -157,7 +157,7 @@ export async function apply_card_mod(
 
     cm.variables = variables;
     cm.styles = cm_config?.style ?? "";
-  });
+  }, 1);
 
   const classes =
     (typeof cm_config?.class == "string"
