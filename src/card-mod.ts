@@ -103,7 +103,8 @@ export class CardMod extends LitElement {
   }
 
   private async _process_styles(stl) {
-    let styles = typeof stl === "string" ? { ".": stl } : merge_deep({}, stl);
+    let styles =
+      typeof stl === "string" ? { ".": stl } : JSON.parse(JSON.stringify(stl));
 
     // Merge card_mod styles with theme styles
     const theme_styles = await get_theme(this);
@@ -229,7 +230,10 @@ export class CardMod extends LitElement {
 }
 
 (async () => {
+  customElements.define("card-mod", CardMod);
+
   // Wait for scoped customElements registry to be set up
+  // and then redefine card-mod if necessary
   // otherwise the customElements registry card-mod is defined in
   // may get overwritten by the polyfill if card-mod is loaded as a module
   while (customElements.get("home-assistant") === undefined)
