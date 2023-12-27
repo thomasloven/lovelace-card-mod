@@ -83,6 +83,7 @@ class ModCard extends LitElement {
 
 (async () => {
   // See explanation in card-mod.ts
+  customElements.define("mod-card", ModCard);
   while (customElements.get("home-assistant") === undefined)
     await new Promise((resolve) => window.setTimeout(resolve, 100));
 

@@ -3333,22 +3333,25 @@ _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20() 
   return _regeneratorRuntime().wrap(function _callee20$(_context22) {
     while (1) switch (_context22.prev = _context22.next) {
       case 0:
+        // See explanation in card-mod.ts
+        customElements.define("mod-card", ModCard);
+      case 1:
         if (!(customElements.get("home-assistant") === undefined)) {
-          _context22.next = 5;
+          _context22.next = 6;
           break;
         }
-        _context22.next = 3;
+        _context22.next = 4;
         return new Promise(function (resolve) {
           return window.setTimeout(resolve, 100);
         });
-      case 3:
-        _context22.next = 0;
+      case 4:
+        _context22.next = 1;
         break;
-      case 5:
+      case 6:
         if (!customElements.get("mod-card")) {
           customElements.define("mod-card", ModCard);
         }
-      case 6:
+      case 7:
       case "end":
         return _context22.stop();
     }
