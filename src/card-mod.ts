@@ -213,7 +213,7 @@ export class CardMod extends LitElement {
     this._observer.disconnect();
     this._styles = "";
     await unbind_template(this._renderer);
-    this.card_mod_parent?.refresh();
+    this.card_mod_parent?.refresh?.();
   }
 
   private _style_rendered(result: string) {
