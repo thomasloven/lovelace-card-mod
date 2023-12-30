@@ -123,3 +123,27 @@ cards:
         entities:
           - input_number.x_pos
           - input_number.y_pos
+
+  - type: vertical-stack
+    cards:
+      - <<: *desc
+        content: |
+          ## Icon template
+          Icon should change when light is turned on or off.
+          [Github issue](https://github.com/thomasloven/lovelace-card-mod/issues/333)
+
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: light.bed_light
+            card_mod:
+              style: |
+                :host {
+                  --card-mod-icon: {% if is_state('light.bed_light', 'on') %} mdi:star {% else %} mdi:star-outline {% endif %};
+                }
+          - entity: light.bed_light
+            card_mod:
+              style: |
+                :host {
+                  --card-mod-icon: {% if is_state(config.entity, 'on') %} mdi:star {% else %} mdi:star-outline {% endif %};
+                }

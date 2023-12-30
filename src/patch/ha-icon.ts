@@ -30,7 +30,7 @@ const bindCardMod = async (el, retry = 0) => {
   el._boundCardMod = await findParentCardMod(el);
 
   // If no card-mod was found in any parent element, then retry with increased interval
-  if (!el._cardMod?.size && retry < 5)
+  if (!el._boundCardMod?.size && retry < 5)
     return window.setTimeout(() => bindCardMod(el, retry + 1), 100 * retry);
 
   for (const cm of el._boundCardMod) {
@@ -72,7 +72,7 @@ function joinSet(dst: Set<any>, src: Set<any>) {
 
 async function findParentCardMod(node: any, step = 0): Promise<Set<CardMod>> {
   let cardMods: Set<CardMod> = new Set();
-  if (step == 10) return cardMods;
+  // if (step == 10) return cardMods;
   if (!node) return cardMods;
 
   if (node._cardMod) {
