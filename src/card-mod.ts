@@ -235,11 +235,10 @@ export class CardMod extends LitElement {
   }
 }
 
+if (!customElements.get("card-mod")) {
+  customElements.define("card-mod", CardMod);
+}
 (async () => {
-  if (!customElements.get("card-mod")) {
-    customElements.define("card-mod", CardMod);
-  }
-
   // Wait for scoped customElements registry to be set up
   // and then redefine card-mod if necessary
   // otherwise the customElements registry card-mod is defined in

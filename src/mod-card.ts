@@ -81,11 +81,12 @@ class ModCard extends LitElement {
   }
 }
 
+if (!customElements.get("mod-card")) {
+  customElements.define("mod-card", ModCard);
+}
 (async () => {
   // See explanation in card-mod.ts
-  if (!customElements.get("mod-card")) {
-    customElements.define("mod-card", ModCard);
-  }
+
   while (customElements.get("home-assistant") === undefined)
     await new Promise((resolve) => window.setTimeout(resolve, 100));
 
