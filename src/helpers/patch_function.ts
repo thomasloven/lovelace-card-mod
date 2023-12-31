@@ -22,18 +22,19 @@ export const patch_object = (obj, patch) => {
   }
 };
 
-export const patch_prototype = async (cls, patch) => {
+export const patch_prototype = async (cls, patch, afterwards?) => {
   if (typeof cls === "string") {
     await customElements.whenDefined(cls);
     cls = customElements.get(cls);
   }
-
-  return patch_object(cls.prototype, patch);
+  const patched = patch_object(cls.prototype, patch);
+  afterwards?.();
+  return patched;
 };
 
 // Decorator for patching a custom-element
-export function patch_element(element) {
+export function patch_element(element, afterwards?) {
   return function patched(constructor) {
-    patch_prototype(element, constructor);
+    patch_prototype(element, constructor, afterwards);
   };
 }
