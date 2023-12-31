@@ -237,6 +237,10 @@ export class CardMod extends LitElement {
 
 if (!customElements.get("card-mod")) {
   customElements.define("card-mod", CardMod);
+  console.info(
+    `%cCARD-MOD ${pjson.version} IS INSTALLED`,
+    "color: green; font-weight: bold"
+  );
 }
 (async () => {
   // Wait for scoped customElements registry to be set up
@@ -248,9 +252,5 @@ if (!customElements.get("card-mod")) {
 
   if (!customElements.get("card-mod")) {
     customElements.define("card-mod", CardMod);
-    console.info(
-      `%cCARD-MOD ${pjson.version} IS INSTALLED`,
-      "color: green; font-weight: bold"
-    );
   }
 })();
