@@ -183,7 +183,7 @@ export class CardMod extends LitElement {
     // Prune old child elements
     for (const key in this.card_mod_children) {
       if (!styleChildren[key]) {
-        this.card_mod_children[key]?.forEach(
+        (await this.card_mod_children[key])?.forEach(
           async (ch) => ((await ch).styles = "")
         );
       }
