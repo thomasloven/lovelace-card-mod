@@ -26,18 +26,22 @@ const bindCardMod = async (el, retry = 0) => {
   // Find the most relevant card-mods in order to listen to change events so we can react quickly
 
   updateIcon(el);
-  if (el._boundCardMod?.size) return;
-  el._boundCardMod = await findParentCardMod(el);
+  el._boundCardMod = el._boundCardMod ?? new Set();
+  const newCardMods = await findParentCardMod(el);
 
-  // If no card-mod was found in any parent element, then retry with increased interval
-  if (!el._boundCardMod?.size && retry < 5)
-    return window.setTimeout(() => bindCardMod(el, retry + 1), 100 * retry);
+  for (const cm of newCardMods) {
+    if (el._boundCardMod.has(cm)) continue;
 
-  for (const cm of el._boundCardMod) {
     cm.addEventListener("card-mod-update", async () => {
       await cm.updateComplete;
       updateIcon(el);
     });
+    el._boundCardMod.add(cm);
+  }
+
+  // Find card-mod elements created later, increased interval
+  if (retry < 5) {
+    return window.setTimeout(() => bindCardMod(el, retry + 1), 250 * retry);
   }
 };
 
@@ -75,13 +79,14 @@ async function findParentCardMod(node: any, step = 0): Promise<Set<CardMod>> {
   // if (step == 10) return cardMods;
   if (!node) return cardMods;
 
+  if (node.updateComplete) await node.updateComplete;
+
   if (node._cardMod) {
     for (const cm of node._cardMod) {
       if (cm.styles) cardMods.add(cm);
     }
   }
 
-  if (node.updateComplete) await node.updateComplete;
   if (node.parentElement)
     joinSet(cardMods, await findParentCardMod(node.parentElement, step + 1));
   else if (node.parentNode)
