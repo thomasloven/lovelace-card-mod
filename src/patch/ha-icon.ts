@@ -22,7 +22,7 @@ const updateIcon = (el) => {
   if (filter === "none") el.style.filter = "none";
 };
 
-const bindCardMod = async (el, retry = 0) => {
+const bindCardMod = async (el) => {
   // Find the most relevant card-mods in order to listen to change events so we can react quickly
 
   updateIcon(el);
@@ -40,32 +40,39 @@ const bindCardMod = async (el, retry = 0) => {
   }
 
   // Find card-mod elements created later, increased interval
-  if (retry < 5) {
-    return window.setTimeout(() => bindCardMod(el, retry + 1), 250 * retry);
+  if (el.cm_retries < 5) {
+    el.cm_retries++;
+    return window.setTimeout(() => bindCardMod(el), 250 * el.cm_retries);
   }
 };
 
 @patch_element("ha-state-icon")
 class HaStateIconPatch extends ModdedElement {
-  firstUpdated(_orig, ...args) {
+  cm_retries = 0;
+  updated(_orig, ...args) {
     _orig?.(...args);
+    this.cm_retries = 0;
     bindCardMod(this);
   }
 }
 
 @patch_element("ha-icon")
 class HaIconPatch extends ModdedElement {
-  firstUpdated(_orig, ...args) {
+  cm_retries = 0;
+  updated(_orig, ...args) {
     _orig?.(...args);
+    this.cm_retries = 0;
     bindCardMod(this);
   }
 }
 
 @patch_element("ha-svg-icon")
 class HaSvgIconPatch extends ModdedElement {
-  firstUpdated(_orig, ...args) {
+  cm_retries = 0;
+  updated(_orig, ...args) {
     _orig?.(...args);
     if ((this.parentNode as any)?.host?.localName === "ha-icon") return;
+    this.cm_retries = 0;
     bindCardMod(this);
   }
 }

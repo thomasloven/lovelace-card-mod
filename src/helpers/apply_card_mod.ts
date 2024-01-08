@@ -91,7 +91,7 @@ export async function apply_card_mod_compatible(
     (window as any).cm_compatibility_warning = true;
     console.groupCollapsed("Card-mod warning");
     console.info(
-      "You are using a custom card which reiles on card-mod, and uses an outdated signature for <code>applyElement</code>."
+      "You are using a custom card which relies on card-mod, and uses an outdated signature for applyToElement."
     );
     console.info(
       "The outdated signature will be removed at some point in the future. Hopefully the developer of your card will have updated their card by then."
