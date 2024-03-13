@@ -2,6 +2,9 @@ title: Performance test
 # https://github.com/thomasloven/lovelace-card-mod/issues/154
 # Switching between this tab and any other tab used to be very very slow.
 cards:
+  - type: entities
+    entities:
+      - light.bed_light
   - type: picture-elements
     image: https://placekitten.com/g/800/800
     card_mod:
@@ -26,153 +29,113 @@ cards:
                   --label-badge-red: cyan;
                 }
     elements:
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: &common
+          entity: sun.sun
+          type: state-icon
+          card_mod:
+            style: |
+              :host {
+                --card-mod-icon: {% if is_state('light.bed_light','on') %}mdi:star {% else %} mdi:star-outline{%endif%};
+              }
+          # element_type: state-badge
+          # type: custom:hui-element
+          # entity: sensor.outside_temperature
         style:
           top: 10%
           left: 10%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 10%
           left: 30%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 10%
           left: 50%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 10%
           left: 70%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 10%
           left: 90%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 30%
           left: 10%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 30%
           left: 30%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 30%
           left: 50%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 30%
           left: 70%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 30%
           left: 90%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 50%
           left: 10%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 50%
           left: 30%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 50%
           left: 50%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 50%
           left: 70%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 50%
           left: 90%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 70%
           left: 10%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 70%
           left: 30%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 70%
           left: 50%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 70%
           left: 70%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 70%
           left: 90%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 90%
           left: 10%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 90%
           left: 30%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 90%
           left: 50%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 90%
           left: 70%
-      - element_type: state-badge
-        type: custom:hui-element
-        entity: sensor.outside_temperature
+      - <<: *common
         style:
           top: 90%
           left: 90%

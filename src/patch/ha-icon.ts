@@ -83,7 +83,7 @@ function joinSet(dst: Set<any>, src: Set<any>) {
 
 async function findParentCardMod(node: any, step = 0): Promise<Set<CardMod>> {
   let cardMods: Set<CardMod> = new Set();
-  // if (step == 10) return cardMods;
+  if (step == 10) return cardMods;
   if (!node) return cardMods;
 
   if (node.updateComplete) await node.updateComplete;
