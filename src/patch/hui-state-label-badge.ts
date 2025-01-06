@@ -6,7 +6,7 @@ Patch the hui-state-label-badge to take styles from the config
 ( those are the optional badges at the top of the view )
 */
 
-@patch_element("hui-state-label-badge")
+@patch_element("hui-state-badge-element")
 class StateLabelBadgePatch extends ModdedElement {
   async firstUpdated(_orig, ...args) {
     await _orig?.(...args);
