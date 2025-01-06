@@ -1,15 +1,18 @@
 import "./card-mod";
-import "./patch/ha-card";
+
+import "./patch/hui-card";
+import "./patch/hui-badge";
+
 import "./patch/hui-entities-card";
 import "./patch/hui-glance-card";
-import "./patch/hui-state-label-badge";
+import "./patch/hui-picture-elements-card";
+
+import "./patch/ha-icon";
 import "./patch/hui-view";
 import "./patch/hui-root";
 import "./patch/ha-more-info-dialog";
 import "./patch/ha-sidebar";
 import "./patch/hui-card-element-editor";
-import "./patch/hui-picture-elements-card";
-import "./patch/ha-icon";
 import "./mod-card";
 import "./theme-watcher";
 
@@ -31,3 +34,28 @@ if (resources.some((r) => r.includes("/card-mod.js"))) {
     "You may not be getting optimal performance out of card-mod.\nSee https://github.com/thomasloven/lovelace-card-mod#performance-improvements"
   );
 }
+
+// const get_paths = (root, basepath = "") => {
+//   let paths = {};
+//   paths[`${basepath}`] = root;
+//   if (root.shadowRoot) {
+//     const pth = `${basepath} $`;
+//     paths[pth] = root.shadowRoot;
+//     const p = get_paths(root.shadowRoot, pth);
+//     Object.entries(p).forEach(([k, v]) => {
+//       if (paths[k] === undefined) paths[k] = v;
+//     });
+//   }
+//   for (const el of root.children) {
+//     const pth = `${basepath} ${el.localName}`;
+//     paths[pth] = el;
+//     const p = get_paths(el, pth);
+//     Object.entries(p).forEach(([k, v]) => {
+//       if (paths[k] === undefined) paths[k] = v;
+//     });
+//   }
+
+//   return paths;
+// };
+
+// (window as any).get_paths = get_paths;
