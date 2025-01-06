@@ -9,7 +9,7 @@ Patch the hui-entities-card specifically in order to handle individual styling o
 
 @patch_element("hui-entities-card")
 class HuiEntitiesCardPatch extends ModdedElement {
-  renderEntity(_orig, config, ...rest) {
+  _renderEntity(_orig, config, ...rest) {
     const retval = _orig?.(config, ...rest);
     if (config?.type === "custom:mod-card") return retval;
 
