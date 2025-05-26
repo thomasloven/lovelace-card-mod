@@ -143,6 +143,7 @@ export async function apply_card_mod(
 
   cm.type = type;
   cm.debug = cm_config?.debug ?? false;
+  cm.cancelStyleChild();
   // (cm as any).setAttribute("card-mod-type", type);
 
   if (!element._cardMod.includes(cm)) element._cardMod.push(cm);
