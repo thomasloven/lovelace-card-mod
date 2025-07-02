@@ -1,5 +1,7 @@
+import { Unpromise } from "@watchable/unpromise";
+
 export async function hass_base_el() {
-  await Promise.race([
+  await Unpromise.race([
     customElements.whenDefined("home-assistant"),
     customElements.whenDefined("hc-main"),
   ]);

@@ -1,3 +1,5 @@
+import { Unpromise } from "@watchable/unpromise";
+
 const TIMEOUT_ERROR = "SELECTTREE-TIMEOUT";
 
 export async function await_element(el, hard = false) {
@@ -26,6 +28,7 @@ async function _selectTree(root, path, all = false) {
   // For each element in the path
   for (const [i, p] of path.entries()) {
     if (p === "$") {
+      await Promise.all([...el].map((e) => await_element(e)));
       el = [...el].map((e) => e.shadowRoot);
       continue;
     }
@@ -36,14 +39,14 @@ async function _selectTree(root, path, all = false) {
 
     if (!p.trim().length) continue;
 
-    await_element(e);
+    await await_element(e);
     el = e.querySelectorAll(p);
   }
   return all ? el : el[0];
 }
 
 export async function selectTree(root, path, all = false, timeout = 10000) {
-  return Promise.race([
+  return Unpromise.race([
     _selectTree(root, path, all),
     new Promise((_, reject) =>
       setTimeout(() => reject(new Error(TIMEOUT_ERROR)), timeout)
