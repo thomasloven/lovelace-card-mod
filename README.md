@@ -20,9 +20,27 @@ frontend:
     - /local/card-mod.js
 ```
 
-You'll need to adjust that path according to where you have installed `card-mod.js`. If you installed through HACS, this is probably `/hacsfiles/lovelace-card-mod/card-mod.js`.
+You'll need to adjust that path according to where you have installed `card-mod.js`. 
+If you installed through HACS, this is probably `/hacsfiles/lovelace-card-mod/card-mod.js`.
 
-Any resource definitions automatically added by HACS can be kept as is even after adding `extra_module_url`.
+**Example:**
+When installing through HACS your (dashboard) lovelace resource definition will be automatically added
+```
+/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=190927524345
+```
+In `configuration.yaml` add this exact path to `frontend:` `extra_module_url:`
+When updating card-mod through HACS update your `extra_module_url:` manually to match. (This prevents the resouce being loaded twice)
+
+```yaml
+frontend:
+  extra_module_url:
+    - /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=190927524345
+```
+
+Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`.
+
+(dashboard) lovelace resource definition is required to enable card-mod to be applied to dahsboards on cast devices.
+`extra_module_url` will provide performace improvements to non-cast devices e.g. enhanced speed in applying card-mod to cards.
 
 ## Quick start
 
