@@ -21,21 +21,24 @@ badges:
     card_mod:
       style: |
         :host {
-          --label-badge-red: purple;
+          --ha-card-border-color: purple;
         }
   - entity: sun.sun
     name: Red text
     card_mod:
       style: |
         :host {
-          color: red
+          --primary-text-color: red;
+        }
+        ha-state-icon {
+          --badge-color: red;
         }
   - entity: sun.sun
     name: Teal background
     card_mod:
       style: |
         :host {
-          --label-badge-background-color: teal;
+          --ha-card-background: teal;
         }
 
 cards:
@@ -45,7 +48,7 @@ cards:
 
       First: Default
       Second: Purple border
-      Third: Red text
+      Third: Red text and icon
       Fourth: Teal background
 
       ```
@@ -57,20 +60,23 @@ cards:
           card_mod:
             style: |
               :host {
-                --label-badge-red: purple;
+                --ha-card-border-color: purple;
               }
         - entity: sun.sun
           name: Teal
           card_mod:
             style: |
               :host {
-                color: red
+                --primary-text-color: red;
+              }
+              ha-state-icon {
+                --badge-color: red;
               }
         - entity: sun.sun
           name: No background
           card_mod:
             style: |
               :host {
-                --label-badge-background-color: teal;
+                --ha-card-background: teal;
               }
       ```

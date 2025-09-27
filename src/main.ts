@@ -1,15 +1,19 @@
 import "./card-mod";
+
+import "./patch/hui-card";
 import "./patch/ha-card";
+import "./patch/hui-badge";
+
 import "./patch/hui-entities-card";
 import "./patch/hui-glance-card";
-import "./patch/hui-state-label-badge";
+import "./patch/hui-picture-elements-card";
+
+import "./patch/ha-icon";
 import "./patch/hui-view";
 import "./patch/hui-root";
 import "./patch/ha-more-info-dialog";
 import "./patch/ha-sidebar";
 import "./patch/hui-card-element-editor";
-import "./patch/hui-picture-elements-card";
-import "./patch/ha-icon";
 import "./mod-card";
 import "./theme-watcher";
 
