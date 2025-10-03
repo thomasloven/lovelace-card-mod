@@ -12,7 +12,7 @@ This will only work if card-mod loaded as a Frontend module.
 
 @patch_element("ha-config-dashboard")
 class HaConfigDashboardPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -20,7 +20,7 @@ class HaConfigDashboardPatch extends ModdedElement {
 
 @patch_element("ha-config-devices-dashboard")
 class HaConfigDevicesDashboardPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -28,7 +28,7 @@ class HaConfigDevicesDashboardPatch extends ModdedElement {
 
 @patch_element("ha-config-device-page")
 class HaConfigDevicePagePatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -36,7 +36,7 @@ class HaConfigDevicePagePatch extends ModdedElement {
 
 @patch_element("ha-config-entities")
 class HaConfigEntitiesPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -44,7 +44,7 @@ class HaConfigEntitiesPatch extends ModdedElement {
 
 @patch_element("ha-config-helpers")
 class HaConfigHelpersPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -52,7 +52,7 @@ class HaConfigHelpersPatch extends ModdedElement {
 
 @patch_element("ha-config-integrations-dashboard")
 class HaConfigIntegrationsDashboardPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -60,7 +60,7 @@ class HaConfigIntegrationsDashboardPatch extends ModdedElement {
 
 @patch_element("ha-config-integration-page")
 class HaConfigIntegrationsPagePatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -68,7 +68,7 @@ class HaConfigIntegrationsPagePatch extends ModdedElement {
 
 @patch_element("ha-config-cloud")
 class HaConfigCloudPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -76,7 +76,7 @@ class HaConfigCloudPatch extends ModdedElement {
 
 @patch_element("ha-config-automation")
 class HaConfigAutomationPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -84,7 +84,7 @@ class HaConfigAutomationPatch extends ModdedElement {
 
 @patch_element("ha-config-scene")
 class HaConfigScenePatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -92,7 +92,7 @@ class HaConfigScenePatch extends ModdedElement {
 
 @patch_element("ha-config-script")
 class HaConfigScriptPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -100,7 +100,7 @@ class HaConfigScriptPatch extends ModdedElement {
 
 @patch_element("ha-config-blueprint")
 class HaConfigBlueprintPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -108,7 +108,7 @@ class HaConfigBlueprintPatch extends ModdedElement {
 
 @patch_element("ha-config-areas-dashboard")
 class HaConfigAreasDashboardPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -116,7 +116,7 @@ class HaConfigAreasDashboardPatch extends ModdedElement {
 
 @patch_element("ha-config-labels")
 class HaConfigLabelsPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -124,7 +124,7 @@ class HaConfigLabelsPatch extends ModdedElement {
 
 @patch_element("ha-config-zone")
 class HaConfigZonePatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -132,7 +132,7 @@ class HaConfigZonePatch extends ModdedElement {
 
 @patch_element("ha-config-lovelace-dashboards")
 class HaConfigLovelaceDashboardsPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -140,7 +140,7 @@ class HaConfigLovelaceDashboardsPatch extends ModdedElement {
 
 @patch_element("ha-config-voice-assistants-assistants")
 class HaConfigVoiceAssistantsAssistantsPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -148,7 +148,7 @@ class HaConfigVoiceAssistantsAssistantsPatch extends ModdedElement {
 
 @patch_element("ha-config-tags")
 class HaConfigTagsPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -156,7 +156,7 @@ class HaConfigTagsPatch extends ModdedElement {
 
 @patch_element("ha-config-person")
 class HaConfigPersonPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -164,7 +164,7 @@ class HaConfigPersonPatch extends ModdedElement {
 
 @patch_element("ha-config-users")
 class HaConfigUsersPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -172,7 +172,7 @@ class HaConfigUsersPatch extends ModdedElement {
 
 @patch_element("ha-config-info")
 class HaConfigInfoPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -180,7 +180,7 @@ class HaConfigInfoPatch extends ModdedElement {
 
 @patch_element("ha-config-system-navigation")
 class HaConfigSystemNavigationPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -188,7 +188,7 @@ class HaConfigSystemNavigationPatch extends ModdedElement {
 
 @patch_element("ha-config-section-general")
 class HaConfigSectionGeneralPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -196,7 +196,7 @@ class HaConfigSectionGeneralPatch extends ModdedElement {
 
 @patch_element("ha-config-section-updates")
 class HaConfigSectionUpdatesPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -204,7 +204,7 @@ class HaConfigSectionUpdatesPatch extends ModdedElement {
 
 @patch_element("ha-config-repairs-dashboard")
 class HaConfigRepairsDashboardPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -212,7 +212,7 @@ class HaConfigRepairsDashboardPatch extends ModdedElement {
 
 @patch_element("ha-config-logs")
 class HaConfigLogsDashboardPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -220,7 +220,7 @@ class HaConfigLogsDashboardPatch extends ModdedElement {
 
 @patch_element("ha-config-backup")
 class HaConfigBackupPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -228,15 +228,15 @@ class HaConfigBackupPatch extends ModdedElement {
 
 @patch_element("ha-config-section-analytics")
 class HaConfigSectionAnalyticsPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
 }
 
 @patch_element("ha-config-section-network")
-class HaConfigSectionNetworPatch extends ModdedElement {
-  updated(_orig, ...args) {
+class HaConfigSectionNetworkPatch extends ModdedElement {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -244,7 +244,7 @@ class HaConfigSectionNetworPatch extends ModdedElement {
 
 @patch_element("dhcp-config-panel")
 class HaDhcpConfigPanelPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -252,7 +252,7 @@ class HaDhcpConfigPanelPatch extends ModdedElement {
 
 @patch_element("ssdp-config-panel")
 class HaSsdpConfigPanelPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -260,7 +260,7 @@ class HaSsdpConfigPanelPatch extends ModdedElement {
 
 @patch_element("zeroconf-config-panel")
 class HaZeroconfConfigPanelPatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
@@ -268,10 +268,8 @@ class HaZeroconfConfigPanelPatch extends ModdedElement {
 
 @patch_element("ha-config-hardware")
 class HaConfigHardwarePatch extends ModdedElement {
-  updated(_orig, ...args) {
+  firstUpdated(_orig, ...args) {
     _orig?.(...args);
     apply_card_mod(this, "config");
   }
 }
-
-
