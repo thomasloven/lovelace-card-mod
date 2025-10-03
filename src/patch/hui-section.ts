@@ -3,6 +3,27 @@ import { apply_card_mod } from "../helpers/apply_card_mod";
 import { ModdedElement } from "../helpers/apply_card_mod";
 
 /*
+Patch the hui-grid-section element to on first update:
+- config is available in this._config as set by parent hui-section
+*/
+
+@patch_element("hui-grid-section")
+class HuiGridSectionPatch extends ModdedElement {
+  _config;
+  firstUpdated(_orig, ...args) {
+    _orig?.(...args);
+    apply_card_mod(
+      this,
+      "grid-section",
+      this._config.card_mod,
+      { config: this._config },
+      true,
+      "type-grid-section"
+    );
+  }
+}
+
+/*
 Patch the hui-section element to on first update:
 - patch can only apply to strategies where cards can be modified
 - apply card-mod to cards per types in card-mod config
