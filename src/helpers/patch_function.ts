@@ -38,3 +38,12 @@ export function patch_element(element, afterwards?) {
     patch_prototype(element, constructor, afterwards);
   };
 }
+
+// Decorator for patching a mutltiple custom-elements with same patch
+export function patch_elements(elements, afterwards?) {
+  return function patched(constructor) {
+    elements.forEach((element) => {
+      patch_prototype(element, constructor, afterwards);
+    });
+  };
+}
