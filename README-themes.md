@@ -29,6 +29,7 @@ my-awesome-theme:
 - `card-mod-view`
 - `card-mod-more-info`
 - `card-mod-sidebar`
+- `card-mod-config`
 
 Also `<any variable>-yaml`.
 
