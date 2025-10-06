@@ -1,0 +1,35 @@
+name: Stale
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 9 * * *"
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 21 days stale policy
+        uses: actions/stale@v10.0.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          days-before-stale: 21
+          days-before-close: 7
+          operations-per-run: 25
+          remove-stale-when-updated: true
+          stale-issue-label: "stale"
+          exempt-issue-labels: "no-stale,pinned,feature-request,feature request"
+          stale-issue-message: >
+            This issue has been automatically marked as stale because it has not had recent activity. 
+            It will be closed if no further activity occurs. 
+            
+            Thank you for your contributions.
+          stale-pr-label: "stale"
+          exempt-pr-labels: "no-stale"
+          stale-pr-message: >
+            There hasn't been any activity on this pull request recently. This
+            pull request has been automatically marked as stale because of that
+            and will be closed if no further activity occurs within 7 days.
+
+            Thank you for your contributions.
