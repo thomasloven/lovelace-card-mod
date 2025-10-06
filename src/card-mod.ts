@@ -143,7 +143,7 @@ export class CardMod extends LitElement {
         this._cancel_style_child.push(reject);
       });
       await timeout.catch((e) => {
-        throw new Error("Reconnected");
+        throw new Error("Cancelled");
       });
       return this._style_child(path, style, retries + 1);
     }
@@ -169,7 +169,7 @@ export class CardMod extends LitElement {
     let hasChildren = false;
 
     this._debug("(Re)connecting", this);
-    
+
     this.cancelStyleChild();
 
     // Go through each path in the styles
@@ -189,15 +189,15 @@ export class CardMod extends LitElement {
             }
             return;
           }
-          if (e.message == "Reconnected") {
+          if (e.message == "Cancelled") {
             if (this.debug) {
-              console.groupCollapsed("card-mod style_child cancelled while looking for elements");
+              console.groupCollapsed(
+                "card-mod style_child cancelled while looking for elements"
+              );
               console.info(`Looked for ${key}`);
               console.info(this);
               console.groupEnd();
             }
-            this._styles = (this._fixed_styles["."] as string) || "";
-            this._style_rendered(this._styles || "");
             return;
           }
           throw e;
