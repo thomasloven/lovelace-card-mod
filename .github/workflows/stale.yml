@@ -4,7 +4,7 @@ name: Stale
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0,5,10,15,20,25,30,35,40,45,50,55 9 * * *"
+    - cron: "0 9 * * *"
 
 jobs:
   stale:
@@ -16,7 +16,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           days-before-stale: 21
           days-before-close: 7
-          operations-per-run: 25
+          operations-per-run: 100
           remove-stale-when-updated: true
           stale-issue-label: "stale"
           exempt-issue-labels: "no-stale,pinned,feature-request,feature request"
