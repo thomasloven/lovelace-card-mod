@@ -1,6 +1,6 @@
 (window as any).cardMod_patch_state = (window as any).cardMod_patch_state || {};
 
-const patchState: Record<string, Boolean> = (window as any).cardMod_patch_state;
+const patchState: Record<string, boolean> = (window as any).cardMod_patch_state;
 
 const patch_method = function (obj, method, override) {
   if (method === "constructor") return;
