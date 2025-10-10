@@ -27,6 +27,7 @@ interface CardModConfig {
   style?: CardModStyle;
   class?: string | string[];
   debug?: boolean;
+  prepend?: boolean;
 }
 
 export async function apply_card_mod_compatible(
@@ -153,7 +154,10 @@ export async function apply_card_mod(
     const target =
       element.modElement ?? shadow ? element.shadowRoot ?? element : element;
 
-    if (!target.contains(cm as any)) target.appendChild(cm as any);
+    if (!target.contains(cm as any)) {
+      target.appendChild(cm as any);
+      if (cm_config?.prepend) target.prepend(cm as any);
+    }
 
     cm.variables = variables;
     cm.styles = cm_config?.style ?? "";
