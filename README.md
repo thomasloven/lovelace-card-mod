@@ -20,7 +20,8 @@ frontend:
     - /local/card-mod.js
 ```
 
-You'll need to adjust that path according to where you have installed `card-mod.js`. 
+#### card_mod resource URL
+The card_mod resource URL is dependent on where you have installed `card-mod.js`. 
 If you installed through HACS, this is likely `/hacsfiles/lovelace-card-mod/card-mod.js`.
 
 When installing through HACS your (dashboard) lovelace resource definition will be automatically added
