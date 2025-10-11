@@ -23,7 +23,6 @@ frontend:
 You'll need to adjust that path according to where you have installed `card-mod.js`. 
 If you installed through HACS, this is probably `/hacsfiles/lovelace-card-mod/card-mod.js`.
 
-**Example:**
 When installing through HACS your (dashboard) lovelace resource definition will be automatically added
 ```
 /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=190927524345
