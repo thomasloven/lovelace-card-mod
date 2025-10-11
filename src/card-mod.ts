@@ -35,15 +35,17 @@ export class CardMod extends LitElement {
   @property() _rendered_styles: string = "";
   _renderer: (_: string) => void;
 
+  _cancel_style_child = [];
+
   _observer: MutationObserver = new MutationObserver((mutations) => {
     // MutationObserver to keep track of any changes to the parent element
     // e.g. when elements are changed after creation.
     // The observer is activated in _connect() only if there are any styles
     //  which should be applied to children
 
+    let stop = true;
     for (const m of mutations) {
       if ((m.target as any).localName === "card-mod") return;
-      let stop = true;
       if (m.addedNodes.length)
         m.addedNodes.forEach((n) => {
           if ((n as any).localName !== "card-mod") stop = false;
@@ -104,6 +106,11 @@ export class CardMod extends LitElement {
     this._connect();
   }
 
+  cancelStyleChild() {
+    this._cancel_style_child.forEach((cancel) => cancel());
+    this._cancel_style_child = [];
+  }
+
   _debug(...msg) {
     if (this.debug) console.log("CardMod Debug:", ...msg);
   }
@@ -131,7 +138,13 @@ export class CardMod extends LitElement {
     const elements = await selectTree(parent, path, true);
     if (!elements || !elements.length) {
       if (retries > 5) throw new Error("NoElements");
-      await new Promise((resolve) => setTimeout(resolve, retries * 100));
+      let timeout = new Promise((resolve, reject) => {
+        setTimeout(resolve, retries * 100);
+        this._cancel_style_child.push(reject);
+      });
+      await timeout.catch((e) => {
+        throw new Error("Cancelled");
+      });
       return this._style_child(path, style, retries + 1);
     }
 
@@ -154,9 +167,10 @@ export class CardMod extends LitElement {
     const styleChildren = {};
     let thisStyle = "";
     let hasChildren = false;
-    const parent = this.parentElement || this.parentNode;
 
     this._debug("(Re)connecting", this);
+
+    this.cancelStyleChild();
 
     // Go through each path in the styles
     for (const [key, value] of Object.entries(styles)) {
@@ -169,6 +183,17 @@ export class CardMod extends LitElement {
           if (e.message == "NoElements") {
             if (this.debug) {
               console.groupCollapsed("card-mod found no elements");
+              console.info(`Looked for ${key}`);
+              console.info(this);
+              console.groupEnd();
+            }
+            return;
+          }
+          if (e.message == "Cancelled") {
+            if (this.debug) {
+              console.groupCollapsed(
+                "card-mod style_child cancelled while looking for elements"
+              );
               console.info(`Looked for ${key}`);
               console.info(this);
               console.groupEnd();
@@ -203,15 +228,18 @@ export class CardMod extends LitElement {
     if (hasChildren) {
       this._observer.disconnect();
       const parentEl = this.parentElement ?? this.parentNode;
-      this._observer.observe((parentEl as any)?.host ?? parentEl, {
-        childList: true,
-      });
+      if (parentEl) {
+        this._observer.observe((parentEl as any)?.host ?? parentEl, {
+          childList: true,
+        });
+      }
     }
   }
 
   private async _disconnect() {
     this._observer.disconnect();
     this._styles = "";
+    this.cancelStyleChild();
     await unbind_template(this._renderer);
     this.card_mod_parent?.refresh?.();
   }
