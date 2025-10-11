@@ -17,7 +17,7 @@ To do that, add the following to your `configuration.yaml` file and restart Home
 ```yaml
 frontend:
   extra_module_url:
-    - /local/card-mod.js
+    - /[card_mod resource URL]
 ```
 
 #### card_mod resource URL
