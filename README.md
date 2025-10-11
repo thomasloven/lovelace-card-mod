@@ -29,7 +29,7 @@ When installing through HACS your (dashboard) lovelace resource definition will 
 /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=190927524345
 ```
 In `configuration.yaml` add this exact path to `frontend:` `extra_module_url:`
-When updating card-mod through HACS update your `extra_module_url:` manually to match. (This prevents the resouce being loaded twice)
+When updating card-mod through HACS make sure to update your `extra_module_url:` manually to match. This is critically important as it prevents the resouce being loaded twice.
 
 ```yaml
 frontend:
