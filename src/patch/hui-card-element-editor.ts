@@ -5,30 +5,38 @@ class ConfigElementPatch extends LitElement {
   _cardModData?;
 
   setConfig(_orig, config, ...rest) {
-    const newConfig = JSON.parse(JSON.stringify(config));
-
     // Save card_mod config
     this._cardModData = {
-      card: newConfig.card_mod,
+      card: config.card_mod,
       entities: [],
     };
-    delete newConfig.card_mod;
+    
+    // Temporarily remove top-level card_mod
+    const topLevelCardMod = config.card_mod;
+    delete config.card_mod;
 
     // Save card_mod config for individual entities
-    if (Array.isArray(newConfig.entities)) {
-      for (const [i, e] of newConfig.entities?.entries?.()) {
+    if (Array.isArray(config.entities)) {
+      for (const [i, e] of config.entities?.entries?.()) {
         this._cardModData.entities[i] = e.card_mod;
         delete e.card_mod;
       }
     }
 
-    _orig(newConfig, ...rest);
+    // Call original function with modified config
+    _orig(config, ...rest);
+
+    // Restore card_mod configurations
+    if (topLevelCardMod) {
+      config.card_mod = topLevelCardMod;
+    }
 
     // Restore card_mod config for entities
-    if (Array.isArray(newConfig.entities)) {
-      for (const [i, e] of newConfig.entities?.entries?.()) {
-        if (this._cardModData?.entities[i])
+    if (Array.isArray(config.entities)) {
+      for (const [i, e] of config.entities?.entries?.()) {
+        if (this._cardModData?.entities[i]) {
           e.card_mod = this._cardModData.entities[i];
+        }
       }
     }
   }
