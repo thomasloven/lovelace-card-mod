@@ -1,3 +1,4 @@
+blank_issues_enabled: false
 contact_links:
   - name: How do I do ___?
     url: https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744
