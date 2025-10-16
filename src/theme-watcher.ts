@@ -34,20 +34,33 @@ export function themesReady(): Promise<void> {
     return hass?.themes && hass?.themes.themes && hass?.themes.theme;
   }
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    let settled = false;
     (async () => {
       const hs = await hass();
       if (_themesReady(hs)) {
+        settled = true;
         resolve();
         return;
       }
       const id = window.setInterval(async () => {
         const hs = await hass();
         if (_themesReady(hs)) {
-          clearInterval(id);
-          resolve();
+          if (!settled) {
+            settled = true;
+            clearInterval(id);
+            clearTimeout(timeoutId);
+            resolve();
+          }
         }
       }, 500);
+      const timeoutId = window.setTimeout(() => {
+        if (!settled) {
+          settled = true;
+          clearInterval(id);
+          reject(new Error("themesReady: Timeout waiting for themes to become ready"));
+        }
+      }, 30000); // 30 seconds
     })();
   });
 }
