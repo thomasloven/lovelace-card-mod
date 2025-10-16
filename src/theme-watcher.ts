@@ -27,3 +27,25 @@ Unpromise.race(bases).then(() => {
       ?.addEventListener("settheme", refresh_theme);
   }, 1000);
 });
+
+export function themesReady(): Promise<void> {
+  function _themesReady(hass): boolean {
+    // Themes are ready when themes exist and a theme is selected
+    return hass?.themes && hass?.themes.themes && hass?.themes?.theme;
+  }
+
+  return new Promise(async (resolve) => {
+    const hs = await hass();
+    if (_themesReady(hs)) {
+      resolve();
+      return;
+    }
+    const id = window.setInterval(async () => {
+      const hs = await hass();
+      if (_themesReady(hs)) {
+        clearInterval(id);
+        resolve();
+      }
+    }, 500);
+  });
+}
