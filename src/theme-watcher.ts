@@ -31,7 +31,7 @@ Unpromise.race(bases).then(() => {
 export function themesReady(): Promise<void> {
   function _themesReady(hass): boolean {
     // Themes are ready when themes exist and a theme is selected
-    return hass?.themes && hass?.themes.themes && hass?.themes?.theme;
+    return hass?.themes && hass?.themes.themes && hass?.themes.theme;
   }
 
   return new Promise(async (resolve) => {
