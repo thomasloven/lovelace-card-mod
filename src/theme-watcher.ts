@@ -34,18 +34,20 @@ export function themesReady(): Promise<void> {
     return hass?.themes && hass?.themes.themes && hass?.themes.theme;
   }
 
-  return new Promise(async (resolve) => {
-    const hs = await hass();
-    if (_themesReady(hs)) {
-      resolve();
-      return;
-    }
-    const id = window.setInterval(async () => {
+  return new Promise((resolve) => {
+    (async () => {
       const hs = await hass();
       if (_themesReady(hs)) {
-        clearInterval(id);
         resolve();
+        return;
       }
-    }, 500);
+      const id = window.setInterval(async () => {
+        const hs = await hass();
+        if (_themesReady(hs)) {
+          clearInterval(id);
+          resolve();
+        }
+      }, 500);
+    })();
   });
 }
