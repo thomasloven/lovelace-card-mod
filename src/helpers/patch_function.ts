@@ -10,7 +10,6 @@ const patch_method = function (obj, method, override) {
     try {
       return override.call(this, original?.bind(this), ...args);
     } catch (e) {
-      console.error("Card-mod", e);
       return original?.bind(this)(...args);
     }
   };
