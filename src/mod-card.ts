@@ -30,7 +30,10 @@ class ModCard extends LitElement {
       style["."] = NO_STYLE;
     }
 
-    this._config.card_mod = { style };
+    this._config.card_mod = {
+      style,
+      debug: this._config.card_mod?.debug || false,
+    };
 
     this.build_card(config.card);
   }
