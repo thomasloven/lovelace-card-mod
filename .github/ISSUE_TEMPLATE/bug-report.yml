@@ -1,0 +1,75 @@
+name: Bug Report
+description: For reporting bugs or unexpected behavior
+title: "[Bug]: "
+body:
+  - type: textarea
+    id: ha_version
+    attributes:
+      label: My Home Assistant Version
+      description: You can view your Home Assistant Version in _Settings > About_
+      placeholder: |
+        Core: 2025.10.3
+        Frontend: 20251001.2
+        Card-mod: 3.4.5
+    validations:
+      required: true
+  - type: dropdown
+    id: lovelace
+    attributes:
+      label: My lovelace configuration method
+      multiple: true
+      options:
+        - GUI
+        - YAML
+  - type: textarea
+    id: what_i_am_doing
+    attributes:
+      label: What I am doing
+  - type: textarea
+    id: what_i_expect_to_happen
+    attributes:
+      label: What I expect to happen
+  - type: textarea
+    id: what_happened_instead
+    attributes:
+      label: What happened instead
+  - type: textarea
+    id: minimal_steps_to_reproduce
+    attributes:
+      label: Minimal steps to reproduce
+      value: |
+        1.
+        2.
+        3.
+        ...
+  - type: textarea
+    id: minimal_code
+    attributes:
+      label: Include any yaml code here
+      placeholder: Paste YAML code
+      render: YAML
+  - type: textarea
+    id: console_errors
+    attributes:
+      label: Error messages from the browser console
+      description: Select everything from the browser console and copy and paste below
+      placeholder: Paste console errors
+      render: console
+  - type: markdown
+    attributes:
+      value: '---'
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: By checking each box below I indicate that I ...
+      options:
+        - label: Understand that this is a channel for reporting bugs, not a support forum (https://community.home-assistant.io/).
+          required: true
+        - label: Have made sure I am using the latest version of the plugin.
+          required: true
+        - label: Have followed the troubleshooting steps of the "Common Problems" section of https://github.com/thomasloven/hass-config/wiki/Lovelace-Plugins.
+          required: true
+        - label: Understand that failure to follow the template above may increase the time required to handle my bug-report, or cause it to be closed without further action.
+          required: true
+      
+      
