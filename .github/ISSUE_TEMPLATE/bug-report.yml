@@ -17,10 +17,12 @@ body:
     id: lovelace
     attributes:
       label: My lovelace configuration method
-      multiple: true
+      multiple: false
       options:
         - GUI
         - YAML
+    validations:
+      required: true
   - type: textarea
     id: what_i_am_doing
     attributes:
