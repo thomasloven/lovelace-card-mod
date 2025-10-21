@@ -71,6 +71,8 @@ export class CardMod extends LitElement {
 
     // cm_update is issued when themes are reloaded
     document.addEventListener("cm_update", () => {
+      // Don't process disconnected elements
+      if (!this.isConnected) return;
       this._process_styles(this.card_mod_input);
     });
   }
@@ -209,7 +211,7 @@ export class CardMod extends LitElement {
     for (const key in this.card_mod_children) {
       if (!styleChildren[key]) {
         (await this.card_mod_children[key])?.forEach(
-          async (ch) => ((await ch).styles = "")
+          async (ch) => await ch.then((cm) => (cm.styles = "")).catch(() => {})
         );
       }
     }
