@@ -24,6 +24,7 @@ declare global {
 export class CardMod extends LitElement {
   @property({ attribute: "card-mod-type", reflect: true }) type: string;
   variables: any;
+  dynamicVariablesHaveChanged: boolean = false;
   card_mod_children: Record<string, Array<Promise<CardMod>>> = {};
   card_mod_parent?: CardMod = undefined;
 
@@ -70,9 +71,10 @@ export class CardMod extends LitElement {
     super();
 
     // cm_update is issued when themes are reloaded
-    document.addEventListener("cm_update", () => {
+    document.addEventListener("cm_update", (ev: CustomEvent) => {
       // Don't process disconnected elements
       if (!this.isConnected) return;
+      this.dynamicVariablesHaveChanged = ev.detail?.variablesChanged || false;
       this._process_styles(this.card_mod_input);
     });
   }
@@ -218,8 +220,9 @@ export class CardMod extends LitElement {
     this.card_mod_children = styleChildren;
 
     // Process styles applicable to this card-mod element
-    if (this._styles === thisStyle) return;
+    if (this._styles === thisStyle && !this.dynamicVariablesHaveChanged) return;
     this._styles = thisStyle;
+    this.dynamicVariablesHaveChanged = false;
 
     if (hasTemplate(this._styles)) {
       this._renderer = this._renderer || this._style_rendered.bind(this);
@@ -271,6 +274,7 @@ if (!customElements.get("card-mod")) {
     `%cCARD-MOD ${pjson.version} IS INSTALLED`,
     "color: green; font-weight: bold"
   );
+  window.dispatchEvent(new Event("card-mod-bootstrap"));
 }
 (async () => {
   // Wait for scoped customElements registry to be set up

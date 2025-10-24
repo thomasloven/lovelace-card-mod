@@ -1,5 +1,6 @@
 import { hass } from "./hass";
 import { BrowserID } from "./browser_id";
+import { getPanelState } from "./panel";
 
 interface CachedTemplate {
   template: string;
@@ -43,20 +44,21 @@ export async function bind_template(
   variables: object
 ): Promise<void> {
   const hs = await hass();
+  const panelState = await getPanelState();
   const connection = hs.connection;
+
+  variables = {
+    user: hs.user.name,
+    browser: BrowserID(),
+    ...panelState,
+    ...variables,
+  };
 
   const cacheKey = JSON.stringify([template, variables]);
   let cache = cachedTemplates[cacheKey];
   if (!cache) {
     unbind_template(callback);
     callback("");
-
-    variables = {
-      user: hs.user.name,
-      browser: BrowserID(),
-      hash: location.hash.substr(1) || "",
-      ...variables,
-    };
 
     cachedTemplates[cacheKey] = cache = {
       template,
