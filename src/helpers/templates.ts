@@ -5,6 +5,7 @@ interface CachedTemplate {
   template: string;
   variables: object;
   value: string;
+  debug: boolean;
   callbacks: Set<(string) => void>;
   unsubscribe: Promise<() => Promise<void>>;
 }
@@ -29,6 +30,13 @@ function template_updated(
     return;
   }
   cache.value = result.result;
+  if (cache.debug) {
+    console.groupCollapsed("CardMod: Template updated");
+    console.log("Template:", cache.template);
+    console.log("Variables:", cache.variables);
+    console.log("Value:", cache.value);
+    console.groupEnd();
+  }
   cache.callbacks.forEach((f) => f(result.result));
 }
 
@@ -48,6 +56,7 @@ export async function bind_template(
   const cacheKey = JSON.stringify([template, variables]);
   let cache = cachedTemplates[cacheKey];
   if (!cache) {
+    let debug = false;
     unbind_template(callback);
     callback("");
 
@@ -58,11 +67,20 @@ export async function bind_template(
       ...variables,
     };
 
+    if (template.includes("card_mod.debug")) {
+      debug = true;
+      console.groupCollapsed("CardMod: Binding template");
+      console.log("Template:", template);
+      console.log("Variables:", variables);
+      console.groupEnd();
+    }
+
     cachedTemplates[cacheKey] = cache = {
       template,
       variables,
       value: "",
       callbacks: new Set([callback]),
+      debug,
       unsubscribe: connection.subscribeMessage(
         (result: RenderTemplateResult) => template_updated(cacheKey, result),
         {
@@ -73,6 +91,12 @@ export async function bind_template(
       ),
     };
   } else {
+    if (cache.debug) {
+      console.groupCollapsed("CardMod: Reusing template");
+      console.log("Template:", template);
+      console.log("Variables:", variables);
+      console.groupEnd();
+    }
     if (!cache.callbacks.has(callback)) unbind_template(callback);
     callback(cache.value);
     cache.callbacks.add(callback);
@@ -87,6 +111,12 @@ export async function unbind_template(
     if (cache.callbacks.has(callback)) {
       cache.callbacks.delete(callback);
       if (cache.callbacks.size == 0) {
+        if (cache.debug) {
+          console.groupCollapsed("CardMod: Unbinding template");
+          console.log("Template:", cache.template);
+          console.log("Variables:", cache.variables);
+          console.groupEnd();
+        }
         unsubscriber = cache.unsubscribe;
         delete cachedTemplates[key];
       }
