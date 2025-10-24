@@ -65,8 +65,8 @@ async function _viewAttributes(panel) {
     };
   }
   let cnt = 0;
-  while (!panel.shadowRoot?.querySelector("hui-root") && cnt < 10) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+  while (!panel.shadowRoot?.querySelector("hui-root") && cnt < 100) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
     cnt++;
   }
   const lovelace = panel.shadowRoot.querySelector("hui-root");
