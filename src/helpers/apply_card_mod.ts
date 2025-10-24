@@ -168,7 +168,8 @@ export async function apply_card_mod(
     (typeof cm_config?.class == "string"
       ? cm_config?.class?.split?.(" ")
       : cm_config?.class) ?? [];
-  element.classList?.add(...classes, cls);
+  cls && classes.push(cls);
+  element.classList?.add(...classes);
 
   return cm;
 }
