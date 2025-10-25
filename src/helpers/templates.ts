@@ -6,8 +6,10 @@ interface CachedTemplate {
   template: string;
   variables: object;
   value: string;
+  debug: boolean;
   callbacks: Set<(string) => void>;
   unsubscribe: Promise<() => Promise<void>>;
+  cooldownTimeoutID?: number;
 }
 
 interface RenderTemplateResult {
@@ -30,6 +32,13 @@ function template_updated(
     return;
   }
   cache.value = result.result;
+  if (cache.debug) {
+    console.groupCollapsed("CardMod: Template updated");
+    console.log("Template:", cache.template);
+    console.log("Variables:", cache.variables);
+    console.log("Value:", cache.value);
+    console.groupEnd();
+  }
   cache.callbacks.forEach((f) => f(result.result));
 }
 
@@ -57,14 +66,24 @@ export async function bind_template(
   const cacheKey = JSON.stringify([template, variables]);
   let cache = cachedTemplates[cacheKey];
   if (!cache) {
+    let debug = false;
     unbind_template(callback);
     callback("");
+
+    if (template.includes("card_mod.debug")) {
+      debug = true;
+      console.groupCollapsed("CardMod: Binding template");
+      console.log("Template:", template);
+      console.log("Variables:", variables);
+      console.groupEnd();
+    }
 
     cachedTemplates[cacheKey] = cache = {
       template,
       variables,
       value: "",
       callbacks: new Set([callback]),
+      debug,
       unsubscribe: connection.subscribeMessage(
         (result: RenderTemplateResult) => template_updated(cacheKey, result),
         {
@@ -75,25 +94,61 @@ export async function bind_template(
       ),
     };
   } else {
+    if (cache.debug) {
+      console.groupCollapsed("CardMod: Reusing template");
+      console.log("Template:", cache.template);
+      console.log("Variables:", cache.variables);
+      console.log("Value:", cache.value);
+      console.groupEnd();
+    }
     if (!cache.callbacks.has(callback)) unbind_template(callback);
     callback(cache.value);
     cache.callbacks.add(callback);
+    cache.cooldownTimeoutID && clearTimeout(cache.cooldownTimeoutID);
+    cache.cooldownTimeoutID = undefined;
   }
 }
 
 export async function unbind_template(
   callback: (string) => void
 ): Promise<void> {
-  let unsubscriber: Promise<() => Promise<void>>;
   for (const [key, cache] of Object.entries(cachedTemplates)) {
     if (cache.callbacks.has(callback)) {
       cache.callbacks.delete(callback);
       if (cache.callbacks.size == 0) {
-        unsubscriber = cache.unsubscribe;
-        delete cachedTemplates[key];
+        if (cache.debug) {
+          console.groupCollapsed(
+            "CardMod: Template unbound and will be unsubscribed after cooldown"
+          );
+          console.log("Template:", cache.template);
+          console.log("Variables:", cache.variables);
+          console.groupEnd();
+        }
+        cache.cooldownTimeoutID = window.setTimeout(
+          unsubscribe_template,
+          20000,
+          key
+        );
       }
       break;
     }
   }
-  if (unsubscriber) await (await unsubscriber)();
+}
+
+async function unsubscribe_template(key: string) {
+  const cache = cachedTemplates[key];
+  if (!cache) return;
+  if (cache.cooldownTimeoutID) {
+    clearTimeout(cache.cooldownTimeoutID);
+  }
+  if (cache.debug) {
+    console.groupCollapsed("CardMod: Unsubscribing template after cooldown");
+    console.log("Template:", cache.template);
+    console.log("Variables:", cache.variables);
+    console.groupEnd();
+  }
+  delete cachedTemplates[key];
+  await (
+    await cache.unsubscribe
+  )();
 }
