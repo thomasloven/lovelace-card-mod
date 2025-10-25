@@ -96,7 +96,7 @@ export async function bind_template(
       console.groupCollapsed("CardMod: Reusing template");
       console.log("Template:", cache.template);
       console.log("Variables:", cache.variables);
-      consloe.log("Value:", cache.value);
+      console.log("Value:", cache.value);
       console.groupEnd();
     }
     if (!cache.callbacks.has(callback)) unbind_template(callback);
