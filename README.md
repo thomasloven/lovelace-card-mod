@@ -36,7 +36,7 @@ Example (dashboard) lovelace resource definition when installed through HACS
 ```
 
 In `configuration.yaml` add this exact path to `frontend:` `extra_module_url:`
-When updating card-mod through HACS make sure to update your `extra_module_url:` manually to match. This is critically important as it prevents the resouce being loaded twice.
+When updating card-mod through HACS make sure to update your `extra_module_url:` manually to match. This is critically important as it prevents the resource being loaded twice.
 
 ```yaml
 frontend:
