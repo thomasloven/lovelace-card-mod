@@ -46,7 +46,7 @@ frontend:
 
 **IMPORTANT**: Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
 
-(dashboard) lovelace resource definition is required to enable card-mod to be applied to dahsboards on cast devices.
+(dashboard) lovelace resource definition is required to enable card-mod to be applied to dashboards on cast devices.
 `extra_module_url` will provide performance improvements to non-cast devices e.g. enhanced speed in applying card-mod to cards.
 
 ## Quick start
