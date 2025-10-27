@@ -50,7 +50,7 @@ hui-card                 ⇐ card-mod v4 patches here
 
 - Custom cards that are wrappers like `streamlined-card` should adopt wrapping in each card in `hui-card`. This gives all benfits of users then including `visibility` conditions or even tempating the new `disabled` config option. These only work 100% when using `hui-card` as a wrapper. This is what `expander-card` (MelleD fork) now does and has 100% success. _NOTE: If you see anything like a history card not updating on first load, that is due to not taking this appaorach_
 - `card-mod-card` theme variable applies to new `hui-card` patching and the legacy `ha-card` patching.
-- Althernative to above point, when you know there is a parent `hui-card` patch you can adjust your themes to match. e.g. for streamlined-card, the below will work for patching from `hui-card`, the `*` matching the unknown card type (to card-mod) in the streamlined-card structure.
+- Alternative to above point, when you know there is a parent `hui-card` patch you can adjust your themes to match. e.g. for streamlined-card, the below will work for patching from `hui-card`, the `*` matching the unknown card type (to card-mod) in the streamlined-card structure.
 
   ```yaml
   card_mod:
