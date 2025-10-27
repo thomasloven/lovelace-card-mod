@@ -30,7 +30,7 @@ hui-card                 ⇐ card-mod v4 patches here
           ↳ shadowRoot
 ```
 
-### Custom card strcture - streamline-card with tile template
+### Custom card structure - streamline-card with tile template
 
 - As hui-card is still patched you could apply CSS vars via `:host { }`.
 - Likewise, you could use yaml selector paths from `hui-card`. See comments below.
