@@ -166,7 +166,7 @@ card-mod also makes the following variables available for templates:
   - `panel.viewTitle`: "Test View"
   - `panel.viewUrlPath`: "another-test-view"
 
-  You can debug card-mod jinja2 templates by placing the comment `{# card_mod.debyg #}` anywhere in your template. You will see debug messages on template binding, value updated, reuse, unbinding and final ubsubscribing. Any template is kept subscribed in cache for a 20s cooldown period to assist with template application, which can bring a slight speed improvememts when switching back and forth to views, or using the same template on cards on different views.
+  You can debug card-mod jinja2 templates by placing the comment `{# card_mod.debug #}` anywhere in your template. You will see debug messages on template binding, value updated, reuse, unbinding and final ubsubscribing. Any template is kept subscribed in cache for a 20s cooldown period to assist with template application, which can bring a slight speed improvememts when switching back and forth to views, or using the same template on cards on different views.
 
 ### DOM navigation
 
