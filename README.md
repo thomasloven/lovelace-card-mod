@@ -331,5 +331,3 @@ For instructions on how to develop a card-mod theme, see [README-themes.md](READ
 ## Development
 
 For adding card-mods styling powers to your custom card, see [README-developers.md](README-developers.md).
-
-## Community
