@@ -260,7 +260,7 @@ The DOM navigation can be tricky to get right the first few times, but you'll ev
 
 To help you, you can use your browsers Element inspector to see which steps card-mod takes.
 
-- Open up the element inspector and find the base element (e.g. `#shadow-root` or card contained by `<hui-card>` or `<ha-card>` contained by a custom card or other elment. See [README-application](/README-application.md) for more details.). This should contain a `<card-mod>` element whether you specified a style or not.
+- Open up the element inspector and find the base element (e.g. `#shadow-root` or card contained by `<hui-card>` or `<ha-card>` contained by a custom card or other element. See [README-application](/README-application.md) for more details.). This should contain a `<card-mod>` element whether you specified a style or not.
 - Make sure the `<card-mod>` element is selected.
 - Open up the browsers console (in chrome you can press Esc to open the console and inspector at the same time).
 - Type in `$0.card_mod_input` and press enter. \
