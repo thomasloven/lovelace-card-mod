@@ -15,7 +15,7 @@ hui-card           ⇐ card-mod v4 patches here
       ↳ ha-card    ⇐ card-mod v4 also patches here but ignores due to known standard structure
 ```
 
-### Custom card strcture - button-card as an examples
+### Custom card structure - button-card as an example
 
 - As hui-card is still patched you could apply CSS vars via `:host { }`.
 - Likewise, you could use yaml selector paths from `hui-card`. See comments below.
