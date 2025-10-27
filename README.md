@@ -1,4 +1,4 @@
-# card-mod 3
+# card-mod 4
 
 Allows you to apply CSS styles to various elements of the Home Assistant frontend.
 
@@ -23,26 +23,31 @@ frontend:
 ```
 
 #### card_mod resource URL
-The card_mod resource URL is dependent on where you have installed `card-mod.js`. 
+
+The card_mod resource URL is dependent on where you have installed `card-mod.js`.
 If you installed through HACS, this is likely `/hacsfiles/lovelace-card-mod/card-mod.js`.
 
 When installing through HACS your (dashboard) lovelace resource definition will be automatically added
+
+Example (dashboard) lovelace resource definition when installed through HACS
+
 ```
-/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=190927524345
+/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=<12345678901>
 ```
+
 In `configuration.yaml` add this exact path to `frontend:` `extra_module_url:`
-When updating card-mod through HACS make sure to update your `extra_module_url:` manually to match. This is critically important as it prevents the resouce being loaded twice.
+When updating card-mod through HACS make sure to update your `extra_module_url:` manually to match. This is critically important as it prevents the resource being loaded twice.
 
 ```yaml
 frontend:
   extra_module_url:
-    - /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=190927524345
+    - /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=<12345678901>
 ```
 
-__IMPORTANT__: Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
+**IMPORTANT**: Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
 
-(dashboard) lovelace resource definition is required to enable card-mod to be applied to dahsboards on cast devices.
-`extra_module_url` will provide performace improvements to non-cast devices e.g. enhanced speed in applying card-mod to cards.
+(dashboard) lovelace resource definition is required to enable card-mod to be applied to dashboards on cast devices.
+`extra_module_url` will provide performance improvements to non-cast devices e.g. enhanced speed in applying card-mod to cards.
 
 ## Quick start
 
@@ -74,20 +79,11 @@ card_mod:
   style: <STYLES>
 ```
 
-If the simplest form, `<STYLES>` is a string of [CSS](https://www.w3schools.com/css/) which will be injected into the `<ha-card>` element of the card.
+If the simplest form, `<STYLES>` is a string of [CSS](https://www.w3schools.com/css/) which will be injected into the appropriate element based on the card type. See [README-application](/README-application.md) for a detailed description on where card-mod is applied in version 4, which is slightly different from previous versions.
 
-> NOTE: card-mod only works on cards that contain a ha-card element. This includes almost every card which can be _seen_, but not e.g. `conditional`, `entity_filter`, `vertical-stack`, `horizontal-stack`, `grid`.
+> NOTE: card-mod only works on cards that are contained by a hui-card element, or contain a ha-card element. This includes almost every card standard Home Assistant Frontend cards, and most custom cards.
 >
-> Note, though that those cards often include other cards, which card-mod _can_ work on. \
-> See the manual for each card to see how to specify parameters for the included card(s).
-
-The bottommost element that can be styled is the `<ha-card>`.
-
-<details><summary>Screenshot of the ha-card element in the Chrome DOM inspector</summary>
-
-![ha-card](https://user-images.githubusercontent.com/1299821/109145981-86162d00-7763-11eb-8cfa-1413ed6e80a5.png)
-
-</details>
+> For a card contained by a hui-card element, which is almost every standard Home Assistant Frontend card, styles are injected into a shadowRoot and the bottom most element is `host:`, though in most cases the first element in the shadowRoot is `ha-card`. For many custom cards which do not take advantage of the modern hui-root container, but contain a ha-card element, the styles are injected into ha-card and the bottommost element is `ha-card`. See [README-application](/README-application.md) for more details.
 
 > TIP: Home Assistant themes makes use of [CSS variables](https://www.w3schools.com/css/css3_variables.asp). Those can both be set and used in card-mod - prepended by two dashes:
 >
@@ -155,7 +151,22 @@ card-mod also makes the following variables available for templates:
 - `config` - The entire configuration of the card, entity or badge - (`config.entity` may be of special interest)
 - `user` - The name of the currently logged in user
 - `browser` - The `browser_id` of your browser, if you have [browser_mod](https://github.com/thomasloven/hass-browser_mod) installed
-- `hash` - Whatever comes after `#` in the current URL (This is only considered on first load. It's not dynamically updated)
+- `hash` - Whatever comes after `#` in the current URL. card-mod watches for location changes through `location-changed` and `popstate` events so templates will be rebound with the updated `hash`
+- `panel` - various information about the panel in view, be it a lovelace dashboard or another panel view. `panel` is a dictionary containing the following panel attributes with example values shown.
+
+  - `panel.fullUrlPath`: "card-mod/another-test-view"
+  - `panel.panelComponentName`: "lovelace"
+  - `panel.panelIcon`: "mdi:card-bulleted-outline"
+  - `panel.panelNarrow`: true
+  - `panel.panelRequireAdmin`: false
+  - `panel.panelTitle`: "Card Mod"
+  - `panel.panelUrlPath`: "card-mod"
+  - `panel.panelTitle`: "Card Mod - Test View"
+  - `panel.viewNarrow`: true
+  - `panel.viewTitle`: "Test View"
+  - `panel.viewUrlPath`: "another-test-view"
+
+  You can debug card-mod jinja2 templates by placing the comment `{# card_mod.debyg #}` anywhere in your template. You will see debug messages on template binding, value updated, reuse, unbinding and final ubsubscribing. Any template is kept subscribed in cache for a 20s cooldown period to assist with template application, which can bring a slight speed improvememts when switching back and forth to views, or using the same template on cards on different views.
 
 ### DOM navigation
 
@@ -163,7 +174,7 @@ Home Assistant makes extensive use of something called [shadow DOM](https://deve
 
 When exploring the cards in your browsers element inspector you may have come across a line that says something like "`#shadow-root (open)`" (exactly what it says depends on your browser) and have noticed that elements inside that does not inherit the styles from outside.
 
-In order to style elements inside a shadow-root, you will need to make your `style:` a dictionary rather than a string.
+In order to style elements inside a `#shadow-root`, you will need to make your `style:` a dictionary rather than a string.
 
 For each dictionary entry the key will be used to select one or several elements through a modified [`querySelector()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) function. The value of the entry will then be injected into those elements.
 
@@ -249,11 +260,11 @@ The DOM navigation can be tricky to get right the first few times, but you'll ev
 
 To help you, you can use your browsers Element inspector to see which steps card-mod takes.
 
-- Open up the element inspector and find the base element (e.g. `<ha-card>`). This should contain a `<card-mod>` element whether you specified a style or not.
+- Open up the element inspector and find the base element (e.g. `#shadow-root` or card contained by `<hui-card>` or `<ha-card>` contained by a custom card or other element. See [README-application](/README-application.md) for more details.). This should contain a `<card-mod>` element whether you specified a style or not.
 - Make sure the `<card-mod>` element is selected.
 - Open up the browsers console (in chrome you can press Esc to open the console and inspector at the same time).
 - Type in `$0.card_mod_input` and press enter. \
-  This is the style information that step of the chain was given. If this is a string, you're at the end of the chain. If it's an object, you can move on to the next ste.
+  This is the style information that step of the chain was given. If this is a string, you're at the end of the chain. If it's an object, you can move on to the next step.
 - Type in `$0.card_mod_children` and press enter. \
   This is a set of any `<card-mod>` elements in the next step of any chain. Clicking "card-mod" in the `value:` of the set items will bring you to that `<card-mod>` element in the inspector, and you can keep on inspecting the rest of the chain.
 - You can also use `$0.card_mod_parent` to find the parent of any `<card-mod>` element in a chain.
@@ -271,7 +282,7 @@ card_mod:
 
 Cards that don't have a `<ha-element>` can still be styled by using the supplied `custom:mod-card` card.
 
-This is only necessary in **very few** instances, and likely to bring more problems than it solves.
+This is only necessary in **very very few** instances, and likely to bring more problems than it solves.
 
 Most likely your card contains another card, in which case **that** is the one you should apply the styles to.
 
@@ -282,7 +293,7 @@ Enough warnings.
 ```yaml
 type: custom:mod-card
 card:
-  type: vertical-stack # for example
+  type: custom:beloved-custom-card
   ...
 card_mod:
   style: |
@@ -309,6 +320,10 @@ Then going to `http://localhost:8125` and logging in with username `dev` and pas
 
 Or you could use the vscode devcontainer and run the task "`Run hass`".
 
+## Detailed card-mod application
+
+For details on where card-mod is applied see [README-application](/README-application.md).
+
 ## Themes
 
 For instructions on how to develop a card-mod theme, see [README-themes.md](README-themes.md).
@@ -316,7 +331,3 @@ For instructions on how to develop a card-mod theme, see [README-themes.md](READ
 ## Development
 
 For adding card-mods styling powers to your custom card, see [README-developers.md](README-developers.md).
-
----
-
-<a href="https://www.buymeacoffee.com/uqD6KHCdJ" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
