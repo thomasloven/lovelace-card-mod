@@ -12,11 +12,12 @@ import "./patch/hui-picture-elements-card";
 import "./patch/ha-icon";
 import "./patch/hui-view";
 import "./patch/hui-root";
+import "./patch/ha-dialog";
 import "./patch/ha-more-info-dialog";
 import "./patch/ha-sidebar";
 import "./patch/hui-card-element-editor";
 import "./patch/ha-panel-config";
-import "./patch/ha-panel-developer-tools"
+import "./patch/ha-panel-developer-tools";
 import "./mod-card";
 import "./theme-watcher";
 
