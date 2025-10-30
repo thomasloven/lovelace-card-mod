@@ -32,6 +32,7 @@ my-awesome-theme:
 - `card-mod-config`
 - `card-mod-panel-custom`
 - `card-mod-top-app-bar-fixed`
+- `card-mod-dialog`
 
 Also `<any variable>-yaml`.
 

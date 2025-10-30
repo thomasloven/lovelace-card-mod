@@ -16,6 +16,16 @@ const patch_method = function (obj, method, override) {
   obj[method] = fn;
 };
 
+export const set_patched = (element: HTMLElement) => {
+  const key = typeof element === "string" ? element : element.constructor.name;
+  patchState[key] = true;
+};
+
+export const is_patched = (element: HTMLElement) => {
+  const key = typeof element === "string" ? element : element.constructor.name;
+  return patchState[key] ?? false;
+};
+
 export const patch_object = (obj, patch) => {
   if (!obj) return;
   for (const method in Object.getOwnPropertyDescriptors(patch.prototype)) {
