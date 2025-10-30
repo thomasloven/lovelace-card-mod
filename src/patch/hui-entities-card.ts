@@ -14,7 +14,7 @@ class HuiEntitiesCardPatch extends ModdedElement {
     if (config?.type === "custom:mod-card") return retval;
 
     if (!retval?.values) return retval;
-    const row = retval.values[0];
+    const row = retval.values[1];
     if (!row) return retval;
 
     const cls = `type-${config?.type?.replace?.(":", "-")}`;
