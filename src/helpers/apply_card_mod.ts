@@ -165,9 +165,9 @@ export async function apply_card_mod(
   }, 1);
 
   const classes =
-    (typeof cm_config?.class == "string"
+    typeof cm_config?.class == "string"
       ? cm_config?.class?.split?.(" ")
-      : cm_config?.class) ?? [];
+      : [...(cm_config?.class ?? [])];
   cls && classes.push(cls);
   element.classList?.add(...classes);
 
