@@ -12,6 +12,20 @@ x-anchors:
 
 title: mod-card
 cards:
+  - type: horizontal-stack
+    cards:
+      - type: markdown
+        content: "# 1"
+      - type: markdown
+        content: "# 2"
+      - type: markdown
+        content: "# 3"
+    card_mod:
+      style: |
+        :host {
+          display: block;
+          border: 1px solid teal;
+        }
   - type: vertical-stack
     cards:
       - <<: *desc

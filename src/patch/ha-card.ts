@@ -4,6 +4,7 @@ import { ModdedElement } from "../helpers/apply_card_mod";
 
 /*
 Patch the ha-card element to on first update:
+- if it's parent is a hui-card, do nothing (as that is already handled in hui-card patch)
 - try to find the config parameter of it's parent element
 - Apply card_mod styles according to that config
 */
@@ -14,7 +15,11 @@ class HaCardPatch extends ModdedElement {
   async firstUpdated(_orig, ...args) {
     await _orig?.(...args);
 
+    const huiCard = (this.parentNode as any)?.host?.parentNode;
+    if (huiCard && huiCard.localName === "hui-card") return;
+
     const config = findConfig(this);
+    if (!config) return;
 
     const cls = `type-${config?.type?.replace?.(":", "-")}`;
     await apply_card_mod(
