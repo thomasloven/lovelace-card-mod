@@ -6,6 +6,45 @@ import {
   set_patched,
 } from "../helpers/patch_function";
 
+export function stripHtmlAndFunctions(value: any, seen = new WeakSet()): any {
+  if (value == null) return value;
+  const t = typeof value;
+
+  // Strip functions
+  if (t === "function") return undefined;
+
+  // Strip HTMLElements / Elements (handles different environments)
+  if (
+    (typeof HTMLElement !== "undefined" && value instanceof HTMLElement) ||
+    (typeof Element !== "undefined" && value instanceof Element)
+  ) {
+    return undefined;
+  }
+
+  // Primitives remain
+  if (t !== "object") return value;
+
+  // Prevent infinite recursion on circular refs
+  if (seen.has(value)) return undefined;
+  seen.add(value);
+
+  // Arrays: sanitize elements and remove stripped ones
+  if (Array.isArray(value)) {
+    const arr = value
+      .map((v) => stripHtmlAndFunctions(v, seen))
+      .filter((v) => v !== undefined);
+    return arr;
+  }
+
+  // Objects: sanitize each property
+  const out: Record<string, any> = {};
+  for (const [k, v] of Object.entries(value)) {
+    const cleaned = stripHtmlAndFunctions(v, seen);
+    if (cleaned !== undefined) out[k] = cleaned;
+  }
+  return out;
+}
+
 class HaDialogPatch extends ModdedElement {
   async showDialog(_orig, params, ...rest) {
     await _orig?.(params, ...rest);
@@ -32,7 +71,7 @@ class HaDialogPatch extends ModdedElement {
         "dialog",
         undefined,
         {
-          params: params,
+          params: stripHtmlAndFunctions(params),
         },
         false,
         cls
