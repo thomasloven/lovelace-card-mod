@@ -27,6 +27,7 @@ interface CardModConfig {
   style?: CardModStyle;
   class?: string | string[];
   debug?: boolean;
+  prepend?: boolean;
 }
 
 export async function apply_card_mod_compatible(
@@ -143,6 +144,7 @@ export async function apply_card_mod(
 
   cm.type = type;
   cm.debug = cm_config?.debug ?? false;
+  cm.cancelStyleChild();
   // (cm as any).setAttribute("card-mod-type", type);
 
   if (!element._cardMod.includes(cm)) element._cardMod.push(cm);
@@ -153,17 +155,21 @@ export async function apply_card_mod(
     const target =
       element.modElement ?? shadow ? element.shadowRoot ?? element : element;
 
-    if (!target.contains(cm as any)) target.appendChild(cm as any);
+    if (!target.contains(cm as any)) {
+      target.appendChild(cm as any);
+      if (cm_config?.prepend) target.prepend(cm as any);
+    }
 
     cm.variables = variables;
     cm.styles = cm_config?.style ?? "";
   }, 1);
 
   const classes =
-    (typeof cm_config?.class == "string"
+    typeof cm_config?.class == "string"
       ? cm_config?.class?.split?.(" ")
-      : cm_config?.class) ?? [];
-  element.classList?.add(...classes, cls);
+      : [...(cm_config?.class ?? [])];
+  cls && classes.push(cls);
+  element.classList?.add(...classes);
 
   return cm;
 }

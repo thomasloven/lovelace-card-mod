@@ -24,6 +24,7 @@ declare global {
 export class CardMod extends LitElement {
   @property({ attribute: "card-mod-type", reflect: true }) type: string;
   variables: any;
+  dynamicVariablesHaveChanged: boolean = false;
   card_mod_children: Record<string, Array<Promise<CardMod>>> = {};
   card_mod_parent?: CardMod = undefined;
 
@@ -35,15 +36,17 @@ export class CardMod extends LitElement {
   @property() _rendered_styles: string = "";
   _renderer: (_: string) => void;
 
+  _cancel_style_child = [];
+
   _observer: MutationObserver = new MutationObserver((mutations) => {
     // MutationObserver to keep track of any changes to the parent element
     // e.g. when elements are changed after creation.
     // The observer is activated in _connect() only if there are any styles
     //  which should be applied to children
 
+    let stop = true;
     for (const m of mutations) {
       if ((m.target as any).localName === "card-mod") return;
-      let stop = true;
       if (m.addedNodes.length)
         m.addedNodes.forEach((n) => {
           if ((n as any).localName !== "card-mod") stop = false;
@@ -68,7 +71,10 @@ export class CardMod extends LitElement {
     super();
 
     // cm_update is issued when themes are reloaded
-    document.addEventListener("cm_update", () => {
+    document.addEventListener("cm_update", (ev: CustomEvent) => {
+      // Don't process disconnected elements
+      if (!this.isConnected) return;
+      this.dynamicVariablesHaveChanged = ev.detail?.variablesChanged || false;
       this._process_styles(this.card_mod_input);
     });
   }
@@ -104,6 +110,11 @@ export class CardMod extends LitElement {
     this._connect();
   }
 
+  cancelStyleChild() {
+    this._cancel_style_child.forEach((cancel) => cancel());
+    this._cancel_style_child = [];
+  }
+
   _debug(...msg) {
     if (this.debug) console.log("CardMod Debug:", ...msg);
   }
@@ -131,7 +142,13 @@ export class CardMod extends LitElement {
     const elements = await selectTree(parent, path, true);
     if (!elements || !elements.length) {
       if (retries > 5) throw new Error("NoElements");
-      await new Promise((resolve) => setTimeout(resolve, retries * 100));
+      let timeout = new Promise((resolve, reject) => {
+        setTimeout(resolve, retries * 100);
+        this._cancel_style_child.push(reject);
+      });
+      await timeout.catch((e) => {
+        throw new Error("Cancelled");
+      });
       return this._style_child(path, style, retries + 1);
     }
 
@@ -154,9 +171,10 @@ export class CardMod extends LitElement {
     const styleChildren = {};
     let thisStyle = "";
     let hasChildren = false;
-    const parent = this.parentElement || this.parentNode;
 
     this._debug("(Re)connecting", this);
+
+    this.cancelStyleChild();
 
     // Go through each path in the styles
     for (const [key, value] of Object.entries(styles)) {
@@ -175,6 +193,17 @@ export class CardMod extends LitElement {
             }
             return;
           }
+          if (e.message == "Cancelled") {
+            if (this.debug) {
+              console.groupCollapsed(
+                "card-mod style_child cancelled while looking for elements"
+              );
+              console.info(`Looked for ${key}`);
+              console.info(this);
+              console.groupEnd();
+            }
+            return;
+          }
           throw e;
         });
       }
@@ -184,15 +213,16 @@ export class CardMod extends LitElement {
     for (const key in this.card_mod_children) {
       if (!styleChildren[key]) {
         (await this.card_mod_children[key])?.forEach(
-          async (ch) => ((await ch).styles = "")
+          async (ch) => await ch.then((cm) => (cm.styles = "")).catch(() => {})
         );
       }
     }
     this.card_mod_children = styleChildren;
 
     // Process styles applicable to this card-mod element
-    if (this._styles === thisStyle) return;
+    if (this._styles === thisStyle && !this.dynamicVariablesHaveChanged) return;
     this._styles = thisStyle;
+    this.dynamicVariablesHaveChanged = false;
 
     if (hasTemplate(this._styles)) {
       this._renderer = this._renderer || this._style_rendered.bind(this);
@@ -203,15 +233,18 @@ export class CardMod extends LitElement {
     if (hasChildren) {
       this._observer.disconnect();
       const parentEl = this.parentElement ?? this.parentNode;
-      this._observer.observe((parentEl as any)?.host ?? parentEl, {
-        childList: true,
-      });
+      if (parentEl) {
+        this._observer.observe((parentEl as any)?.host ?? parentEl, {
+          childList: true,
+        });
+      }
     }
   }
 
   private async _disconnect() {
     this._observer.disconnect();
     this._styles = "";
+    this.cancelStyleChild();
     await unbind_template(this._renderer);
     this.card_mod_parent?.refresh?.();
   }
@@ -241,6 +274,7 @@ if (!customElements.get("card-mod")) {
     `%cCARD-MOD ${pjson.version} IS INSTALLED`,
     "color: green; font-weight: bold"
   );
+  window.dispatchEvent(new Event("card-mod-bootstrap"));
 }
 (async () => {
   // Wait for scoped customElements registry to be set up

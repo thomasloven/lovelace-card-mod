@@ -1,10 +1,8 @@
 title: Theme
 theme: art-nouveau
 badges:
-  - entity: binary_sensor.updater
   - entity: binary_sensor.basement_floor_wet
   - entity: binary_sensor.movement_backyard
-  - entity: mailbox.demomailbox
   - entity: sensor.outside_temperature
   - entity: sensor.outside_humidity
   - entity: sun.sun

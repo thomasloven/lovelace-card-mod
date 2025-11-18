@@ -138,7 +138,7 @@ cards:
                       $:
                         ha-state-icon:
                           $: |
-                            ha-svg-icon {
+                            ha-icon {
                               color: green !important;
                             }
         card_mod:
@@ -151,7 +151,7 @@ cards:
                       $:
                         ha-state-icon:
                           $: |
-                            ha-svg-icon {
+                            ha-icon {
                               color: red;
                             }
   - type: vertical-stack
@@ -163,6 +163,8 @@ cards:
           Red Map Markers
 
           Note: fix has been removed. Seems to work without it now.
+
+          DEBUG ENABLED ON THIS CARD
       - type: map
         entities:
           - device_tracker.demo_paulus
