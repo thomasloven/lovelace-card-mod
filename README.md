@@ -24,15 +24,17 @@ frontend:
 
 #### card_mod resource URL
 
-The card_mod resource URL is dependent on where you have installed `card-mod.js`.
-If you installed through HACS, this is likely `/hacsfiles/lovelace-card-mod/card-mod.js`.
+The card_mod resource URL is dependent on where/how you have installed `card-mod.js`.
+
+- If you installed through HACS, this is likely `/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901`.
+- If you manage resources due to using YAML mode or are not using HACS your resource url may be different.
 
 When installing through HACS your (dashboard) lovelace resource definition will be automatically added
 
 Example (dashboard) lovelace resource definition when installed through HACS
 
 ```
-/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=<12345678901>
+/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901
 ```
 
 In `configuration.yaml` add this exact path to `frontend:` `extra_module_url:`
@@ -41,10 +43,15 @@ When updating card-mod through HACS make sure to update your `extra_module_url:`
 ```yaml
 frontend:
   extra_module_url:
-    - /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=<12345678901>
+    - /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901
 ```
 
-**IMPORTANT**: Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
+__NOTE__: If you manage your resource URLs in YAML and do not use CAST, you do not need a resource URL at all. In this case you can just use `extra_module_url`. It is recommended that you use a cache busting techique to assist with caching of old files on update. e.g. `...\card-mod.js?v4.0.0` updating the version when you update card-mod.
+
+**IMPORTANT**: 
+
+1. Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
+2. Whenever you alter `extra_module_url` you need to restart Home Assistant.
 
 (dashboard) lovelace resource definition is required to enable card-mod to be applied to dashboards on cast devices.
 `extra_module_url` will provide performance improvements to non-cast devices e.g. enhanced speed in applying card-mod to cards.
