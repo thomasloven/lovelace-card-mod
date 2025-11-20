@@ -6,7 +6,7 @@ Card-mod v4 updated the method of application cover near 100% of standard Home A
 
 - Using `tile` card as an example.
 - Does not apply card-mod at card level (`tile`) as you would need many different CSS rules which would make theming a nightmare.
-- Base CSS styles via `:host { }`.
+- Base CSS styles via `:host { }` or card styles via `ha-card { }`.
 
 ```console
 hui-card           ⇐ card-mod v4 patches here
