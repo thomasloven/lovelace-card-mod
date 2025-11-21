@@ -309,7 +309,22 @@ card_mod:
     }
 ```
 
-The mod-card will create a `<ha-card>` element - with removed background and border - and put your card inside that.
+The mod-card will create a `<ha-card>` element and put your card inside that. If you wish to style the ha-card so that it is transparent, include the following style.
+
+```yaml
+type: custom:mod-card
+card:
+  type: custom:beloved-custom-card
+  ...
+card_mod:
+  style: |
+    ha-card {
+      background: none;
+      box-shadow: none;
+      border: none;
+      transition: none;
+    }
+```
 
 </details>
 
