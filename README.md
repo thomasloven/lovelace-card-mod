@@ -12,7 +12,7 @@ Install using HACS or [see this guide](https://github.com/thomasloven/hass-confi
 
 ### Performance improvements
 
-While card-mod can be installed as a [lovelace resource](https://www.home-assistant.io/lovelace/dashboards/#resources), some functionality will benefit greatly from it being installed as a [frontend module](https://www.home-assistant.io/integrations/frontend/#extra_module_url) instead.
+While card-mod can be installed as a [lovelace resource](https://www.home-assistant.io/lovelace/dashboards/#resources), some functionality<sup>1</sup> will benefit greatly from it being installed as a [frontend module](https://www.home-assistant.io/integrations/frontend/#extra_module_url) instead.
 
 To do that, add the following to your `configuration.yaml` file and restart Home Assistant:
 
@@ -31,7 +31,7 @@ The card_mod resource URL is dependent on where/how you have installed `card-mod
 
 When installing through HACS your (dashboard) lovelace resource definition will be automatically added
 
-Example (dashboard) lovelace resource definition when installed through HACS
+Example Dashboard<sup>2</sup> lovelace resource definition when installed through HACS
 
 ```
 /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901
@@ -48,13 +48,14 @@ frontend:
 
 __NOTE__: If you manage your resource URLs in YAML and do not use CAST, you do not need a resource URL at all. In this case you can just use `extra_module_url`. It is recommended that you use a cache busting technique to assist with caching of old files on update. e.g. `...\card-mod.js?v4.0.0` updating the version when you update card-mod.
 
+_1. Installing card-mod as a Frontend module via `extra_module_url` will provide performance improvements to non-CAST devices e.g. enhanced speed in applying card-mod to cards, espeically when using card-mod themes. Installing card-mod as a Frontend module also required if you are using card-mod to style panels of Home Assistant which are not Lovelace dashboards, as Dashboard resources are not loaded for those panels. This includes styling sidebar in your theme for these panels._
+
+_2. Dashboard lovelace resource definition is required to enable card-mod to be applied to dashboards on CAST devices._
+
 **IMPORTANT**: 
 
 1. Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
 2. Whenever you alter `extra_module_url` you need to restart Home Assistant.
-
-(dashboard) lovelace resource definition is required to enable card-mod to be applied to dashboards on cast devices.
-`extra_module_url` will provide performance improvements to non-cast devices e.g. enhanced speed in applying card-mod to cards.
 
 ## Quick start
 
