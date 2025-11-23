@@ -30,30 +30,3 @@ class HuiEntitiesCardPatch extends ModdedElement {
     return retval;
   }
 }
-
-/*
-Patch conditional row specifically as it creates rows dynamically
-*/
-
-@patch_element("hui-conditional-row")
-class HuiConditionalRowPatch extends ModdedElement {
-  _element;
-  
-  setConfig(_orig, config, ...args) {
-    _orig?.(config, ...args);
-    const row = this._element;
-    if (!row) return;
-    if (!config?.row?.type || config.row.type === "custom:mod-card") return;
-    
-    const cls = `type-${config.row.type.replace?.(":", "-")}`;
-    const apply = async () => {
-      await await_element(row);
-      patch_object(row, ModdedElement);
-      apply_card_mod(row, "row", config.row.card_mod, { config: config.row }, true, cls);
-      row.addEventListener("ll-rebuild", apply);
-    };
-
-    Promise.all([this.updateComplete]).then(() => apply());
-  }
-}
-
