@@ -13,12 +13,13 @@ class HuiCardPatch extends ModdedElement {
     if (!this._element) return;
 
     const cls = `type-${this.config?.type?.replace?.(":", "-")}`;
+    const config = (this._element as any)?._config || (this._element as any)?.config || this.config;
 
     await apply_card_mod(
       this._element,
       "card",
-      this.config.card_mod,
-      { config: this.config },
+      config.card_mod,
+      { config },
       true,
       cls
     );
