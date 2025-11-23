@@ -18,7 +18,7 @@ class HuiCardPatch extends ModdedElement {
     await apply_card_mod(
       this._element,
       "card",
-      config.card_mod,
+      config?.card_mod,
       { config },
       true,
       cls
