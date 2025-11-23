@@ -12,7 +12,8 @@ class HuiCardPatch extends ModdedElement {
   async _add_card_mod() {
     if (!this._element) return;
 
-    const config = (this._element as any)?._config || (this._element as any)?.config || this.config;
+    const element = this._element as any;
+    const config = element?._config || element?.config || this.config;
     const cls = `type-${config?.type?.replace?.(":", "-")}`;
 
     await apply_card_mod(
