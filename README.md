@@ -50,7 +50,7 @@ frontend:
 
 __NOTE__: If you manage your resource URLs in YAML and do not use CAST, you do not need a resource URL at all. In this case you can just use `extra_module_url`. It is recommended that you use a cache busting technique to assist with caching of old files on update. e.g. `...\card-mod.js?v4.0.0` updating the version when you update card-mod.
 
-_1. Installing card-mod as a Frontend module via `extra_module_url` will provide performance improvements to non-CAST devices e.g. enhanced speed in applying card-mod to cards, espeically when using card-mod themes. Installing card-mod as a Frontend module also required if you are using card-mod to style panels of Home Assistant which are not Lovelace dashboards, as Dashboard resources are not loaded for those panels. This includes styling the sidebar in your theme for these panels._
+_1. Installing card-mod as a Frontend module via `extra_module_url` will provide performance improvements to non-CAST devices e.g. enhanced speed in applying card-mod to cards, especially when using card-mod themes. Installing card-mod as a Frontend module is also required if you are using card-mod to style panels of Home Assistant which are not Lovelace dashboards, as Dashboard resources are not loaded for those panels. This includes styling the sidebar in your theme for these panels._
 
 _2. Dashboard lovelace resource definition is required to enable card-mod to be applied to dashboards on CAST devices._
 
