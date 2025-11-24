@@ -29,7 +29,7 @@ The card_mod resource URL is dependent on where/how you have installed `card-mod
 - If you installed through HACS, this is likely `/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901`.
 - If you manage resources due to using YAML mode or are not using HACS your resource url may be different.
 
-When installing through HACS your (dashboard) lovelace resource definition will be automatically added in Dashboard resources which you can access vai the button below.
+When installing through HACS your (dashboard) lovelace resource definition will be automatically added in Dashboard resources which you can access via the button below.
 
 [![Open your Home Assistant instance and show your dashboard resources.](https://my.home-assistant.io/badges/lovelace_resources.svg)](https://my.home-assistant.io/redirect/lovelace_resources/)
 
