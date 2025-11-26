@@ -11,13 +11,16 @@ class PictureElementsCardPatch extends ModdedElement {
   setConfig(_orig, ...args) {
     _orig?.(...args);
 
-    for (const [i, el] of (this as any)._elements.entries()) {
-      await_element(el);
-      patch_object(el, ModdedElement);
-      const config = (this as any)._config.elements[i];
-      const cls = `type-${config?.type?.replace?.(":", "-")}`;
-      apply_card_mod(el, "element", config?.card_mod, { config }, true, cls);
+    const apply = async () => { 
+      for (const [i, el] of (this as any)._elements.entries()) {
+        await_element(el);
+        patch_object(el, ModdedElement);
+        const config = (this as any)._config.elements[i];
+        const cls = `type-${config?.type?.replace?.(":", "-")}`;
+        apply_card_mod(el, "element", config?.card_mod, { config }, true, cls);
+      }
     }
+    Promise.all([this.updateComplete]).then(() => apply()); 
   }
 }
 
@@ -29,12 +32,15 @@ Patch conditional element specifically as it creates elements dynamically
 class HuiConditionalElementPatch extends ModdedElement {  
   setConfig(_orig, ...args) {
     _orig?.(...args);
-    for (const [i, el] of (this as any)._elements.entries()) {
-      await_element(el);
-      const config = (this as any)._config.elements[i];
-      patch_object(el, ModdedElement);
-      const cls = `type-${config?.type?.replace?.(":", "-")}`;
-      apply_card_mod(el, "element", config?.card_mod, { config }, true, cls);
+    const apply = async () => {
+      for (const [i, el] of (this as any)._elements.entries()) {
+        await_element(el);
+        const config = (this as any)._config.elements[i];
+        patch_object(el, ModdedElement);
+        const cls = `type-${config?.type?.replace?.(":", "-")}`;
+        apply_card_mod(el, "element", config?.card_mod, { config }, true, cls);
+      }
     }
+    Promise.all([this.updateComplete]).then(() => apply());
   }
 }
