@@ -11,7 +11,7 @@ Patch the hui-entities-card specifically in order to handle individual styling o
 class HuiEntitiesCardPatch extends ModdedElement {
   _renderEntity(_orig, config, ...rest) {
     const retval = _orig?.(config, ...rest);
-    if (config?.type === "custom:mod-card" || config?.type === "conditional") return retval;
+    if (config?.type === "custom:mod-card") return retval;
 
     if (!retval?.values) return retval;
     const row = retval.values[1];
