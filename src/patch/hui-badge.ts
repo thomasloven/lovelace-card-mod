@@ -33,4 +33,9 @@ class HuiBadgePatch extends ModdedElement {
     _orig?.(...args);
     this._add_card_mod();
   }
+
+  _updateElement(_orig, ...args) {
+    _orig?.(...args);
+    this._add_card_mod();
+  }
 }
