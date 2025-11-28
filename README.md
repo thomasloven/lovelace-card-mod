@@ -167,7 +167,7 @@ Cards known to need `prepend` option are listed below. Generally these cards wil
           }
   ```
 
-  Card_mod styles will show correctly on page load.
+  card_mod styles will show correctly on page load.
 
 <img width="1118" height="195" alt="Screenshot 2025-11-28 at 1 37 22 pm" src="https://github.com/user-attachments/assets/72eaf841-3472-4f01-9591-6594b0889ae6" />
 
