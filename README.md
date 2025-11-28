@@ -143,7 +143,7 @@ Cards known to need `prepend` option are listed below. Generally these cards wil
         card_mod:
           style: |
             ha-card {
-              boreder-color:red;
+              border-color: red;
             }
   ```
 
@@ -163,7 +163,7 @@ Cards known to need `prepend` option are listed below. Generally these cards wil
         prepend: true # <- add prepend:true here
         style: |
           ha-card {
-            boreder-color:red;
+            border-color: red;
           }
   ```
 
