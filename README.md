@@ -93,7 +93,7 @@ If the simplest form, `<STYLES>` is a string of [CSS](https://www.w3schools.com/
 
 > NOTE: card-mod only works on cards that are contained by a hui-card element, or contain a ha-card element. This includes almost every card standard Home Assistant Frontend cards, and most custom cards.
 >
-> For a card contained by a hui-card element, which is almost every standard Home Assistant Frontend card, styles are injected into a shadowRoot and the bottom most element is `host:`, though in most cases the first element in the shadowRoot is `ha-card`. For many custom cards which do not take advantage of the modern hui-root container, but contain a ha-card element, the styles are injected into ha-card and the bottommost element is `ha-card`. See [README-application](/README-application.md) for more details.
+> For a card contained by a hui-card element, which is almost every standard Home Assistant Frontend card, styles are injected into a shadowRoot and the bottom most element is `:host`, though in most cases the first element in the shadowRoot is `ha-card`. For many custom cards which do not take advantage of the modern hui-root container, but contain a ha-card element, the styles are injected into ha-card and the bottommost element is `ha-card`. See [README-application](/README-application.md) for more details.
 
 > TIP: Home Assistant themes makes use of [CSS variables](https://www.w3schools.com/css/css3_variables.asp). Those can both be set and used in card-mod - prepended by two dashes:
 >
@@ -105,6 +105,73 @@ If the simplest form, `<STYLES>` is a string of [CSS](https://www.w3schools.com/
 >       color: var(--primary-color);
 >     }
 > ```
+
+### Prepend option
+
+Card_mod version 4 has the `prepend` option that affects where card_mod styles are injected into the shadowRoot of the card. This is not normally required. However if a card renders in a way that initially has a 'Loading...' or similar initial state, before its final state, `prepend` may help. When `prepend` is `true`, card_mod styles are injected using the `prepend` function rather than the `append` function. The option is added at the same level as `style`.
+
+```yaml
+type: energy-distribution
+card_mod:
+  prepend: true
+  style: |
+    ha-card {
+      background: red;
+    }
+```
+
+Cards known to need `prepend` option are listed below. Generally these cards will initially have a non-card 'Loading...' state.
+
+- energy-distribution
+- energy-sankey
+- energy-sources-table
+- custom:alarmo-card
+- custom:button-state-card
+- custom:logbook-card
+
+<details>
+  <summary>Prepend examples</summary>
+  Take the following section config for `energy-sankey` with its companion `energy-date-selection`
+
+  #### Without prepend
+  
+  ```yaml
+    type: grid
+    cards:
+      - type: energy-date-selection
+      - type: energy-sankey
+        card_mod:
+          style: |
+            ha-card {
+              border-color: red;
+            }
+  ```
+
+  Card_mod styles will not show on page load as although card_mod applies, it is removed by the next render of the card.
+
+
+<img width="1102" height="195" alt="Screenshot 2025-11-28 at 1 35 11 pm" src="https://github.com/user-attachments/assets/f1002b2c-6a34-41ba-8b02-bcd952138143" />
+
+  #### With prepend: true
+
+  ```yaml
+  type: grid
+  cards:
+    - type: energy-date-selection
+    - type: energy-sankey
+      card_mod:
+        prepend: true # <- add prepend:true here
+        style: |
+          ha-card {
+            border-color: red;
+          }
+  ```
+
+  card_mod styles will show correctly on page load.
+
+<img width="1118" height="195" alt="Screenshot 2025-11-28 at 1 37 22 pm" src="https://github.com/user-attachments/assets/72eaf841-3472-4f01-9591-6594b0889ae6" />
+
+</details>
 
 ### Styling entities, badges and elements
 
