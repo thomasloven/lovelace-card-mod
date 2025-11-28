@@ -108,7 +108,7 @@ If the simplest form, `<STYLES>` is a string of [CSS](https://www.w3schools.com/
 
 ### Prepend option
 
-Card_mod version 4 has the `prepend` option that affects where card_mod styles are injected into the shadwowRoot of the card. This is not normally required. However if a card renders in a way that initially has a 'Loading...' or similar initial state, before its final state, `prepend` may help. When `prepend` is `true` card_mod styles are injected using the `prepend` function rather than the `append` function. The option is added at the same level as `style`.
+Card_mod version 4 has the `prepend` option that affects where card_mod styles are injected into the shadowRoot of the card. This is not normally required. However if a card renders in a way that initially has a 'Loading...' or similar initial state, before its final state, `prepend` may help. When `prepend` is `true`, card_mod styles are injected using the `prepend` function rather than the `append` function. The option is added at the same level as `style`.
 
 ```yaml
 type: energy-distribution
