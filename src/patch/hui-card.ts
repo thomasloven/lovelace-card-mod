@@ -18,7 +18,7 @@ class HuiCardPatch extends ModdedElement {
     if (EXCLUDED_CARDS.includes(this.config?.type?.toLowerCase())) return;
 
     const element = this._element as any;
-    const config = element?._config || element?.config || this.config;
+    const config = element?.config || element?._config || this.config;
     const cls = `type-${config?.type?.replace?.(":", "-")}`;
 
     await apply_card_mod(
