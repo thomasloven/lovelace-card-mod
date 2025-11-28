@@ -131,6 +131,46 @@ Cards known to need `prepend` option are listed below. Generally these cards wil
 
 <details>
   <summary>Prepend examples</summary>
+  Take the following section config for `energy-sankey` with its companion `energy-date-selection`
+
+  #### Without prepend
+  
+  ```yaml
+    type: grid
+    cards:
+      - type: energy-date-selection
+      - type: energy-sankey
+        card_mod:
+          style: |
+            ha-card {
+              boreder-color:red;
+            }
+  ```
+
+  Card_mod styles will not show on page load as although card_mod applies, it is removed by the next render of the card.
+
+
+<img width="1102" height="195" alt="Screenshot 2025-11-28 at 1 35 11 pm" src="https://github.com/user-attachments/assets/f1002b2c-6a34-41ba-8b02-bcd952138143" />
+
+  #### With prepend: true
+
+  ```yaml
+  type: grid
+  cards:
+    - type: energy-date-selection
+    - type: energy-sankey
+      card_mod:
+        prepend: true # <- add prepend:true here
+        style: |
+          ha-card {
+            boreder-color:red;
+          }
+  ```
+
+  Card_mod styles will show correctly on page load.
+
+<img width="1118" height="195" alt="Screenshot 2025-11-28 at 1 37 22 pm" src="https://github.com/user-attachments/assets/72eaf841-3472-4f01-9591-6594b0889ae6" />
+
 </details>
 
 ### Styling entities, badges and elements
