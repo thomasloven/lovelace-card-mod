@@ -306,6 +306,157 @@ The mod-card will create a `<ha-card>` element - with removed background and bor
 
 </details>
 
+### Styling entities conditional rows
+
+The row in an entities conditional row can be styled directly. If you style the conditional config itself, you need to take care as the conditional row wrapper is not in a shadowRoot so styles may leak to other rows/elements.
+
+<details><summary>Conditional row examples</summary>
+Styling a conditional row directly. Only the entity row.
+
+```yaml
+type: entities
+state_color: true
+entities:
+  - type: conditional
+    conditions:
+      - condition: state
+        entity: input_boolean.test_boolean
+        state: "off"
+    row:
+      entity: sun.sun
+      name: Conditional Sun
+      card_mod:
+        style: |
+          :host {
+            color: red;
+          }
+```
+
+Styling a conditional row config using shadowRoot. This method is available for legacy configurations.
+
+```yaml
+type: entities
+state_color: true
+entities:
+  - type: conditional
+    conditions:
+      - condition: state
+        entity: input_boolean.test_boolean
+        state: "on"
+    row:
+      entity: sun.sun
+      name: Conditional Sun 
+    card_mod:
+      style:
+        hui-simple-entity-row $ hui-generic-entity-row $: |
+          .row {
+            color: red;
+          }
+```
+
+Styling a conditional config where styles will 'leak' to all rows.
+
+```yaml
+type: entities
+state_color: true
+entities:
+  - type: conditional
+    conditions:
+      - condition: state
+        entity: input_boolean.test_boolean
+        state: "on"
+    row:
+      entity: sun.sun
+      name: Conditional Sun 
+    card_mod:
+      style: |
+        :host {
+          --primary-text-color: red;
+        }
+```
+
+</details>
+
+### Styling picture-elements conditional elements
+
+The elements in picture-elements conditional element can be styled directly. If you style the conditional config itself, you need to take care as the conditional element wrapper is not in a shadowRoot so styles may leak to other rows/elements.
+
+<details><summary>Conditional picture-elements example</summary>
+Styling a conditional element directly. Only the element.
+
+```yaml
+type: picture-elements
+image:
+  media_content_id: https://demo.home-assistant.io/stub_config/t-shirt-promo.png
+elements:
+  - type: conditional
+    conditions:
+      - entity: input_boolean.test_boolean
+        state: "on"
+    elements:
+      - type: state-badge
+        entity: sun.sun
+        style:
+          left: 25%
+          top: 25%
+        card_mod:
+          style: |
+            :host {
+              color: green;
+            }
+```
+
+Styling the conditional config. This method is available for legacy configurations.
+
+```yaml
+type: picture-elements
+image:
+  media_content_id: https://demo.home-assistant.io/stub_config/t-shirt-promo.png
+elements:
+  - type: conditional
+    conditions:
+      - entity: input_boolean.test_boolean
+        state: "on"
+    elements:
+      - type: state-badge
+        entity: sun.sun
+        style:
+          left: 25%
+          top: 25%
+    card_mod:
+      style:
+        hui-state-badge-element $ ha-state-label-badge $: |
+          :host {
+            color: red;
+          }
+```
+
+Styling the conditional config where styles will 'leak' to all elements.
+
+```yaml
+type: picture-elements
+image:
+  media_content_id: https://demo.home-assistant.io/stub_config/t-shirt-promo.png
+elements:
+  - type: conditional
+    conditions:
+      - entity: input_boolean.test_boolean
+        state: "on"
+    elements:
+      - type: state-badge
+        entity: sun.sun
+        style:
+          left: 25%
+          top: 25%
+    card_mod:
+      style: |
+        :host {
+          --primary-text-color: purple;
+        }
+```
+
+</details>
+
 ## More examples
 
 All my test cases are available in the `test/views` directory.
