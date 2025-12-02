@@ -308,7 +308,7 @@ The mod-card will create a `<ha-card>` element - with removed background and bor
 
 ### Styling entities conditional rows
 
-The row in an entities conditional row can be styled directly. If you style the conditional config itself, you need to take care as the conditional row wrapper is not in a shadowRoot so styles may leak to other rows/elements.
+Rows in entities conditional rows can be styled directly. If you style the conditional config itself, you need to take care as the conditional row wrapper is not in a shadowRoot so styles may leak to other rows/elements.
 
 <details><summary>Conditional row examples</summary>
 Styling a conditional row directly. Only the entity row.
