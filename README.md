@@ -367,7 +367,7 @@ entities:
         state: "on"
     row:
       entity: sun.sun
-      name: Conditional Sun 
+      name: Conditional Sun
     card_mod:
       style: |
         :host {
