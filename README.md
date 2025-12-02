@@ -379,7 +379,7 @@ entities:
 
 ### Styling picture-elements conditional elements
 
-The elements in picture-elements conditional element can be styled directly. If you style the conditional config itself, you need to take care as the conditional element wrapper is not in a shadowRoot so styles may leak to other rows/elements.
+The elements in a picture-elements conditional element can be styled directly. If you style the conditional config itself, you need to take care as the conditional element wrapper is not in a shadowRoot so styles may leak to other rows/elements.
 
 <details><summary>Conditional picture-elements example</summary>
 Styling a conditional element directly. Only the element.
