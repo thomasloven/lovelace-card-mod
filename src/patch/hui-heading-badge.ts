@@ -3,35 +3,33 @@ import { patch_element, patch_object } from "../helpers/patch_function";
 import { apply_card_mod } from "../helpers/apply_card_mod";
 import { ModdedElement } from "../helpers/apply_card_mod";
 
-const EXCLUDED_CARDS = [
-  "conditional",
-  "entity-filter",
-];
-@patch_element("hui-card")
-class HuiCardPatch extends ModdedElement {
-  _cardMod = [];
+@patch_element("hui-heading-badge")
+class HuiBadgePatch extends ModdedElement {
   _element: ModdedElement;
   config;
 
   async _add_card_mod() {
     if (!this._element) return;
-    if (EXCLUDED_CARDS.includes(this.config?.type?.toLowerCase())) return;
-
-    const element = this._element as any;
-    const config = element?.config || element?._config || this.config;
-    const cls = `type-${config?.type?.replace?.(":", "-")}`;
+    
+    const cls = `type-${this.config?.type?.replace?.(":", "-")}`;
 
     await apply_card_mod(
       this._element,
-      "card",
-      config?.card_mod,
-      { config },
+      "heading-badge",
+      this.config.card_mod,
+      { config: this.config },
       true,
       cls
     );
+    this._cardMod = this._element._cardMod;
   }
 
   _loadElement(_orig, ...args) {
+    _orig?.(...args);
+    this._add_card_mod();
+  }
+
+  _updateElement(_orig, ...args) {
     _orig?.(...args);
     this._add_card_mod();
   }

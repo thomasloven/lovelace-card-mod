@@ -17,7 +17,8 @@ class HuiEntitiesCardPatch extends ModdedElement {
     const row = retval.values[1];
     if (!row) return retval;
 
-    const cls = `type-${config?.type?.replace?.(":", "-")}`;
+    const cls = config?.type ? 
+      `type-${config.type.replace?.(":", "-")}` : "type-entity";
     const apply = async () => {
       await await_element(row);
       patch_object(row, ModdedElement);
@@ -30,3 +31,31 @@ class HuiEntitiesCardPatch extends ModdedElement {
     return retval;
   }
 }
+
+/*
+Patch conditional row specifically as it creates rows dynamically
+*/
+
+@patch_element("hui-conditional-row")
+class HuiConditionalRowPatch extends ModdedElement {
+  _element;
+  
+  setConfig(_orig, config, ...args) {
+    _orig?.(config, ...args);
+    const row = this._element;
+    if (!row) return;
+    if (!config?.row || config?.row?.type === "custom:mod-card") return;
+    
+    const cls = config?.row?.type ? 
+    `type-${config.row.type.replace?.(":", "-")}` : "type-entity";
+    const apply = async () => {
+      await await_element(row);
+      patch_object(row, ModdedElement);
+      apply_card_mod(row, "row", config.row.card_mod, { config: config.row }, true, cls);
+      row.addEventListener("ll-rebuild", apply);
+    };
+
+    Promise.all([this.updateComplete]).then(() => apply());
+  }
+}
+
