@@ -12,7 +12,7 @@ Install using HACS or [see this guide](https://github.com/thomasloven/hass-confi
 
 ### Performance improvements
 
-While card-mod can be installed as a [lovelace resource](https://www.home-assistant.io/lovelace/dashboards/#resources), some functionality will benefit greatly from it being installed as a [frontend module](https://www.home-assistant.io/integrations/frontend/#extra_module_url) instead.
+While card-mod can be installed as a [lovelace resource](https://www.home-assistant.io/lovelace/dashboards/#resources), some functionality<sup>1</sup> will benefit greatly from it being installed as a [frontend module](https://www.home-assistant.io/integrations/frontend/#extra_module_url) instead.
 
 To do that, add the following to your `configuration.yaml` file and restart Home Assistant:
 
@@ -24,15 +24,19 @@ frontend:
 
 #### card_mod resource URL
 
-The card_mod resource URL is dependent on where you have installed `card-mod.js`.
-If you installed through HACS, this is likely `/hacsfiles/lovelace-card-mod/card-mod.js`.
+The card_mod resource URL is dependent on where/how you have installed `card-mod.js`.
 
-When installing through HACS your (dashboard) lovelace resource definition will be automatically added
+- If you installed through HACS, this is likely `/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901`.
+- If you manage resources due to using YAML mode or are not using HACS your resource url may be different.
 
-Example (dashboard) lovelace resource definition when installed through HACS
+When installing through HACS your Dashboard<sup>2</sup> lovelace resource definition will be automatically added in Dashboard resources which you can access via the button below.
+
+[![Open your Home Assistant instance and show your dashboard resources.](https://my.home-assistant.io/badges/lovelace_resources.svg)](https://my.home-assistant.io/redirect/lovelace_resources/)
+
+Example Dashboard<sup>2</sup> lovelace resource definition when installed through HACS.
 
 ```
-/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=<12345678901>
+/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901
 ```
 
 In `configuration.yaml` add this exact path to `frontend:` `extra_module_url:`
@@ -41,13 +45,19 @@ When updating card-mod through HACS make sure to update your `extra_module_url:`
 ```yaml
 frontend:
   extra_module_url:
-    - /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=<12345678901>
+    - /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901
 ```
 
-**IMPORTANT**: Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
+__NOTE__: If you manage your resource URLs in YAML and do not use CAST, you do not need a resource URL at all. In this case you can just use `extra_module_url`. It is recommended that you use a cache busting technique to assist with caching of old files on update. e.g. `...\card-mod.js?v4.0.0` updating the version when you update card-mod.
 
-(dashboard) lovelace resource definition is required to enable card-mod to be applied to dashboards on cast devices.
-`extra_module_url` will provide performance improvements to non-cast devices e.g. enhanced speed in applying card-mod to cards.
+_1. Installing card-mod as a Frontend module via `extra_module_url` will provide performance improvements to non-CAST devices e.g. enhanced speed in applying card-mod to cards, especially when using card-mod themes. Installing card-mod as a Frontend module is also required if you are using card-mod to style panels of Home Assistant which are not Lovelace dashboards, as Dashboard resources are not loaded for those panels. This includes styling the sidebar in your theme for these panels._
+
+_2. Dashboard lovelace resource definition is required to enable card-mod to be applied to dashboards on CAST devices._
+
+**IMPORTANT**: 
+
+1. Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
+2. Whenever you alter `extra_module_url` you need to restart Home Assistant.
 
 ## Quick start
 
@@ -83,7 +93,7 @@ If the simplest form, `<STYLES>` is a string of [CSS](https://www.w3schools.com/
 
 > NOTE: card-mod only works on cards that are contained by a hui-card element, or contain a ha-card element. This includes almost every card standard Home Assistant Frontend cards, and most custom cards.
 >
-> For a card contained by a hui-card element, which is almost every standard Home Assistant Frontend card, styles are injected into a shadowRoot and the bottom most element is `host:`, though in most cases the first element in the shadowRoot is `ha-card`. For many custom cards which do not take advantage of the modern hui-root container, but contain a ha-card element, the styles are injected into ha-card and the bottommost element is `ha-card`. See [README-application](/README-application.md) for more details.
+> For a card contained by a hui-card element, which is almost every standard Home Assistant Frontend card, styles are injected into a shadowRoot and the bottom most element is `:host`, though in most cases the first element in the shadowRoot is `ha-card`. For many custom cards which do not take advantage of the modern hui-root container, but contain a ha-card element, the styles are injected into ha-card and the bottommost element is `ha-card`. See [README-application](/README-application.md) for more details.
 
 > TIP: Home Assistant themes makes use of [CSS variables](https://www.w3schools.com/css/css3_variables.asp). Those can both be set and used in card-mod - prepended by two dashes:
 >
@@ -95,6 +105,73 @@ If the simplest form, `<STYLES>` is a string of [CSS](https://www.w3schools.com/
 >       color: var(--primary-color);
 >     }
 > ```
+
+### Prepend option
+
+Card_mod version 4 has the `prepend` option that affects where card_mod styles are injected into the shadowRoot of the card. This is not normally required. However if a card renders in a way that initially has a 'Loading...' or similar initial state, before its final state, `prepend` may help. When `prepend` is `true`, card_mod styles are injected using the `prepend` function rather than the `append` function. The option is added at the same level as `style`.
+
+```yaml
+type: energy-distribution
+card_mod:
+  prepend: true
+  style: |
+    ha-card {
+      background: red;
+    }
+```
+
+Cards known to need `prepend` option are listed below. Generally these cards will initially have a non-card 'Loading...' state.
+
+- energy-distribution
+- energy-sankey
+- energy-sources-table
+- custom:alarmo-card
+- custom:button-state-card
+- custom:logbook-card
+
+<details>
+  <summary>Prepend examples</summary>
+  Take the following section config for `energy-sankey` with its companion `energy-date-selection`
+
+  #### Without prepend
+  
+  ```yaml
+    type: grid
+    cards:
+      - type: energy-date-selection
+      - type: energy-sankey
+        card_mod:
+          style: |
+            ha-card {
+              border-color: red;
+            }
+  ```
+
+  Card_mod styles will not show on page load as although card_mod applies, it is removed by the next render of the card.
+
+
+<img width="1102" height="195" alt="Screenshot 2025-11-28 at 1 35 11 pm" src="https://github.com/user-attachments/assets/f1002b2c-6a34-41ba-8b02-bcd952138143" />
+
+  #### With prepend: true
+
+  ```yaml
+  type: grid
+  cards:
+    - type: energy-date-selection
+    - type: energy-sankey
+      card_mod:
+        prepend: true # <- add prepend:true here
+        style: |
+          ha-card {
+            border-color: red;
+          }
+  ```
+
+  card_mod styles will show correctly on page load.
+
+<img width="1118" height="195" alt="Screenshot 2025-11-28 at 1 37 22 pm" src="https://github.com/user-attachments/assets/72eaf841-3472-4f01-9591-6594b0889ae6" />
+
+</details>
 
 ### Styling entities, badges and elements
 
@@ -302,7 +379,22 @@ card_mod:
     }
 ```
 
-The mod-card will create a `<ha-card>` element - with removed background and border - and put your card inside that.
+The mod-card will create a `<ha-card>` element and put your card inside that. If you wish to style the ha-card so that it is transparent, include the following style.
+
+```yaml
+type: custom:mod-card
+card:
+  type: custom:beloved-custom-card
+  ...
+card_mod:
+  style: |
+    ha-card {
+      background: none;
+      box-shadow: none;
+      border: none;
+      transition: none;
+    }
+```
 
 </details>
 
