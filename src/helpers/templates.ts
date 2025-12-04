@@ -10,11 +10,17 @@ interface CachedTemplate {
   callbacks: Set<(string) => void>;
   unsubscribe: Promise<() => Promise<void>>;
   cooldownTimeoutID?: number;
+  error?: RenderTemplateError;
 }
 
 interface RenderTemplateResult {
   result: string;
   listeners: any;
+}
+
+interface RenderTemplateError {
+  error: string;
+  level: "ERROR" | "WARNING";
 }
 
 (window as any).cardMod_template_cache =
@@ -31,15 +37,33 @@ function template_updated(
   if (!cache) {
     return;
   }
-  cache.value = result.result;
-  if (cache.debug) {
-    console.groupCollapsed("CardMod: Template updated");
-    console.log("Template:", cache.template);
-    console.log("Variables:", cache.variables);
-    console.log("Value:", cache.value);
-    console.groupEnd();
+  if ("error" in result) {
+    cache.error = result as unknown as RenderTemplateError;
+    cache.value = "";
+    if (cache.debug) {
+      console.groupCollapsed(`CardMod: Template ${cache.error.level}`);
+      console.log( { 
+        template: cache.template, 
+        variables: cache.variables, 
+        value: cache.value,
+        error: cache.error
+      });
+      console.groupEnd();
+    }
+  } else {
+    cache.value = result.result;
+    if (cache.debug) {
+      console.groupCollapsed("CardMod: Template updated");
+      console.log( { 
+        template: cache.template, 
+        variables: cache.variables, 
+        value: cache.value,
+        error: cache.error
+      });
+      console.groupEnd();
+    }
   }
-  cache.callbacks.forEach((f) => f(result.result));
+  cache.callbacks.forEach((f) => f(cache.value));
 }
 
 export function hasTemplate(str) {
@@ -73,8 +97,10 @@ export async function bind_template(
     if (template.includes("card_mod.debug")) {
       debug = true;
       console.groupCollapsed("CardMod: Binding template");
-      console.log("Template:", template);
-      console.log("Variables:", variables);
+      console.log( { 
+        template, 
+        variables
+      });
       console.groupEnd();
     }
 
@@ -90,15 +116,19 @@ export async function bind_template(
           type: "render_template",
           template,
           variables,
+          report_errors: debug,
         }
       ),
     };
   } else {
     if (cache.debug) {
       console.groupCollapsed("CardMod: Reusing template");
-      console.log("Template:", cache.template);
-      console.log("Variables:", cache.variables);
-      console.log("Value:", cache.value);
+      console.log( { 
+        template: cache.template, 
+        variables: cache.variables, 
+        value: cache.value,
+        error: cache.error
+      });
       console.groupEnd();
     }
     if (!cache.callbacks.has(callback)) unbind_template(callback);
@@ -120,8 +150,10 @@ export async function unbind_template(
           console.groupCollapsed(
             "CardMod: Template unbound and will be unsubscribed after cooldown"
           );
-          console.log("Template:", cache.template);
-          console.log("Variables:", cache.variables);
+          console.log( { 
+            template: cache.template, 
+            variables: cache.variables
+          });
           console.groupEnd();
         }
         cache.cooldownTimeoutID = window.setTimeout(
@@ -143,8 +175,10 @@ async function unsubscribe_template(key: string) {
   }
   if (cache.debug) {
     console.groupCollapsed("CardMod: Unsubscribing template after cooldown");
-    console.log("Template:", cache.template);
-    console.log("Variables:", cache.variables);
+    console.log( { 
+      template: cache.template, 
+      variables: cache.variables
+    });
     console.groupEnd();
   }
   delete cachedTemplates[key];
