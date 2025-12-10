@@ -23,6 +23,8 @@ my-awesome-theme:
 - `card-mod-row`
 - `card-mod-glance`
 - `card-mod-badge`
+- `card-mod-heading-badge`
+- `card-mod-assist-chip`
 - `card-mod-element`
 
 - `card-mod-root`
