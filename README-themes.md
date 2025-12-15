@@ -70,5 +70,5 @@ my-awesome-theme:
   card-mod-theme: my-awesome-theme
 
   card-mod-card-type-energy-sankey-debug: true # Debug card which has card-mod class 'type-energy-sankey'
-  card-mod-badge-my-class: true # Debug badges which have my-class set by card-mod config
+  card-mod-badge-my-class-debug: true # Debug badges which have my-class set by card-mod config
 ```
