@@ -49,7 +49,7 @@ card_mod:
 
 ### Setting debug via theme variables
 
-Just like you can set debug on a card with `card_mod:` -> `debug: true` you can also set debug via a theme variable. This may be the only way to debug a certain type and/or class if styling a panel which is not lovelace or a lovelace strategy dashboard.
+Just like you can set debug on a card with `card_mod:` -> `debug: true`, you can also set debug via a theme variable. This may be the only way to debug a certain type and/or class when styling a panel that is not a Lovelace dashboard or a Lovelace strategy dashboard.
 
 You can set debug via:
 
