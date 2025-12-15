@@ -224,7 +224,7 @@ export class CardMod extends LitElement {
       this._observer.disconnect();
       const parentEl = this.parentElement ?? this.parentNode;
       if (parentEl) {
-        // Observer changes to the parent element to catch any changes
+        // Observe changes to the parent element to catch any changes
         if (this.debug) {
           this._debug("Observing for changes on:", parentEl);
         }
