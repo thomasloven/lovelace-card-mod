@@ -43,7 +43,9 @@ export class CardMod extends LitElement {
     // e.g. when elements are changed after creation.
     // The observer is activated in _connect() only if there are any styles
     //  which should be applied to children
-
+    if (this.debug) {
+      this._debug("Mutations observed:", mutations);
+    }
     let stop = true;
     for (const m of mutations) {
       if ((m.target as any).localName === "card-mod") return;
@@ -218,6 +220,28 @@ export class CardMod extends LitElement {
       }
     }
     this.card_mod_children = styleChildren;
+    if (hasChildren) {
+      this._observer.disconnect();
+      const parentEl = this.parentElement ?? this.parentNode;
+      if (parentEl) {
+        // Observer changes to the parent element to catch any changes
+        if (this.debug) {
+          this._debug("Observing for changes on:", parentEl);
+        }
+        this._observer.observe(parentEl, {
+          childList: true,
+        });
+        if ((parentEl as any).host) {
+          // If parent is a shadow root, also observe changes to the host
+          if (this.debug) {
+            this._debug("Observing for changes on:", (parentEl as any).host);
+          }
+          this._observer.observe((parentEl as any).host, {
+            childList: true,
+          });
+        }
+      }
+    }
 
     // Process styles applicable to this card-mod element
     if (this._styles === thisStyle && !this.dynamicVariablesHaveChanged) return;
@@ -230,15 +254,7 @@ export class CardMod extends LitElement {
     } else {
       this._style_rendered(this._styles || "");
     }
-    if (hasChildren) {
-      this._observer.disconnect();
-      const parentEl = this.parentElement ?? this.parentNode;
-      if (parentEl) {
-        this._observer.observe((parentEl as any)?.host ?? parentEl, {
-          childList: true,
-        });
-      }
-    }
+
   }
 
   private async _disconnect() {
