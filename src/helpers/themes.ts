@@ -28,12 +28,7 @@ export async function get_theme(root: CardMod): Promise<CardModStyle> {
   const typeDebug = cs.getPropertyValue(`--card-mod-${root.type}-debug`);
   if (cssValueIsTrue(typeDebug)) debug = true;
 
-  const classSource = (el as any).className || "";
-  const classes = String(classSource)
-    .split(/\s+/)
-    .filter(Boolean);
-
-  for (const cls of classes) {
+  for (const cls of root.classes) {
     const debugVar = cs.getPropertyValue(`--card-mod-${root.type}-${cls}-debug`);
     if (cssValueIsTrue(debugVar)) {
       debug = true;

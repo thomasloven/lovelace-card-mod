@@ -27,6 +27,8 @@ export class CardMod extends LitElement {
   dynamicVariablesHaveChanged: boolean = false;
   card_mod_children: Record<string, Array<Promise<CardMod>>> = {};
   card_mod_parent?: CardMod = undefined;
+  card_mod_class?: string = undefined;
+  classes: string[] = [];
 
   debug: boolean = false;
 

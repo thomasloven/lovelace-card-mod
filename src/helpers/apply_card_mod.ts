@@ -143,6 +143,7 @@ export async function apply_card_mod(
   debug("Applying card-mod in:", cm);
 
   cm.type = type;
+  cm.card_mod_class = cls;
   cm.debug = cm_config?.debug ?? false;
   cm.cancelStyleChild();
   // (cm as any).setAttribute("card-mod-type", type);
@@ -164,12 +165,12 @@ export async function apply_card_mod(
     cm.styles = cm_config?.style ?? "";
   }, 1);
 
-  const classes =
+  cm.classes =
     typeof cm_config?.class == "string"
       ? cm_config?.class?.split?.(" ")
       : [...(cm_config?.class ?? [])];
-  cls && classes.push(cls);
-  element.classList?.add(...classes);
+  cls && cm.classes.push(cls);
+  element.classList?.add(...cm.classes);
 
   return cm;
 }
