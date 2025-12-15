@@ -53,8 +53,8 @@ Just like you can set debug on a card with `card_mod:` -> `debug: true` you can 
 
 You can set debug via:
 
-1. Using the css variable `card-mod-<type>-debug: true` to debug all elements of type `<type>`.
-2. Using the css variable `card-mod-<type>-<class>-debug: true` to debug all elements of type `<type>` which have class `<class>`. These include both classes that card-mod sets as well as any class you included in card-mod config for a card/element.
+1. Using the theme variable `card-mod-<type>-debug: true` (defined in your theme YAML file, without the leading `--`) to debug all elements of type `<type>`. In CSS, this variable is referenced as `--card-mod-<type>-debug`.
+2. Using the theme variable `card-mod-<type>-<class>-debug: true` (again, without the leading `--` in YAML) to debug all elements of type `<type>` which have class `<class>`. In CSS, reference as `--card-mod-<type>-<class>-debug`. These include both classes that card-mod sets as well as any class you included in card-mod config for a card/element.
 
 Example:
 
