@@ -46,3 +46,29 @@ Set a class with:
 card_mod:
   class: red
 ```
+
+### Setting debug via theme variables
+
+Just like you can set debug on a card with `card_mod:` -> `debug: true` you can also set debug via a theme variable. This may be the only way to debug a certain type and/or class if styling a panel which is not lovelace or a lovelace strategy dashboard.
+
+You can set debug via:
+
+1. Using the css variable `card-mod-<type>-debug: true` to debug all elements of type `<type>`.
+2. Using the css variable `card-mod-<type>-<class>-debug: true` to debug all elements of type `<type>` which have class `<class>`. These include both classes that card-mod sets as well as any class you included in card-mod config for a card/element.
+
+Example:
+
+```yaml
+my-awesome-theme:
+  card-mod-theme: my-awesome-theme
+
+  card-mod-card-debug: true # Debug all elements of card-mod type `card`
+```
+
+```yaml
+my-awesome-theme:
+  card-mod-theme: my-awesome-theme
+
+  card-mod-card-type-energy-sankey-debug: true # Debug card which has card-mod class 'type-energy-sankey'
+  card-mod-badge-my-class: true # Debug badges which have my-class set by card-mod config
+```

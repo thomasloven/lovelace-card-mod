@@ -27,6 +27,8 @@ export class CardMod extends LitElement {
   dynamicVariablesHaveChanged: boolean = false;
   card_mod_children: Record<string, Array<Promise<CardMod>>> = {};
   card_mod_parent?: CardMod = undefined;
+  card_mod_class?: string = undefined;
+  classes: string[] = [];
 
   debug: boolean = false;
 
@@ -174,7 +176,14 @@ export class CardMod extends LitElement {
     let thisStyle = "";
     let hasChildren = false;
 
-    this._debug("(Re)connecting", this);
+    this._debug("(Re)connecting:",
+      "type:",
+      this.type,
+      "to:",
+      ...((this as any)?.parentNode?.host
+      ? ["#shadow-root of:", (this as any)?.parentNode?.host]
+      : [this.parentElement ?? this.parentNode]),
+      );
 
     this.cancelStyleChild();
 

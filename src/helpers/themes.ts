@@ -4,15 +4,39 @@ import { CardMod } from "../card-mod";
 import { CardModStyle } from "./apply_card_mod";
 import { themesReady } from "../theme-watcher";
 
+function cssValueIsTrue(v: string): boolean {
+  if (!v) return false;
+  const t = v.trim().toLowerCase();
+  return t === "true" || t === "1" || t === "yes" || t === "on";
+}
+
 export async function get_theme(root: CardMod): Promise<CardModStyle> {
   if (!root.type) return null;
 
   await themesReady();
 
   const el = root.parentElement ? root.parentElement : root;
-  const theme = window
-    .getComputedStyle(el)
-    .getPropertyValue("--card-mod-theme");
+  const cs = window.getComputedStyle(el);
+  const theme = cs.getPropertyValue("--card-mod-theme");
+
+  // Determine debug flag from CSS variables.
+  // Checked patterns:
+  //  - --card-mod-<type>-debug
+  //  - --card-mod-<type>-<class>-debug
+  let debug = false;
+
+  const typeDebug = cs.getPropertyValue(`--card-mod-${root.type}-debug`);
+  if (cssValueIsTrue(typeDebug)) debug = true;
+
+  for (const cls of root.classes) {
+    const debugVar = cs.getPropertyValue(`--card-mod-${root.type}-${cls}-debug`);
+    if (cssValueIsTrue(debugVar)) {
+      debug = true;
+      break;
+    }
+  }
+
+  (root as any).debug = !!debug;
 
   root.debug && console.log("CardMod Debug: Theme:", theme);
 

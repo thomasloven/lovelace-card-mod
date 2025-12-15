@@ -353,6 +353,8 @@ card_mod:
   debug: true
 ```
 
+You can also set debug via theme variables. See [README-themes.md](./README-themes.md)
+
 </details>
 
 ### Styling cards without an `<ha-card>` element
