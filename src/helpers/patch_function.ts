@@ -69,7 +69,7 @@ function patch_warning(key) {
     "Make sure all card-mod resource URLs including hacstag match EXACTLY."
   );
   console.info(
-    "Also check other custom elemets inculding cards and themes which may load card-mod."
+    "Also check other custom elements including cards and themes which may load card-mod."
   );
   console.groupEnd();
 }
