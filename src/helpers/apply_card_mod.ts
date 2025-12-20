@@ -159,8 +159,7 @@ export async function apply_card_mod(
     if (!target.contains(cm as any)) {
       target.appendChild(cm as any);
       // Prepend if set or if Lit is in a buggy state
-      const litWorkaround = (element as any)?.__childPart?._$startNode !== null &&
-                            (element as any)?.__childPart?._$endNode === null;
+      const litWorkaround = (element as any)?.renderOptions?.renderBefore === null;
       if (litWorkaround) debug("Lit prepend workaround applied for:", element);
       if (cm_config?.prepend || litWorkaround) target.prepend(cm as any);
     }
