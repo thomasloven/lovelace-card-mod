@@ -1,4 +1,5 @@
 import pjson from "../../package.json";
+import { selectTree } from "./selecttree";
 
 (window as any).cardMod_patch_state = (window as any).cardMod_patch_state || {};
 
@@ -62,16 +63,30 @@ export function patch_element(element, afterwards?) {
 function patch_warning(key) {
   if ((window as any).cm_patch_warning) return;
   (window as any).cm_patch_warning = true;
+  const message = `CARD-MOD (${pjson.version}): ${key} already patched by ${patchState[key]?.version || "unknown version"}!`;
+  const details = [
+    "Card-mod likely loaded twice with different resource URLs.",
+    "Make sure all card-mod resource URLs including hacstag match EXACTLY.",
+    "Also check other custom elements including cards and themes which may load card-mod.",
+  ];
   console.groupCollapsed(
-    `%cCARD-MOD (${pjson.version}): ${key} already patched by ${patchState[key]?.version || "unknown version"}!`,
+    `%c${message}`,
     "color: red; font-weight: bold"
   );
-  console.info("Card-mod likely loaded twice with different resource URLs.");
-  console.info(
-    "Make sure all card-mod resource URLs including hacstag match EXACTLY."
-  );
-  console.info(
-    "Also check other custom elements including cards and themes which may load card-mod."
-  );
+  details.forEach((line) => console.info(line));
   console.groupEnd();
+
+  selectTree(document.body, "home-assistant").then((haEl) => {
+    if (haEl?.hass) {
+      const notification = `${message}<br><br>${details.join(" ")}<br><br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${navigator.userAgent}`;
+      const notification_id = "card_mod_patch_warning_" + (haEl.hass.user?.id || "unknown");
+      haEl.hass.callService("persistent_notification", 
+        "create", {
+          message: notification,
+          title: "Card-mod duplicate patch warning",
+          notification_id: notification_id,
+        }
+      );
+    }
+  });
 }
