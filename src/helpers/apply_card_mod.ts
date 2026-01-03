@@ -135,6 +135,12 @@ export async function apply_card_mod(
 
   element._cardMod = element._cardMod || [];
 
+  // Await card-mod element definition
+  if (!customElements.get("card-mod")) {
+    debug("Waiting for card-mod customElement to be defined");
+    await customElements.whenDefined("card-mod");
+  }
+
   // Find any existing card-mod elements of the right type
   const cm: CardMod =
     element._cardMod.find((cm) => cm.type === type) ??
@@ -157,11 +163,14 @@ export async function apply_card_mod(
       element.modElement ?? shadow ? element.shadowRoot ?? element : element;
 
     if (!target.contains(cm as any)) {
-      target.appendChild(cm as any);
       // Prepend if set or if Lit is in a buggy state
       const litWorkaround = (element as any)?.renderOptions?.renderBefore === null;
       if (litWorkaround) debug("Lit prepend workaround applied for:", element);
-      if (cm_config?.prepend || litWorkaround) target.prepend(cm as any);
+      if (cm_config?.prepend || litWorkaround) {
+        target.prepend(cm as any);
+      } else {
+        target.appendChild(cm as any);
+      }
     }
 
     cm.variables = variables;

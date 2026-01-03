@@ -35,6 +35,7 @@ export class CardMod extends LitElement {
   card_mod_input: CardModStyle;
   _fixed_styles: Record<string, CardModStyle> = {};
   _styles: string = "";
+  _processStylesOnConnect: boolean = false;
   @property() _rendered_styles: string = "";
   _renderer: (_: string) => void;
 
@@ -77,15 +78,31 @@ export class CardMod extends LitElement {
     // cm_update is issued when themes are reloaded
     document.addEventListener("cm_update", (ev: CustomEvent) => {
       // Don't process disconnected elements
-      if (!this.isConnected) return;
       this.dynamicVariablesHaveChanged = ev.detail?.variablesChanged || false;
+      if (!this.isConnected) {
+        this._processStylesOnConnect = true;
+        return;
+      }
       this._process_styles(this.card_mod_input);
     });
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.refresh();
+    if (this._processStylesOnConnect) {
+      this._processStylesOnConnect = false;
+      this._debug("Processing styles on (Re)connect:", 
+        "type:",
+        this.type,
+        "for:",
+        ...((this as any)?.parentNode?.host
+        ? ["#shadow-root of:", (this as any)?.parentNode?.host]
+        : [this.parentElement ?? this.parentNode]),
+      );
+      this._process_styles(this.card_mod_input);
+    } else {
+      this.refresh();
+    }
 
     // Make sure the card-mod element is invisible
     this.setAttribute("slot", "none");
@@ -102,6 +119,10 @@ export class CardMod extends LitElement {
     if (compare_deep(stl, this.card_mod_input)) return;
 
     this.card_mod_input = stl;
+    if (!this.isConnected) {
+      this._processStylesOnConnect = true;
+      return;
+    }
     this._process_styles(stl);
   }
 
@@ -125,7 +146,7 @@ export class CardMod extends LitElement {
 
   private async _process_styles(stl) {
     let styles =
-      typeof stl === "string" ? { ".": stl } : JSON.parse(JSON.stringify(stl));
+      typeof stl === "string" || stl === undefined ? { ".": stl ?? "" } : JSON.parse(JSON.stringify(stl));
 
     // Merge card_mod styles with theme styles
     const theme_styles = await get_theme(this);
