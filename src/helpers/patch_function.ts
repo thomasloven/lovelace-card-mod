@@ -78,7 +78,9 @@ function patch_warning(key) {
 
   selectTree(document.body, "home-assistant").then((haEl) => {
     if (haEl?.hass) {
-      const notification = `${message}<br><br>${details.join(" ")}<br><br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${navigator.userAgent}`;
+      const notification = `${message}<br><br>${details.join(" ")}
+        <br><br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${navigator.userAgent}
+        <br><br>If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared.`;
       const notification_id = "card_mod_patch_warning_" + (haEl.hass.user?.id || "unknown");
       haEl.hass.callService("persistent_notification", 
         "create", {
