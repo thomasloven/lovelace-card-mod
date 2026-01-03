@@ -1,6 +1,8 @@
+import pjson from "../../package.json";
+
 (window as any).cardMod_patch_state = (window as any).cardMod_patch_state || {};
 
-const patchState: Record<string, boolean> = (window as any).cardMod_patch_state;
+const patchState: Record<string, {patched: boolean, version: string}> = (window as any).cardMod_patch_state;
 
 const patch_method = function (obj, method, override) {
   if (method === "constructor") return;
@@ -18,7 +20,7 @@ const patch_method = function (obj, method, override) {
 
 export const set_patched = (element: HTMLElement) => {
   const key = typeof element === "string" ? element : element.constructor.name;
-  patchState[key] = true;
+  patchState[key] = {patched: true, version: pjson.version};
 };
 
 export const is_patched = (element: HTMLElement) => {
@@ -47,12 +49,12 @@ export const patch_prototype = async (cls, patch, afterwards?) => {
 export function patch_element(element, afterwards?) {
   return function patched(constructor) {
     const key = typeof element === "string" ? element : element.name;
-    const patched = patchState[key] ?? false;
+    const patched = patchState[key]?.patched ?? patchState[key] ?? false;
     if (patched) {
       patch_warning(key);
       return;
     }
-    patchState[key] = true;
+    patchState[key] = {patched: true, version: pjson.version};
     patch_prototype(element, constructor, afterwards);
   };
 }
@@ -61,7 +63,7 @@ function patch_warning(key) {
   if ((window as any).cm_patch_warning) return;
   (window as any).cm_patch_warning = true;
   console.groupCollapsed(
-    `%cCARD-MOD: ${key} already patched!`,
+    `%cCARD-MOD (${pjson.version}): ${key} already patched by ${patchState[key]?.version || "unknown version"}!`,
     "color: red; font-weight: bold"
   );
   console.info("Card-mod likely loaded twice with different resource URLs.");

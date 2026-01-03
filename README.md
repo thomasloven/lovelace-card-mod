@@ -26,7 +26,7 @@ frontend:
 
 The card_mod resource URL is dependent on where/how you have installed `card-mod.js`.
 
-- If you installed through HACS, this is likely `/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901`.
+- If you installed through HACS, this is likely similar to `/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901`. Here `hacstag=12345678901` is just an example. Your actual card_mod HACS resource URL will be different.
 - If you manage resources due to using YAML mode or are not using HACS your resource url may be different.
 
 When installing through HACS your Dashboard<sup>2</sup> lovelace resource definition will be automatically added in Dashboard resources which you can access via the button below.
@@ -58,6 +58,7 @@ _2. Dashboard lovelace resource definition is required to enable card-mod to be 
 
 1. Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
 2. Whenever you alter `extra_module_url` you need to restart Home Assistant.
+3. Beginning with Version 4.2.0, a warning will be generated in Browser console if duplicate patching is detected listing both the card-mod version checking for duplicates, as well as the version which has already run patching code. e.g. `CARD-MOD (4.2.1): hui-card already patched by 4.2.0!` If the later version is earlier than the checking version, then this is a critical issue that needs to be addressed immediately as you will not be running up to date patching code. If both versions are the same, it indicates that you have duplicate resource URLs and may end up in a critical version state. For both cases, refer to the information above to implement the recommended approach for your installation. _Note: Any version prior to 4.2.0 will show as `unknown version` as version was not tracked in patching check prior to 4.2.0._
 
 ## Quick start
 
