@@ -36,7 +36,7 @@ export async function get_theme(root: CardMod): Promise<CardModStyle> {
     }
   }
 
-  root.debug = !!debug;
+  root.debug ||= !!debug;
 
   root.debug && console.log("CardMod Debug: Theme:", theme);
 
