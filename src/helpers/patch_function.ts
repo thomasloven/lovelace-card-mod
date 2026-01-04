@@ -99,7 +99,7 @@ function patch_warning(key) {
           title: "Card-mod duplicate patch warning",
           notification_id: notification_id,
         }
-      ).catch (error => {
+      ).catch(error => {
         console.error(
           "CARD-MOD: Failed to create duplicate patch warning notification",
           error
