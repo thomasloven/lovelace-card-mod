@@ -11,9 +11,9 @@ window.addEventListener("card-mod-bootstrap", async (ev: CustomEvent) => {
       return;
     }
     const actionName = (cardMod as any).action;
-    if (actionName && typeof actionName === "string" && typeof actions[actionName] === "function") {
+    if (actionName && typeof actionName === "string" && typeof Actions[actionName] === "function") {
       try {
-        const result = (actions as any)[actionName]();
+        const result = (Actions as any)[actionName]();
         if (result && typeof (result as Promise<unknown>).catch === "function") {
           (result as Promise<unknown>).catch((error: unknown) => {
             console.error(`Error while executing action "${actionName}":`, error);
@@ -26,7 +26,7 @@ window.addEventListener("card-mod-bootstrap", async (ev: CustomEvent) => {
   });
 });
 
-class actions {
+class Actions {
   static async clear_cache() {
     if (window.caches) {
       try {

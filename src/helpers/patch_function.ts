@@ -27,7 +27,7 @@ export const set_patched = (element: HTMLElement) => {
 
 export const is_patched = (element: HTMLElement) => {
   const key = typeof element === "string" ? element : element.constructor.name;
-  return patchState[key] ?? false;
+  return patchState[key]?.patched ?? patchState[key] ?? false;
 };
 
 export const patch_object = (obj, patch) => {
@@ -81,34 +81,30 @@ function patch_warning(key) {
   selectTree(document.body, "home-assistant").then((haEl) => {
     if (haEl?.hass) {
       const userIdComponent =
-        haEl.hass.user?.id ??
         haEl.hass.user?.name ??
+        haEl.hass.user?.id ??
         "unknown_user";
       const userAgentComponent =
-        typeof navigator !== "undefined" && navigator.userAgent
-  selectTree(document.body, "home-assistant").then(async (haEl) => {
-    if (haEl?.hass) {
+        typeof navigator !== "undefined" && navigator.userAgent;
       const notification = `${message}<br><br>${details.join(" ")}
         <br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${navigator.userAgent}
         <br>If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared.`;
       const notification_id = "card_mod_patch_warning_" + 
-       simpleHash((haEl.hass.user?.id || "unknown") + navigator.userAgent);
-      try {
-        await haEl.hass.callService(
-          "persistent_notification",
-          "create",
-          {
-            message: notification,
-            title: "Card-mod duplicate patch warning",
-            notification_id: notification_id,
-          }
-        );
-      } catch (error) {
+        simpleHash((haEl.hass.user?.id || "unknown") + navigator.userAgent);
+      haEl.hass.callService(
+        "persistent_notification",
+        "create",
+        {
+          message: notification,
+          title: "Card-mod duplicate patch warning",
+          notification_id: notification_id,
+        }
+      ).catch (error => {
         console.error(
           "CARD-MOD: Failed to create duplicate patch warning notification",
           error
         );
-      }
+      });
     }
   });
 }
