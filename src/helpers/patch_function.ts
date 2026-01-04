@@ -1,6 +1,10 @@
+import pjson from "../../package.json";
+import { selectTree } from "./selecttree";
+import { simpleHash } from "./simple-hash";
+
 (window as any).cardMod_patch_state = (window as any).cardMod_patch_state || {};
 
-const patchState: Record<string, boolean> = (window as any).cardMod_patch_state;
+const patchState: Record<string, {patched: boolean, version: string}> = (window as any).cardMod_patch_state;
 
 const patch_method = function (obj, method, override) {
   if (method === "constructor") return;
@@ -18,12 +22,12 @@ const patch_method = function (obj, method, override) {
 
 export const set_patched = (element: HTMLElement) => {
   const key = typeof element === "string" ? element : element.constructor.name;
-  patchState[key] = true;
+  patchState[key] = {patched: true, version: pjson.version};
 };
 
 export const is_patched = (element: HTMLElement) => {
   const key = typeof element === "string" ? element : element.constructor.name;
-  return patchState[key] ?? false;
+  return patchState[key]?.patched ?? patchState[key] ?? false;
 };
 
 export const patch_object = (obj, patch) => {
@@ -47,12 +51,12 @@ export const patch_prototype = async (cls, patch, afterwards?) => {
 export function patch_element(element, afterwards?) {
   return function patched(constructor) {
     const key = typeof element === "string" ? element : element.name;
-    const patched = patchState[key] ?? false;
+    const patched = patchState[key]?.patched ?? patchState[key] ?? false;
     if (patched) {
       patch_warning(key);
       return;
     }
-    patchState[key] = true;
+    patchState[key] = {patched: true, version: pjson.version};
     patch_prototype(element, constructor, afterwards);
   };
 }
@@ -60,16 +64,45 @@ export function patch_element(element, afterwards?) {
 function patch_warning(key) {
   if ((window as any).cm_patch_warning) return;
   (window as any).cm_patch_warning = true;
+  const message = `CARD-MOD (${pjson.version}): ${key} already patched by ${patchState[key]?.version || "unknown version"}!`;
+  const details = [
+    "Card-mod likely loaded twice with different resource URLs.",
+    "Make sure all card-mod resource URLs including hacstag match EXACTLY.",
+    "Also check other custom elements including cards and themes which may load card-mod.",
+    "See https://github.com/thomasloven/lovelace-card-mod/blob/master/README.md#performance-improvements for details.",
+  ];
   console.groupCollapsed(
-    `%cCARD-MOD: ${key} already patched!`,
+    `%c${message}`,
     "color: red; font-weight: bold"
   );
-  console.info("Card-mod likely loaded twice with different resource URLs.");
-  console.info(
-    "Make sure all card-mod resource URLs including hacstag match EXACTLY."
-  );
-  console.info(
-    "Also check other custom elements including cards and themes which may load card-mod."
-  );
+  details.forEach((line) => console.info(line));
   console.groupEnd();
+
+  selectTree(document.body, "home-assistant").then((haEl) => {
+    if (haEl?.hass) {
+      const userIdComponent =
+        haEl.hass.user?.name ??
+        haEl.hass.user?.id ??
+        "unknown_user";
+      const userAgentComponent =
+        typeof navigator !== "undefined" && navigator.userAgent;
+      const notification = `${message}<br><br>${details.join(" ")}<br><br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${navigator.userAgent}<br><br>If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared.`;
+      const notification_id = "card_mod_patch_warning_" + 
+        simpleHash((haEl.hass.user?.id || "unknown") + navigator.userAgent);
+      haEl.hass.callService(
+        "persistent_notification",
+        "create",
+        {
+          message: notification,
+          title: "Card-mod duplicate patch warning",
+          notification_id: notification_id,
+        }
+      ).catch(error => {
+        console.error(
+          "CARD-MOD: Failed to create duplicate patch warning notification",
+          error
+        );
+      });
+    }
+  });
 }

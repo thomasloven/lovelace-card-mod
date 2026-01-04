@@ -1,3 +1,4 @@
+import "./ll-custom-actions";
 import "./card-mod";
 
 import "./patch/hui-card";
