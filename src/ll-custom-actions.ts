@@ -2,8 +2,16 @@
 window.addEventListener("card-mod-bootstrap", async (ev: CustomEvent) => {
   ev.stopPropagation();
   document.addEventListener("ll-custom", (event: CustomEvent) => {
-    const actionName = event.detail?.card_mod?.action;
-    if (actionName && typeof actionName === 'string' && typeof actions[actionName] === 'function') {
+    const detail = event.detail;
+    if (!detail || typeof detail !== "object") {
+      return;
+    }
+    const cardMod = (detail as any).card_mod;
+    if (!cardMod || typeof cardMod !== "object") {
+      return;
+    }
+    const actionName = (cardMod as any).action;
+    if (actionName && typeof actionName === "string" && typeof actions[actionName] === "function") {
       try {
         const result = (actions as any)[actionName]();
         if (result && typeof (result as Promise<unknown>).catch === "function") {
