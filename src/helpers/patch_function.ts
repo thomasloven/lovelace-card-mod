@@ -69,6 +69,7 @@ function patch_warning(key) {
     "Card-mod likely loaded twice with different resource URLs.",
     "Make sure all card-mod resource URLs including hacstag match EXACTLY.",
     "Also check other custom elements including cards and themes which may load card-mod.",
+    "See https://github.com/thomasloven/lovelace-card-mod/blob/master/README.md#performance-improvements for details.",
   ];
   console.groupCollapsed(
     `%c${message}`,
