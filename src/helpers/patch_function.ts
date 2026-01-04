@@ -86,20 +86,29 @@ function patch_warning(key) {
         "unknown_user";
       const userAgentComponent =
         typeof navigator !== "undefined" && navigator.userAgent
-          ? navigator.userAgent
-          : (typeof window !== "undefined" && window.location?.href) || "unknown_ua";
+  selectTree(document.body, "home-assistant").then(async (haEl) => {
+    if (haEl?.hass) {
       const notification = `${message}<br><br>${details.join(" ")}
-        <br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${userAgentComponent}
+        <br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${navigator.userAgent}
         <br>If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared.`;
-      const notification_id = "card_mod_patch_warning_" +
-        simpleHash(userIdComponent + userAgentComponent);
-      haEl.hass.callService("persistent_notification",
-        "create", {
-          message: notification,
-          title: "Card-mod duplicate patch warning",
-          notification_id: notification_id,
-        }
-      );
+      const notification_id = "card_mod_patch_warning_" + 
+       simpleHash((haEl.hass.user?.id || "unknown") + navigator.userAgent);
+      try {
+        await haEl.hass.callService(
+          "persistent_notification",
+          "create",
+          {
+            message: notification,
+            title: "Card-mod duplicate patch warning",
+            notification_id: notification_id,
+          }
+        );
+      } catch (error) {
+        console.error(
+          "CARD-MOD: Failed to create duplicate patch warning notification",
+          error
+        );
+      }
     }
   });
 }
