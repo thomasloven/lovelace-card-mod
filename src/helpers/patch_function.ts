@@ -80,12 +80,20 @@ function patch_warning(key) {
 
   selectTree(document.body, "home-assistant").then((haEl) => {
     if (haEl?.hass) {
+      const userIdComponent =
+        haEl.hass.user?.id ??
+        haEl.hass.user?.name ??
+        "unknown_user";
+      const userAgentComponent =
+        typeof navigator !== "undefined" && navigator.userAgent
+          ? navigator.userAgent
+          : (typeof window !== "undefined" && window.location?.href) || "unknown_ua";
       const notification = `${message}<br><br>${details.join(" ")}
-        <br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${navigator.userAgent}
+        <br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${userAgentComponent}
         <br>If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared.`;
-      const notification_id = "card_mod_patch_warning_" + 
-       simpleHash((haEl.hass.user?.id || "unknown") + navigator.userAgent);
-      haEl.hass.callService("persistent_notification", 
+      const notification_id = "card_mod_patch_warning_" +
+        simpleHash(userIdComponent + userAgentComponent);
+      haEl.hass.callService("persistent_notification",
         "create", {
           message: notification,
           title: "Card-mod duplicate patch warning",
