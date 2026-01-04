@@ -40,10 +40,10 @@ class actions {
       } catch (error) {
         console.error("Failed to clear caches:", error);
         // Fallback: force a full reload even if cache clearing fails
-        window.location.href = window.location.href;
+        window.location.reload();
       }
     } else {
-      window.location.href = window.location.href;
+      window.location.reload();
     }
   }
 }
