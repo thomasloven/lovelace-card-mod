@@ -4,23 +4,36 @@ window.addEventListener("card-mod-bootstrap", async (ev: CustomEvent) => {
   document.addEventListener("ll-custom", (event: CustomEvent) => {
     const actionName = event.detail?.card_mod?.action;
     if (actionName && typeof actionName === 'string' && typeof actions[actionName] === 'function') {
-      actions[actionName]();
+      try {
+        const result = (actions as any)[actionName]();
+        if (result && typeof (result as Promise<unknown>).catch === "function") {
+          (result as Promise<unknown>).catch((error: unknown) => {
+            console.error(`Error while executing action "${actionName}":`, error);
+          });
+        }
+      } catch (error) {
+        console.error(`Error while executing action "${actionName}":`, error);
+      }
     }
   });
 });
 
 class actions {
-  static clear_cache() {
+  static async clear_cache() {
     if (window.caches) {
-      let cacheDeletePromises = [];
-      window.caches.keys().then((cacheNames) => {
+      try {
+        const cacheNames = await window.caches.keys();
+        const deletePromises: Promise<boolean>[] = [];
         cacheNames.forEach((cacheName) => {
-          cacheDeletePromises.push(window.caches.delete(cacheName));
+          deletePromises.push(window.caches.delete(cacheName));
         });
-        Promise.all(cacheDeletePromises).then(() => {
-          window.location.reload();
-        });
-      });
+        await Promise.all(deletePromises);
+        window.location.reload();
+      } catch (error) {
+        console.error("Failed to clear caches:", error);
+        // Fallback: force a full reload even if cache clearing fails
+        window.location.href = window.location.href;
+      }
     } else {
       window.location.href = window.location.href;
     }
