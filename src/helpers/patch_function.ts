@@ -86,9 +86,7 @@ function patch_warning(key) {
         "unknown_user";
       const userAgentComponent =
         typeof navigator !== "undefined" && navigator.userAgent;
-      const notification = `${message}<br><br>${details.join(" ")}
-        <br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${navigator.userAgent}
-        <br>If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared.`;
+      const notification = `${message}<br><br>${details.join(" ")}<br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${navigator.userAgent}<br>If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared.`;
       const notification_id = "card_mod_patch_warning_" + 
         simpleHash((haEl.hass.user?.id || "unknown") + navigator.userAgent);
       haEl.hass.callService(
