@@ -27,7 +27,7 @@ frontend:
 The card_mod resource URL is dependent on where/how you have installed `card-mod.js`.
 
 - If you installed through HACS, this is likely similar to `/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901`. Here `hacstag=12345678901` is just an example. Your actual card_mod HACS resource URL will be different.
-- If you manage resources due to using YAML mode or are not using HACS your resource url may be different.
+- If you manage resources due to using YAML mode<sup>3</sup> or are not using HACS your resource url may be different.
 
 When installing through HACS your Dashboard<sup>2</sup> lovelace resource definition will be automatically added in Dashboard resources which you can access via the button below.
 
@@ -53,6 +53,8 @@ __NOTE__: If you manage your resource URLs in YAML and do not use CAST, you do n
 _1. Installing card-mod as a Frontend module via `extra_module_url` will provide performance improvements to non-CAST devices e.g. enhanced speed in applying card-mod to cards, especially when using card-mod themes. Installing card-mod as a Frontend module is also required if you are using card-mod to style panels of Home Assistant which are not Lovelace dashboards, as Dashboard resources are not loaded for those panels. This includes styling the sidebar in your theme for these panels._
 
 _2. Dashboard lovelace resource definition is required to enable card-mod to be applied to dashboards on CAST devices._
+
+_3. Since Home Assistant 2026.2 YAML Dashboards can set `resource_mode` to either `yaml` or `storage`. When set to `yaml` resources are managed in yaml mode. You can set to `storage` to manage resources using UI and also allowing HACS to manage resources directly._
 
 **IMPORTANT**: 
 
