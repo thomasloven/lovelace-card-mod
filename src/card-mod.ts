@@ -27,12 +27,15 @@ export class CardMod extends LitElement {
   dynamicVariablesHaveChanged: boolean = false;
   card_mod_children: Record<string, Array<Promise<CardMod>>> = {};
   card_mod_parent?: CardMod = undefined;
+  card_mod_class?: string = undefined;
+  classes: string[] = [];
 
   debug: boolean = false;
 
   card_mod_input: CardModStyle;
   _fixed_styles: Record<string, CardModStyle> = {};
   _styles: string = "";
+  _processStylesOnConnect: boolean = false;
   @property() _rendered_styles: string = "";
   _renderer: (_: string) => void;
 
@@ -43,7 +46,9 @@ export class CardMod extends LitElement {
     // e.g. when elements are changed after creation.
     // The observer is activated in _connect() only if there are any styles
     //  which should be applied to children
-
+    if (this.debug) {
+      this._debug("Mutations observed:", mutations);
+    }
     let stop = true;
     for (const m of mutations) {
       if ((m.target as any).localName === "card-mod") return;
@@ -73,15 +78,31 @@ export class CardMod extends LitElement {
     // cm_update is issued when themes are reloaded
     document.addEventListener("cm_update", (ev: CustomEvent) => {
       // Don't process disconnected elements
-      if (!this.isConnected) return;
       this.dynamicVariablesHaveChanged = ev.detail?.variablesChanged || false;
+      if (!this.isConnected) {
+        this._processStylesOnConnect = true;
+        return;
+      }
       this._process_styles(this.card_mod_input);
     });
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.refresh();
+    if (this._processStylesOnConnect) {
+      this._processStylesOnConnect = false;
+      this._debug("Processing styles on (Re)connect:", 
+        "type:",
+        this.type,
+        "for:",
+        ...((this as any)?.parentNode?.host
+        ? ["#shadow-root of:", (this as any)?.parentNode?.host]
+        : [this.parentElement ?? this.parentNode]),
+      );
+      this._process_styles(this.card_mod_input);
+    } else {
+      this.refresh();
+    }
 
     // Make sure the card-mod element is invisible
     this.setAttribute("slot", "none");
@@ -98,6 +119,10 @@ export class CardMod extends LitElement {
     if (compare_deep(stl, this.card_mod_input)) return;
 
     this.card_mod_input = stl;
+    if (!this.isConnected) {
+      this._processStylesOnConnect = true;
+      return;
+    }
     this._process_styles(stl);
   }
 
@@ -121,7 +146,7 @@ export class CardMod extends LitElement {
 
   private async _process_styles(stl) {
     let styles =
-      typeof stl === "string" ? { ".": stl } : JSON.parse(JSON.stringify(stl));
+      typeof stl === "string" || stl === undefined ? { ".": stl ?? "" } : JSON.parse(JSON.stringify(stl));
 
     // Merge card_mod styles with theme styles
     const theme_styles = await get_theme(this);
@@ -172,7 +197,14 @@ export class CardMod extends LitElement {
     let thisStyle = "";
     let hasChildren = false;
 
-    this._debug("(Re)connecting", this);
+    this._debug("(Re)connecting:",
+      "type:",
+      this.type,
+      "to:",
+      ...((this as any)?.parentNode?.host
+      ? ["#shadow-root of:", (this as any)?.parentNode?.host]
+      : [this.parentElement ?? this.parentNode]),
+      );
 
     this.cancelStyleChild();
 
@@ -218,6 +250,28 @@ export class CardMod extends LitElement {
       }
     }
     this.card_mod_children = styleChildren;
+    if (hasChildren) {
+      this._observer.disconnect();
+      const parentEl = this.parentElement ?? this.parentNode;
+      if (parentEl) {
+        // Observe changes to the parent element to catch any changes
+        if (this.debug) {
+          this._debug("Observing for changes on:", parentEl);
+        }
+        this._observer.observe(parentEl, {
+          childList: true,
+        });
+        if ((parentEl as any).host) {
+          // If parent is a shadow root, also observe changes to the host
+          if (this.debug) {
+            this._debug("Observing for changes on:", (parentEl as any).host);
+          }
+          this._observer.observe((parentEl as any).host, {
+            childList: true,
+          });
+        }
+      }
+    }
 
     // Process styles applicable to this card-mod element
     if (this._styles === thisStyle && !this.dynamicVariablesHaveChanged) return;
@@ -230,15 +284,7 @@ export class CardMod extends LitElement {
     } else {
       this._style_rendered(this._styles || "");
     }
-    if (hasChildren) {
-      this._observer.disconnect();
-      const parentEl = this.parentElement ?? this.parentNode;
-      if (parentEl) {
-        this._observer.observe((parentEl as any)?.host ?? parentEl, {
-          childList: true,
-        });
-      }
-    }
+
   }
 
   private async _disconnect() {

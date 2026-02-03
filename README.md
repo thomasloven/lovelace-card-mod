@@ -14,7 +14,7 @@ Install using HACS or [see this guide](https://github.com/thomasloven/hass-confi
 
 While card-mod can be installed as a [lovelace resource](https://www.home-assistant.io/lovelace/dashboards/#resources), some functionality<sup>1</sup> will benefit greatly from it being installed as a [frontend module](https://www.home-assistant.io/integrations/frontend/#extra_module_url) instead.
 
-To do that, add the following to your `configuration.yaml` file and restart Home Assistant:
+To do that, add the following to your `configuration.yaml` file and restart Home Assistant. See [card_mod resource URL](#card_mod-resource-url) section below for how to find/use this URL.
 
 ```yaml
 frontend:
@@ -26,7 +26,7 @@ frontend:
 
 The card_mod resource URL is dependent on where/how you have installed `card-mod.js`.
 
-- If you installed through HACS, this is likely `/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901`.
+- If you installed through HACS, this is likely similar to `/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901`. Here `hacstag=12345678901` is just an example. Your actual card_mod HACS resource URL will be different.
 - If you manage resources due to using YAML mode<sup>3</sup> or are not using HACS your resource url may be different.
 
 When installing through HACS your Dashboard<sup>2</sup> lovelace resource definition will be automatically added in Dashboard resources which you can access via the button below.
@@ -60,6 +60,8 @@ _3. Since Home Assistant 2026.2 YAML Dashboards can set `resource_mode` to eithe
 
 1. Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
 2. Whenever you alter `extra_module_url` you need to restart Home Assistant.
+3. Starting from version 4.2.0, if a patching version mismatch is detected, both a Browser console warning and Home Assistant notification will be created listing both the card-mod version checking for duplicates, as well as the version which has already run patching code. e.g. `CARD-MOD (4.2.1): hui-card already patched by 4.2.0!` If the later version is earlier than the checking version, then this is a critical issue that needs to be addressed immediately as you will not be running up to date patching code. If both versions are the same, it indicates that you have duplicate resource URLs and may end up in a critical version state. For both cases, refer to the information above to implement the recommended approach for your installation. _Note: Any version prior to 4.2.0 will show as `unknown version` as version was not tracked in patching check prior to 4.2.0._
+4. If you continue to get notifications from devices regarding duplicate patching, you may need to clear the Home Assistant Frontend application cache for that device. This may happen immediately or after some time depending on what starting pages have been cached in the Home Assistant Frontend application cache. Card_mod includes a custom event to action clearing the Home Assistant Frontend application cache. See [Clearing Home Assistant Frontend application cache](#clearing-home-assistant-frontend-application-cache).
 
 ## Quick start
 
@@ -110,7 +112,7 @@ If the simplest form, `<STYLES>` is a string of [CSS](https://www.w3schools.com/
 
 ### Prepend option
 
-Card_mod version 4 has the `prepend` option that affects where card_mod styles are injected into the shadowRoot of the card. This is not normally required. However if a card renders in a way that initially has a 'Loading...' or similar initial state, before its final state, `prepend` may help. When `prepend` is `true`, card_mod styles are injected using the `prepend` function rather than the `append` function. The option is added at the same level as `style`.
+__Since 4.2.0, the issue that gives rise to needing prepend option should be automatically detected and applied__. card-mod version 4 has the `prepend` option that affects where card_mod styles are injected into the shadowRoot of the card. This is not normally required. However if a card renders in a way that initially has a 'Loading...' or similar initial state, before its final state, `prepend` may help. When `prepend` is `true`, card_mod styles are injected using the `prepend` function rather than the `append` function. The option is added at the same level as `style`.
 
 ```yaml
 type: energy-distribution
@@ -355,6 +357,8 @@ card_mod:
   debug: true
 ```
 
+You can also set debug via theme variables. See [README-themes.md](./README-themes.md)
+
 </details>
 
 ### Styling cards without an `<ha-card>` element
@@ -576,3 +580,22 @@ For instructions on how to develop a card-mod theme, see [README-themes.md](READ
 ## Development
 
 For adding card-mods styling powers to your custom card, see [README-developers.md](README-developers.md).
+
+## Clearing Home Assistant Frontend application cache
+
+If at any time you need to clear the Home Assistant Application cache, which is used in addition to Browser cache, starting with Version 4.2.0 you can use a custom action to clear the Home Assistant Application cache and reload the Browser. This can be very convenient especially for devices where the option is hidden in a debugging menu and will clear more than just the application cache (e.g. localStorage which clears out many stored items like Browser Mod Browser ID).
+
+The action can be executed using `fire-dom-event` with key `card_mod` with `action: clear_cache`. This can be used on any card that supports the `fire-dom-event` action which includes all standard Home Assistant cards.
+
+Example button to clear cache and reload.
+
+```yaml
+show_name: true
+show_icon: true
+type: button
+name: Clear Frontend Cache
+tap_action:
+  action: fire-dom-event
+  card_mod:
+    action: clear_cache
+```
