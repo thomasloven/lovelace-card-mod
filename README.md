@@ -39,7 +39,7 @@ Example Dashboard<sup>2</sup> lovelace resource definition when installed throug
 /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901
 ```
 
-In `configuration.yaml` add this exact path to `frontend:` `extra_module_url:`
+In `configuration.yaml` add your exact resource path to `frontend:` `extra_module_url:`. NOTE: All resource paths listed here are **EXAMPLES ONLY**.
 When updating card-mod through HACS make sure to update your `extra_module_url:` manually to match. This is critically important as it prevents the resource being loaded twice.
 
 ```yaml

@@ -66,7 +66,7 @@ The examples show card_mod applied to a card. Similar would also work for themes
 
 ### Dual CSS selectors
 
-`:host(.my-class) ha-card1` selector for cards loaded by Frontend. `ha-card.myclass` for custom cards using a divergent structure, or for cards loaded by custom cards.
+`:host(.my-class) ha-card` selector for cards loaded by Frontend. `ha-card.myclass` for custom cards using a divergent structure, or for cards loaded by custom cards.
 
   ```yaml
   card_mod:
