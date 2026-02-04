@@ -1,3 +1,4 @@
+import "./ll-custom-actions";
 import "./card-mod";
 
 import "./patch/hui-card";
@@ -5,6 +6,7 @@ import "./patch/ha-card";
 import "./patch/hui-section";
 import "./patch/hui-badge";
 import "./patch/hui-heading-badge";
+import "./patch/ha-assist-chip";
 
 import "./patch/hui-entities-card";
 import "./patch/hui-glance-card";

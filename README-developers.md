@@ -13,7 +13,7 @@ customElements.whenDefined("card-mod").then((cardMod) => {
 }
 ```
 
-The card mod configuration is an objecty with the following optional properties:
+The card mod configuration is an object with the following optional properties:
 
 - `style` - card mod style definition (string or object)
 - `class` - string or array of classes to apply to the element
