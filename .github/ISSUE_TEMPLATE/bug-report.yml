@@ -17,7 +17,7 @@ body:
     id: install_method
     attributes:
       label: My card-mod installation method
-      muliple: false
+      multiple: false
       options:
         - HACS
         - Manual using Dashboard resources UI (Dashboard resource_mod = storage)
