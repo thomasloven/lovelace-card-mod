@@ -14,6 +14,17 @@ body:
     validations:
       required: true
   - type: dropdown
+    id: install_method
+    attributes:
+      label: My card-mod installation method
+      muliple: false
+      options:
+        - HACS
+        - Manual using Dashboard resources UI (Dashboard resource_mod = storage)
+        - Manual using YAML resources (Dashboard resource_mode = yaml)
+    validations:
+      required: true
+  - type: dropdown
     id: lovelace
     attributes:
       label: My lovelace configuration method
