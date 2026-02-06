@@ -29,7 +29,7 @@ The card_mod resource URL is dependent on where/how you have installed `card-mod
 - If you installed through HACS, this is likely similar to `/hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901`. Here `hacstag=12345678901` is just an example. Your actual card_mod HACS resource URL will be different.
 - If you manage resources due to using YAML mode<sup>3</sup> or are not using HACS your resource url may be different.
 
-When installing through HACS your Dashboard<sup>2</sup> lovelace resource definition will be automatically added in Dashboard resources which you can access via the button below.
+When installing through HACS your Dashboard<sup>2</sup> lovelace resource definition will be automatically added in Dashboard resources which you can access via the button below. To find it in your own HACS instance, navigate to Settings > Dashboards and then click the 3-dot menu, which will display "Resources". Your URL will be displayed there with the `hacstag` value.
 
 [![Open your Home Assistant instance and show your dashboard resources.](https://my.home-assistant.io/badges/lovelace_resources.svg)](https://my.home-assistant.io/redirect/lovelace_resources/)
 
@@ -48,7 +48,7 @@ frontend:
     - /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=12345678901
 ```
 
-__NOTE__: If you manage your resource URLs in YAML and do not use CAST, you do not need a resource URL at all. In this case you can just use `extra_module_url`. It is recommended that you use a cache busting technique to assist with caching of old files on update. e.g. `...\card-mod.js?v4.0.0` updating the version when you update card-mod.
+**NOTE**: If you manage your resource URLs in YAML and do not use CAST, you do not need a resource URL at all. In this case you can just use `extra_module_url`. It is recommended that you use a cache busting technique to assist with caching of old files on update. e.g. `...\card-mod.js?v4.0.0` updating the version when you update card-mod.
 
 _1. Installing card-mod as a Frontend module via `extra_module_url` will provide performance improvements to non-CAST devices e.g. enhanced speed in applying card-mod to cards, especially when using card-mod themes. Installing card-mod as a Frontend module is also required if you are using card-mod to style panels of Home Assistant which are not Lovelace dashboards, as Dashboard resources are not loaded for those panels. This includes styling the sidebar in your theme for these panels._
 
@@ -56,7 +56,7 @@ _2. Dashboard lovelace resource definition is required to enable card-mod to be 
 
 _3. Since Home Assistant 2026.2 YAML Dashboards can set `resource_mode` to either `yaml` or `storage`. When set to `yaml` resources are managed in yaml mode. You can set to `storage` to manage resources using UI and also allowing HACS to manage resources directly._
 
-**IMPORTANT**: 
+**IMPORTANT**:
 
 1. Any resource definitions automatically added by HACS should be kept as is even after adding `extra_module_url`. This enables you to keep track when updating via HACS.
 2. Whenever you alter `extra_module_url` you need to restart Home Assistant.
@@ -112,7 +112,7 @@ If the simplest form, `<STYLES>` is a string of [CSS](https://www.w3schools.com/
 
 ### Prepend option
 
-__Since 4.2.0, the issue that gives rise to needing prepend option should be automatically detected and applied__. card-mod version 4 has the `prepend` option that affects where card_mod styles are injected into the shadowRoot of the card. This is not normally required. However if a card renders in a way that initially has a 'Loading...' or similar initial state, before its final state, `prepend` may help. When `prepend` is `true`, card_mod styles are injected using the `prepend` function rather than the `append` function. The option is added at the same level as `style`.
+**Since 4.2.0, the issue that gives rise to needing prepend option should be automatically detected and applied**. card-mod version 4 has the `prepend` option that affects where card_mod styles are injected into the shadowRoot of the card. This is not normally required. However if a card renders in a way that initially has a 'Loading...' or similar initial state, before its final state, `prepend` may help. When `prepend` is `true`, card_mod styles are injected using the `prepend` function rather than the `append` function. The option is added at the same level as `style`.
 
 ```yaml
 type: energy-distribution
@@ -137,41 +137,40 @@ Cards known to need `prepend` option are listed below. Generally these cards wil
   <summary>Prepend examples</summary>
   Take the following section config for `energy-sankey` with its companion `energy-date-selection`
 
-  #### Without prepend
-  
-  ```yaml
-    type: grid
-    cards:
-      - type: energy-date-selection
-      - type: energy-sankey
-        card_mod:
-          style: |
-            ha-card {
-              border-color: red;
-            }
-  ```
+#### Without prepend
 
-  Card_mod styles will not show on page load as although card_mod applies, it is removed by the next render of the card.
+```yaml
+type: grid
+cards:
+  - type: energy-date-selection
+  - type: energy-sankey
+    card_mod:
+      style: |
+        ha-card {
+          border-color: red;
+        }
+```
 
+Card_mod styles will not show on page load as although card_mod applies, it is removed by the next render of the card.
 
 <img width="1102" height="195" alt="Screenshot 2025-11-28 at 1 35 11 pm" src="https://github.com/user-attachments/assets/f1002b2c-6a34-41ba-8b02-bcd952138143" />
 
-  #### With prepend: true
+#### With prepend: true
 
-  ```yaml
-  type: grid
-  cards:
-    - type: energy-date-selection
-    - type: energy-sankey
-      card_mod:
-        prepend: true # <- add prepend:true here
-        style: |
-          ha-card {
-            border-color: red;
-          }
-  ```
+```yaml
+type: grid
+cards:
+  - type: energy-date-selection
+  - type: energy-sankey
+    card_mod:
+      prepend: true # <- add prepend:true here
+      style: |
+        ha-card {
+          border-color: red;
+        }
+```
 
-  card_mod styles will show correctly on page load.
+card_mod styles will show correctly on page load.
 
 <img width="1118" height="195" alt="Screenshot 2025-11-28 at 1 37 22 pm" src="https://github.com/user-attachments/assets/72eaf841-3472-4f01-9591-6594b0889ae6" />
 
@@ -234,7 +233,6 @@ card-mod also makes the following variables available for templates:
 - `browser` - The `browser_id` of your browser, if you have [browser_mod](https://github.com/thomasloven/hass-browser_mod) installed
 - `hash` - Whatever comes after `#` in the current URL. card-mod watches for location changes through `location-changed` and `popstate` events so templates will be rebound with the updated `hash`
 - `panel` - various information about the panel in view, be it a lovelace dashboard or another panel view. `panel` is a dictionary containing the following panel attributes with example values shown.
-
   - `panel.fullUrlPath`: "card-mod/another-test-view"
   - `panel.panelComponentName`: "lovelace"
   - `panel.panelIcon`: "mdi:card-bulleted-outline"
@@ -443,7 +441,7 @@ entities:
         state: "on"
     row:
       entity: sun.sun
-      name: Conditional Sun 
+      name: Conditional Sun
     card_mod:
       style:
         hui-simple-entity-row $ hui-generic-entity-row $: |
