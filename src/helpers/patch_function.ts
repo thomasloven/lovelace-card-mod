@@ -53,7 +53,7 @@ export function patch_element(element, afterwards?) {
     const key = typeof element === "string" ? element : element.name;
     const patched = patchState[key]?.patched ?? patchState[key] ?? false;
     if (patched) {
-      patch_warning(key);
+      log_patch_warning(key);
       return;
     }
     patchState[key] = {patched: true, version: pjson.version};
@@ -61,7 +61,7 @@ export function patch_element(element, afterwards?) {
   };
 }
 
-function patch_warning(key) {
+function log_patch_warning(key) {
   if ((window as any).cm_patch_warning) return;
   (window as any).cm_patch_warning = true;
   const message = `CARD-MOD (${pjson.version}): ${key} already patched by ${patchState[key]?.version || "unknown version"}!`;
@@ -70,13 +70,8 @@ function patch_warning(key) {
     "Make sure all card-mod resource URLs including hacstag match EXACTLY.",
     "Also check other custom elements including cards and themes which may load card-mod.",
     "See https://github.com/thomasloven/lovelace-card-mod/blob/master/README.md#performance-improvements for details.",
+    "If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared."
   ];
-  console.groupCollapsed(
-    `%c${message}`,
-    "color: red; font-weight: bold"
-  );
-  details.forEach((line) => console.info(line));
-  console.groupEnd();
 
   selectTree(document.body, "home-assistant").then((haEl) => {
     if (haEl?.hass) {
@@ -86,17 +81,17 @@ function patch_warning(key) {
         "unknown_user";
       const userAgentComponent =
         typeof navigator !== "undefined" && navigator.userAgent;
-      const notification = `${message}<br><br>${details.join(" ")}<br><br>User: ${haEl.hass.user?.name || "unknown"}<br><br>Browser: ${navigator.userAgent}<br><br>If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared.`;
-      const notification_id = "card_mod_patch_warning_" + 
-        simpleHash((haEl.hass.user?.id || "unknown") + navigator.userAgent);
+      const info = `User: ${haEl.hass.user?.name || "unknown"}\n\nBrowser: ${navigator.userAgent}`;
       haEl.hass.callService(
-        "persistent_notification",
-        "create",
+        "system_log",
+        "write",
         {
-          message: notification,
-          title: "Card-mod duplicate patch warning",
-          notification_id: notification_id,
-        }
+          logger: `card-mod.${pjson.version}`,
+          level: "warning",
+          message: `${message} ${details.join(" ")} ${info}`,
+        },
+        undefined,
+        false
       ).catch(error => {
         console.error(
           "CARD-MOD: Failed to create duplicate patch warning notification",
