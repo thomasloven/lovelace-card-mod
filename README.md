@@ -63,6 +63,17 @@ _3. Since Home Assistant 2026.2 YAML Dashboards can set `resource_mode` to eithe
 3. Starting from version 4.2.0, if a patching version mismatch is detected, both a Browser console warning and Home Assistant notification will be created listing both the card-mod version checking for duplicates, as well as the version which has already run patching code. e.g. `CARD-MOD (4.2.1): hui-card already patched by 4.2.0!` If the later version is earlier than the checking version, then this is a critical issue that needs to be addressed immediately as you will not be running up to date patching code. If both versions are the same, it indicates that you have duplicate resource URLs and may end up in a critical version state. For both cases, refer to the information above to implement the recommended approach for your installation. _Note: Any version prior to 4.2.0 will show as `unknown version` as version was not tracked in patching check prior to 4.2.0._
 4. If you continue to get notifications from devices regarding duplicate patching, you may need to clear the Home Assistant Frontend application cache for that device. This may happen immediately or after some time depending on what starting pages have been cached in the Home Assistant Frontend application cache. Card_mod includes a custom event to action clearing the Home Assistant Frontend application cache. See [Clearing Home Assistant Frontend application cache](#clearing-home-assistant-frontend-application-cache).
 
+## Home Assistant version compatability
+
+The table below shows the Home Assistand and Card-mod version compatability across the last 3 years.
+
+| min. Home Assistant version. | max Card-mod version|
+| -- | -- |
+| [2026.2.0](https://www.home-assistant.io/blog/2026/02/04/release-20262/) | (current) [4.2.0](https://github.com/thomasloven/lovelace-card-mod/releases/tag/v4.2.0) |
+| [2025.11.0](https://www.home-assistant.io/blog/2026/01/07/release-20261/) | [4.1.0](https://github.com/thomasloven/lovelace-card-mod/releases/tag/v4.1.0) |
+| [2025.1.0 ](https://www.home-assistant.io/blog/2025/01/03/release-20251/)| [3.4.4](https://github.com/thomasloven/lovelace-card-mod/tree/v3.4.4) |
+| [2023.10.0 ](https://www.home-assistant.io/blog/2023/10/04/release-202310/)| [3.2.3](https://github.com/thomasloven/lovelace-card-mod/tree/3.2.3) |
+
 ## Quick start
 
 - Open your card in the GUI editor
