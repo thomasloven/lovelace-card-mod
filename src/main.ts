@@ -14,6 +14,7 @@ import "./patch/hui-picture-elements-card";
 
 import "./patch/ha-icon";
 import "./patch/hui-view";
+import "./patch/hui-view-background";
 import "./patch/hui-root";
 // To include in 4.2.2 and leave 4.2.1 just as a bugfix release for the 4.2.0 duplicate patching warning
 // import "./patch/ha-drawer";
