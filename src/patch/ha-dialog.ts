@@ -1,4 +1,4 @@
-import { apply_uix, ModdedElement } from "../helpers/apply_uix";
+import { apply_card_mod, ModdedElement } from "../helpers/apply_card_mod";
 import {
   is_patched,
   patch_prototype,
@@ -73,7 +73,7 @@ class HaDialogPatch extends ModdedElement {
       if (!haDialog) return;
 
       const cls = `type-${this.localName.replace?.("ha-", "")}`;
-      apply_uix(
+      apply_card_mod(
         haDialog as ModdedElement,
         "dialog",
         undefined,
