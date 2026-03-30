@@ -102,7 +102,7 @@ function patchDialog(ev: Event) {
 }
 
 function patchNotification(ev: Event) {
-  const notificationTag = "notification-manager";
+  const notificationTag: string = "notification-manager";
   const params = (ev as CustomEvent).detail;
   if (params) {
     dialogParams[notificationTag] = stripHtmlAndFunctions(params);

@@ -4,7 +4,9 @@ import { simpleHash } from "./simple-hash";
 
 (window as any).cardMod_patch_state = (window as any).cardMod_patch_state || {};
 
-const patchState: Record<string, {patched: boolean, version: string}> = (window as any).cardMod_patch_state;
+const patchState: Record<string, { patched: boolean; version: string }> = (
+  window as any
+).cardMod_patch_state;
 
 const patch_method = function (obj, method, override) {
   if (method === "constructor") return;
@@ -20,12 +22,12 @@ const patch_method = function (obj, method, override) {
   obj[method] = fn;
 };
 
-export const set_patched = (element: HTMLElement) => {
+export const set_patched = (element: HTMLElement | string) => {
   const key = typeof element === "string" ? element : element.constructor.name;
-  patchState[key] = {patched: true, version: pjson.version};
+  patchState[key] = { patched: true, version: pjson.version };
 };
 
-export const is_patched = (element: HTMLElement) => {
+export const is_patched = (element: HTMLElement | string) => {
   const key = typeof element === "string" ? element : element.constructor.name;
   return patchState[key]?.patched ?? patchState[key] ?? false;
 };
@@ -56,7 +58,7 @@ export function patch_element(element, afterwards?) {
       log_patch_warning(key);
       return;
     }
-    patchState[key] = {patched: true, version: pjson.version};
+    patchState[key] = { patched: true, version: pjson.version };
     patch_prototype(element, constructor, afterwards);
   };
 }
@@ -70,34 +72,34 @@ function log_patch_warning(key) {
     "Make sure all card-mod resource URLs including hacstag match EXACTLY.",
     "Also check other custom elements including cards and themes which may load card-mod.",
     "See https://github.com/thomasloven/lovelace-card-mod/blob/master/README.md#performance-improvements for details.",
-    "If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared."
+    "If you have corrected this issue in config, then the device generating this notification needs its Frontend cache cleared.",
   ];
 
   selectTree(document.body, "home-assistant").then((haEl) => {
     if (haEl?.hass) {
       const userIdComponent =
-        haEl.hass.user?.name ??
-        haEl.hass.user?.id ??
-        "unknown_user";
+        haEl.hass.user?.name ?? haEl.hass.user?.id ?? "unknown_user";
       const userAgentComponent =
         typeof navigator !== "undefined" && navigator.userAgent;
       const info = `User: ${haEl.hass.user?.name || "unknown"}\n\nBrowser: ${navigator.userAgent}`;
-      haEl.hass.callService(
-        "system_log",
-        "write",
-        {
-          logger: `card-mod.${pjson.version}`,
-          level: "warning",
-          message: `${message} ${details.join(" ")} ${info}`,
-        },
-        undefined,
-        false
-      ).catch(error => {
-        console.error(
-          "CARD-MOD: Failed to create duplicate patch warning notification",
-          error
-        );
-      });
+      haEl.hass
+        .callService(
+          "system_log",
+          "write",
+          {
+            logger: `card-mod.${pjson.version}`,
+            level: "warning",
+            message: `${message} ${details.join(" ")} ${info}`,
+          },
+          undefined,
+          false,
+        )
+        .catch((error) => {
+          console.error(
+            "CARD-MOD: Failed to create duplicate patch warning notification",
+            error,
+          );
+        });
     }
   });
 }
