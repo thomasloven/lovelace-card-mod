@@ -11,7 +11,7 @@
   "author": "Thomas Lovén",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.23.6",
+    "@babel/core": "^7.29.6",
     "@babel/preset-env": "^7.23.6",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-json": "^6.1.0",
