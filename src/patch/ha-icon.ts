@@ -1,13 +1,41 @@
 import { ModdedElement } from "../helpers/apply_card_mod";
 import { patch_element } from "../helpers/patch_function";
 import { CardMod } from "../card-mod";
+import { icon_vars_in_use } from "../helpers/icon_usage";
 
 /*
 Patch various icon elements to consider the following variables:
 --card-mod-icon
 --card-mod-icon-color
 --card-mod-icon-dim
+
+Icons are by far the most numerous elements on a dashboard — 187 on a typical
+one — and this patch used to run getComputedStyle on every one of them at every
+update, then repeat it five times per icon on a timer. That profiled at ~300ms
+per dashboard load, card-mod's single largest cost, and it was spent looking for
+variables that are almost never set.
+
+Both the initial pass and the retries are now skipped unless some style actually
+references --card-mod-icon*. Icons skipped before such a style appeared are
+rebound once, on cm_icons_enabled, rather than every icon polling for it.
 */
+
+const skipped: Set<any> = new Set();
+
+document.addEventListener("cm_icons_enabled", () => {
+  const pending = [...skipped];
+  skipped.clear();
+  for (const el of pending) if (el.isConnected) bindCardMod(el);
+});
+
+const maybeBind = (el) => {
+  if (!icon_vars_in_use()) {
+    skipped.add(el);
+    return;
+  }
+  el.cm_retries = 0;
+  bindCardMod(el);
+};
 
 const updateIcon = (el) => {
   const styles = window.getComputedStyle(el);
@@ -51,8 +79,7 @@ class HaStateIconPatch extends ModdedElement {
   cm_retries = 0;
   updated(_orig, ...args) {
     _orig?.(...args);
-    this.cm_retries = 0;
-    bindCardMod(this);
+    maybeBind(this);
   }
 }
 
@@ -61,8 +88,7 @@ class HaIconPatch extends ModdedElement {
   cm_retries = 0;
   updated(_orig, ...args) {
     _orig?.(...args);
-    this.cm_retries = 0;
-    bindCardMod(this);
+    maybeBind(this);
   }
 }
 
@@ -72,8 +98,7 @@ class HaSvgIconPatch extends ModdedElement {
   updated(_orig, ...args) {
     _orig?.(...args);
     if ((this.parentNode as any)?.host?.localName === "ha-icon") return;
-    this.cm_retries = 0;
-    bindCardMod(this);
+    maybeBind(this);
   }
 }
 

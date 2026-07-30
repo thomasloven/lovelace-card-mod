@@ -19,6 +19,8 @@ active one, because the active theme can differ per view and per card, and it
 reports "may style" whenever hass is not yet reachable.
 */
 
+import { note_theme_keys } from "./icon_usage";
+
 let themeKeys: Set<string> | null = null;
 
 const collect = (themes: object): Set<string> => {
@@ -40,6 +42,7 @@ const themes_from_dom = () => {
 export const refresh_theme_index = () => {
   const themes = themes_from_dom();
   themeKeys = themes ? collect(themes) : null;
+  if (themeKeys) note_theme_keys(themeKeys);
 };
 
 // cm_update is dispatched by theme-watcher whenever themes are reloaded or the
