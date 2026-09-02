@@ -1,5 +1,6 @@
 import { LitElement } from "lit";
 import { CardMod } from "../card-mod";
+import { theme_may_style } from "./theme_index";
 
 export class ModdedElement extends LitElement {
   _cardMod: CardMod[] = [];
@@ -128,6 +129,23 @@ export async function apply_card_mod(
   );
 
   if (!element) return;
+
+  // Fast path: this element declares no card_mod config, no theme declares a
+  // card-mod key for its type, and it carries no card-mod element from a
+  // previous config. Nothing can style it, so skip the whole setup — no
+  // <card-mod> element, no timeout, no getComputedStyle, no awaits.
+  // The type-<card> class is still applied, since user CSS may rely on it.
+  const has_own_config =
+    (cm_config?.style ?? cm_config?.class ?? cm_config?.debug) !== undefined;
+  if (
+    !has_own_config &&
+    !element._cardMod?.length &&
+    !theme_may_style(type)
+  ) {
+    debug("Nothing to apply, skipping element of type:", type);
+    if (cls) element.classList?.add(cls);
+    return;
+  }
 
   // Wait for target element to exist
   if (element.localName?.includes("-"))
