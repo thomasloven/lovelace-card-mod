@@ -1,7 +1,7 @@
 import { LitElement } from "lit";
 import { patch_element, patch_object } from "../helpers/patch_function";
 
-class ConfigElementPatch extends LitElement {
+export class ConfigElementPatch extends LitElement {
   _cardModData?;
 
   setConfig(_orig, config, ...rest) {

@@ -21,6 +21,7 @@ import "./patch/ha-dialog";
 import "./patch/ha-more-info-dialog";
 import "./patch/ha-sidebar";
 import "./patch/hui-card-element-editor";
+import "./patch/hui-badge-element-editor";
 import "./patch/ha-panel-config";
 import "./patch/ha-panel-developer-tools";
 import "./mod-card";
