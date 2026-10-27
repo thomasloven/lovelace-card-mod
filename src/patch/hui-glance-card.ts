@@ -43,11 +43,19 @@ class HuiGlanceCardPatch extends ModdedElement {
       while (el.firstChild) root.append(el.firstChild);
 
       // Add default styles into shadowRoot
-      const styleTag =
-        el.querySelector("style[card-mod]") ?? document.createElement("style");
-      styleTag.setAttribute("card-mod", "");
-      styleTag.innerHTML = ENTITY_STYLES;
-      root.append(styleTag);
+      // The style tag lives in the shadowRoot after the first update, so look
+      // for it there. Looking in el (light DOM) never finds it, which appended
+      // a new identical <style> on every update.
+      // (Direct children only: :scope does not match a ShadowRoot.)
+      let styleTag = Array.from(root.children).find(
+        (e) => e.localName === "style" && e.hasAttribute("card-mod")
+      );
+      if (!styleTag) {
+        styleTag = document.createElement("style");
+        styleTag.setAttribute("card-mod", "");
+        styleTag.innerHTML = ENTITY_STYLES;
+        root.append(styleTag);
+      }
 
       // Thankfully the configuration data for the glance entity is added to the div for some reason
       // https://github.com/home-assistant/frontend/blob/8c39ed46a83e7e889c389af466c0fd1b07fbf6fd/src/panels/lovelace/cards/hui-glance-card.ts#L275
