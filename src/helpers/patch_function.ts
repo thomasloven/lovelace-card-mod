@@ -30,8 +30,19 @@ export const is_patched = (element: HTMLElement) => {
   return patchState[key]?.patched ?? patchState[key] ?? false;
 };
 
+// Re-applying card-mod to a row must not wrap the same methods again. Nested
+// wrappers retain every previous bound method and closure for the row's life.
+const patchedObjects = new WeakMap<object, WeakSet<object>>();
+
 export const patch_object = (obj, patch) => {
   if (!obj) return;
+  let patches = patchedObjects.get(obj);
+  if (!patches) {
+    patches = new WeakSet<object>();
+    patchedObjects.set(obj, patches);
+  }
+  if (patches.has(patch)) return;
+  patches.add(patch);
   for (const method in Object.getOwnPropertyDescriptors(patch.prototype)) {
     patch_method(obj, method, patch.prototype[method]);
   }
